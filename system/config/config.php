@@ -66,12 +66,12 @@ if (getenv('MYSQL_SOCKET') != null){
 	       // defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "m_X0.bAb3,d^");
 	    }else{
 	        defined("DB_USER") ? null : define("DB_USER", "root");
-	        defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "");
+	        defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "Secret3011");
 
 	    }
 
 	}
-	defined("DB_NAME") ? null : define("DB_NAME", "a1th3_soceng");
+	defined("DB_NAME") ? null : define("DB_NAME", "sistemam_tallerhp");
 	defined("DB_PORT") ? null : define("DB_PORT", null);
 	defined("DB_SOCKET") ? null : define("DB_SOCKET", null);
 }
