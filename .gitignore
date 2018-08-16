@@ -1,2 +1,6 @@
-system/config/config.php
-system/config/config.php
+# IDE
+.idea/
+.ftpquota
+
+#system/
+#system/config/config.php
