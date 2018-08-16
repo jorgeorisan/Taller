@@ -1,0 +1,18 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_TASS	/robots.txt
+fds.beone.net	TRUE	/	FALSE	1999999999	pwcount	0
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_AAAC	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_EPAC	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_DLGE	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_USER	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_FSRD	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_BASEURL	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	CsrfToken	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	CtxsAuthId	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	ASP.NET_SessionId	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_TMAA	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_TMAS	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_TEMP	xyz
+fds.beone.net	TRUE	/	FALSE	1999999999	NSC_PERS	xyz
+

@@ -1,0 +1,8 @@
+-qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://login.microsoftonline.com/common/reprocess?ctx=rQIIAYWSy4vTUBTGm3YmzIjo4MrlKIIwkPamTdIHjJA2SZ9JppPWNHczZvJob5vXJHc6bf4FQboTZqm7WboSwX9gUBjElWtBcCW6cWmLG3d-i9_5Pjibw3cOcnSerj0Cf8VRG1LAdWnKcjbuH8X3bu2thg8_Eo-fKM-fvT5YvajWrogHE4yjpFYoRGGMTS8fui6ynLwV-gXPDGwUjN8SxA1BXGa3nYAaalfZhCtxLF0uVRmGARzNMJViXhHGJXVwPDNSA8u-hKAGABwYFz1dmhq6jFWBTxW_46tNcQl1kYWC5ym-XFxnDAf8QkEAKIKR9gYzVhnwGPpDRplKMzjwPHk9v2Tvqvw5nhQ3CGOUOj-zu24Y-ydRmODL3DdCjZygbTfCIHAsnN-sOQFGlolRGBzFYeTEGDnJoR5Uzfr5rF8Pe42eBPVGNwRhU0O6NDLS1lzkuAvcYFVD5_q8edoZTWKKZrSJZ7UNqyIkFb5cPVsuPV1sVfU-NTs7Gre8xUVbVGS7O5VhZWpR5inTALLbZKCKli4_LNZxAuZAX8BEiwELKc94avfKsDuepxOOxV2NR6bNzs2ThZja9fLTmWC1KxLiA5GNpGN5MXJHQlOLWtpZh32TI9fV-GFwnbuzPipA9n4Uhy7ynJst4vvWbZCr7eyQe8T9zH7m9xbxantdOil__hV8itWXH77uvLeTzPV2oc0CJmFMGS_5YhQDucpo5SnbKHUmBez1IdfqyBIW-CmYi4eVGr0iiRVJ_iAz73b__y9_AA2 -O1 "C:\xampp\htdocs\SocEng_v2.1\soceng_v2\templates\MicrosoftOffice360" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+File generated automatically on Thu, 18 Jan 2018 17:16:11, do NOT edit
+
+To update a mirror, just launch httrack without any parameters
+The existing cache will be used (and modified)
+To have other options, retype all parameters and launch HTTrack
+To continue an interrupted mirror, just launch httrack without any parameters
+

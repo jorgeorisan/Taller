@@ -1,0 +1,177 @@
+#AllowOverride All
+
+##########################################
+# Hide/Show folder structure
+
+#Options +Indexes
+Options -Indexes
+
+#
+##########################################
+# Authenticate this folder
+
+#Password File Path = echo dirname(__FILE__) . "/.htpasswd";
+#Password file content: user:encryptedPwd
+#Encrypt Password: http://www.kxs.net/support/htaccess_pw.html
+
+#AuthType Basic
+#AuthName "Restricted Files"
+#AuthUserFile /home/demos.dark12/public_html/rmaker/transfer/.htpasswd
+#Require valid-user
+
+#
+##########################################
+# Redirect to other sites
+
+#RedirectMatch 301 ^/include/.*$ /page.php?name=404
+#Redirect /old /error.php?code=404
+
+#
+##########################################
+# Rewrite the URL
+
+AddType application/x-font-ttf           ttc ttf
+AddType application/x-font-otf           otf
+AddType application/font-woff            woff
+AddType application/font-woff2           woff2
+AddType application/vnd.ms-fontobject    eot
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+RewriteRule ^(system/.*)$ index.php?url=$1 [QSA,L]
+
+
+#RewriteRule ^([^/]*)\.html$ /page.php?name=$1 [L]
+#RewriteRule /name/(.*)\.html page.php?name=$1
+#RewriteRule ^contact/$ /home/hardsoft/public_html/pages/contact.php [L]
+
+#RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+#RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+#
+##########################################
+# 400 (Bad request)
+# 401 (Authorization required)
+# 402 (Payment required)
+# 403 (Forbidden)
+# 404 (Not found)
+# 405 (Method not allowed)
+# 406 (Not acceptable)
+# 407 (Proxy authentication required)
+# 408 (Request timeout)
+# 409 (Conflict)
+# 410 (Gone)
+# 411 (Length required)
+# 412 (Precondition failed)
+# 413 (Request entity too large)
+# 414 (Request URI too large)
+# 415 (Unsupported media type)
+# 416 (Request range not satisfiable)
+# 417 (Expectation failed)
+# 422 (Unprocessable entity)
+# 423 (Locked)
+# 424 (Failed dependency)
+# 500 (Internal server error)
+# 501 (Not Implemented)
+# 502 (Bad gateway)
+# 503 (Service unavailable)
+# 504 (Gateway timeout)
+# 505 (HTTP version not supported)
+# 506 (Variant also negotiates)
+# 507 (Insufficient storage)
+# 510 (Not extended)
+
+#ErrorDocument 400 http://demos.dark12.com/rmaker/message.php?code=400
+#ErrorDocument 401 http://demos.dark12.com/rmaker/message.php?code=401
+#ErrorDocument 402 http://demos.dark12.com/rmaker/message.php?code=402
+#ErrorDocument 403 http://demos.dark12.com/rmaker/noaccess.html
+#ErrorDocument 404 http://demos.dark12.com/rmaker/message.php?code=404
+#ErrorDocument 405 http://demos.dark12.com/rmaker/message.php?code=405
+#ErrorDocument 406 http://demos.dark12.com/rmaker/message.php?code=406
+#ErrorDocument 407 http://demos.dark12.com/rmaker/message.php?code=407
+#ErrorDocument 408 http://demos.dark12.com/rmaker/message.php?code=408
+#ErrorDocument 409 http://demos.dark12.com/rmaker/message.php?code=409
+#ErrorDocument 410 http://demos.dark12.com/rmaker/message.php?code=410
+#ErrorDocument 411 http://demos.dark12.com/rmaker/message.php?code=411
+#ErrorDocument 412 http://demos.dark12.com/rmaker/message.php?code=412
+#ErrorDocument 413 http://demos.dark12.com/rmaker/message.php?code=413
+#ErrorDocument 414 http://demos.dark12.com/rmaker/message.php?code=414
+#ErrorDocument 415 http://demos.dark12.com/rmaker/message.php?code=415
+#ErrorDocument 416 http://demos.dark12.com/rmaker/message.php?code=416
+#ErrorDocument 417 http://demos.dark12.com/rmaker/message.php?code=417
+#ErrorDocument 422 http://demos.dark12.com/rmaker/message.php?code=422
+#ErrorDocument 423 http://demos.dark12.com/rmaker/message.php?code=423
+#ErrorDocument 424 http://demos.dark12.com/rmaker/message.php?code=424
+#ErrorDocument 500 http://demos.dark12.com/rmaker/message.php?code=500
+#ErrorDocument 501 http://demos.dark12.com/rmaker/message.php?code=501
+#ErrorDocument 502 http://demos.dark12.com/rmaker/message.php?code=502
+#ErrorDocument 503 http://demos.dark12.com/rmaker/message.php?code=503
+#ErrorDocument 504 http://demos.dark12.com/rmaker/message.php?code=504
+#ErrorDocument 505 http://demos.dark12.com/rmaker/message.php?code=505
+#ErrorDocument 506 http://demos.dark12.com/rmaker/message.php?code=506
+#ErrorDocument 507 http://demos.dark12.com/rmaker/message.php?code=507
+#ErrorDocument 510 http://demos.dark12.com/rmaker/message.php?code=510
+
+
+#
+##########################################
+# Deny/Allow viewwing .htaccess
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+<FilesMatch "\.(?:sql|zip)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
+<Files noaccess.html>
+order allow,deny
+allow from all
+</Files>
+
+#AddType font/ttf .ttf
+#AddType font/eot .eot
+#AddType font/otf .otf
+#AddType font/woff .woff
+#<FilesMatch "\.(ttf|otf|eot)$">
+#  <IfModule mod_headers.c>
+#    Header set Access-Control-Allow-Origin "*"
+#  </IfModule>
+#</FilesMatch>
+
+#
+##########################################
+# Deny access from outside the US
+
+#<Limit GET HEAD PUT POST>
+#  order deny,allow
+#    allow from 73.166.19.21
+#    allow from 98.198.182.209
+#    allow from 75.108.80.75
+#    allow from 98.199.154.205
+#    allow from 99.25.92.93
+#    allow from 4.16.218.178
+#    allow from 66.117.3.159
+#    allow from 50.16.212.172
+#    allow from 192.145.239.26
+#    allow from 47.220.4.82
+#    allow from 127.0.0.1
+#    allow from 50.207.137.246
+#    allow from 99.43.42.223
+#  deny from all
+#</Limit>
+
+#SetEnvIfNoCase Remote_Addr ^66\.117\.3\.159$ MODSEC_ENABLE=Off
+#SetEnvIfNoCase Remote_Addr ^192\.145\.239\.26$ MODSEC_ENABLE=Off
+#SetEnvIfNoCase Remote_Addr ^99\.43\.42\.223$ MODSEC_ENABLE=Off
+#SetEnvIfNoCase Remote_Addr ^127\.0\.0\.1$ MODSEC_ENABLE=Off
+
+#
+##########################################
