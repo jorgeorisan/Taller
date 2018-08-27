@@ -1,6 +1,7 @@
 # IDE
 .idea/
 .ftpquota
+error_log
 
 #system/
 #system/config/config.php

@@ -144,6 +144,6 @@ if( isset($request['path']) && preg_match("/\.php$/",$request['path']) && file_e
 
 // close database
 if (!$db->connect_errno) {
-    $db->close();
+   // $db->close();
 }
 ob_end_flush();
