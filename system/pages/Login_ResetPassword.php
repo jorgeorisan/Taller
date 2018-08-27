@@ -36,20 +36,17 @@ if ( isset($_POST['email']) )  {
 			$message = str_replace("__URL__",   $link , $message); 
 			$message = str_replace("__EMAIL__",   $email , $message); 
 
-
-			
-			if (ON_GOOGLE === TRUE ){
-				$headers=array();	
-				$headers[] = 'MIME-Version: 1.0';
-				$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-
-			}else{
-				$headers = 'From: noreply@geohti.com' . "\r\n" .
-			    'Reply-To: noreply@geohti.com' .  ""; 
+				 $headers = "MIME-Version: 1.0\r\n";
+                    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+                    $headers .= "From: <no-reply@geohti.com>\r\n";
+                    $headers .= "X-Taller: 1\r\n";	
+                     $headers .= 'X-Mailer: PHP/' . phpversion();
+                    
+				
 			 	//sendMail("jorge.orihuela@geohti.com", $subject, $message, $headers); 
 			 	mail("jorge.orihuela@geohti.com", $subject, $message, $headers); 
-			 	echo $message;
-   			}
+			 	//echo $message;
+   			
 	}else{ 
 		// to protect against username enumeration
     	sleep(rand(1,4));

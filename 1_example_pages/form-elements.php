@@ -486,9 +486,6 @@ include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/nav.php");
 													<option value="Yasmin">Yasmin</option>
 													<option value="Zelma">Zelma</option>
 												</datalist> </label>
-											<div class="note">
-												<strong>Note:</strong> works in Chrome, Firefox, Opera and IE10.
-											</div>
 										</section>
 									</fieldset>
 		

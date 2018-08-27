@@ -1,5 +1,6 @@
 <?php
 ob_start();
+
 error_reporting(E_ALL); ini_set('display_errors', 1);
 
 // Olny allow whitelisted IP durring testing
@@ -38,25 +39,25 @@ $request=unmake_url();
 /*
 =====================================
 Routing section
-	maps requested URLs to pages and checks authorization
+  maps requested URLs to pages and checks authorization
 =====================================
 */
 //$_SESSION['user_id']=1;
 // Authorized user routing
-		//if ( isset ($_SESSION['user_id']) && $_SESSION['user_id'] * 1 > 0 ){
+    //if ( isset ($_SESSION['user_id']) && $_SESSION['user_id'] * 1 > 0 ){
     if (isset($_SESSION['user_id']) && $_SESSION['user_id'] > 0 ){
      // echo  "sesion=".$_SESSION['user_id'];
 
-			//default page to load
-			$page="Home_index.php";
+      //default page to load
+      $page="Home_index.php";
       $dir="";//si esta en carpeta
-			$page_num=0;
+      $page_num=0;
 
-			 /*if ($request['section']==='Dashboard'){
-			 	$page="Dashboard_index.php";
-			 	if ($request['page']==='test'){$page="Dashboard_test.php"; }
-			 	if ($request['page']==='testb'){$page="Dashboard_testb.php"; }
-			}*/
+       /*if ($request['section']==='Dashboard'){
+        $page="Dashboard_index.php";
+        if ($request['page']==='test'){$page="Dashboard_test.php"; }
+        if ($request['page']==='testb'){$page="Dashboard_testb.php"; }
+      }*/
       if ($request['section']==='Projects'){
        $page="Projects_index.php";
         $dir="";//si esta en carpeta
@@ -93,6 +94,13 @@ Routing section
        if ($request['page']==='edit'){$page="Users_edit.php"; }
        if ($request['page']==='test'){$page="Users_test.php"; }
       }
+       if ($request['section']==='Autos'){
+       $page="Autos_index.php";
+       $dir="Autos";//si esta en carpeta
+       if ($request['page']==='add'){$page="Autos_add.php"; }
+       if ($request['page']==='edit'){$page="Autos_edit.php"; }
+       if ($request['page']==='inventario'){$page="Autos_inventario.php"; }
+      }
              /******  DEV ROUTING  ******/
        if (file_exists("system/pages/".$dir."/".$request['section']."_".$request['page'].".php")){
         $page = $dir."/".$request['section']."_".$request['page'].".php";
@@ -127,11 +135,11 @@ Routing section
 // Public user
 //echo "========session=".$_SESSION['user_id']."<pre>".print_r(unmake_url())."</pre>";
 if( isset($request['path']) && preg_match("/\.php$/",$request['path']) && file_exists(  ROOT_DIR . "/1_example_pages/" . $request['path'])){
-	//echo ROOT_DIR . "/1_example_pages/" . $request['path'];
+  //echo ROOT_DIR . "/1_example_pages/" . $request['path'];
 
-	include_once(ROOT_DIR . "/1_example_pages/" . $request['path']);
+  include_once(ROOT_DIR . "/1_example_pages/" . $request['path']);
 }elseif (file_exists("system/pages/".$page)){
-	include_once("system/pages/".$page);
+  include_once("system/pages/".$page);
 }else{}
 
 // close database

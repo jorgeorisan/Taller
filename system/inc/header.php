@@ -26,6 +26,8 @@
 
 		<!-- Toastr JQuery based toasts-->
 		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/css/toastr.css" />
+		<!-- notify alert-->
+		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/css/animate.css/animate.min.css" />
 
 		<!-- We recommend you use "your_style.css" to override SmartAdmin
 		     specific styles this will also ensure you retrain your customization with each SmartAdmin update.
@@ -69,7 +71,7 @@
 		<link rel="apple-touch-startup-image" href="<?php echo ASSETS_URL; ?>/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
 		<link rel="apple-touch-startup-image" href="<?php echo ASSETS_URL; ?>/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
 
-		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<!-- Link to Google CDNs jQuery + jQueryUI; fall back to local -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script>
 			if (!window.jQuery) {
@@ -83,84 +85,50 @@
 				document.write('<script src="<?php echo ASSETS_URL; ?>/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
 			}
 		</script>
+
+		<!-- notify alert-->
+		<script src="<?php echo ASSETS_URL; ?>/js/bootstrap-notify/bootstrap-notify.min.js"></script>
+		  <!--para lo del sweetalert eliminar y mensajitos -->
+	    <script src="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.min.js"></script>
+	    <link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.css">
 <style>
-	body.smart-style-6 #logo-group > span#logo::before {  content: "Hojalatería y pintura";}
-    body.smart-style-6 nav ul li.active > a::before{color: #a10f2b !important;}
+	body.smart-style-7 #logo-group > span#logo::before {  content: "";}
+    body.smart-style-7 nav ul li.active > a::before{color: #323950 !important;}
     aside {background-color: #fff; border-right:1px solid #ccc; }
     #main {background-color: #fff;}
     .page-footer{position: fixed; bottom:0;}
-    body.smart-style-6 .minifyme { background: #a10f2b !important;}
+    body.smart-style-7 .minifyme { background: #323950 !important;}
     input[disabled] {color: #bbb !important;}
+
 </style>
 
 	</head>
 	<body <?php echo implode(' ', array_map(function($prop, $value) {
 			return $prop.'="'.$value.'"';
-		}, array_keys($page_body_prop), $page_body_prop)) ;?>  class=" smart-style-6 minified">
-
+		}, array_keys($page_body_prop), $page_body_prop)) ;?>  class=" smart-style-7 ">
 		<!-- POSSIBLE CLASSES: minified, fixed-ribbon, fixed-header, fixed-width
-			 You can also add different skin classes such as "smart-skin-1", "smart-skin-2" etc...-->
+			 You can also add different skin classes such as "smart-style-1", "smart-style-2" etc...-->
 		<?php
 			if (!$no_main_header) {
 
 		?>
+		
 				<!-- HEADER -->
-				<header id="header" style="background-color: #a10f2b;">
+				<header id="header" style="background-color: #323950;">
 					<div id="logo-group">
-
+					<input type="text" id="base" value="<?php echo APP_URL; ?>" hidden>
 						<!-- PLACE YOUR LOGO HERE -->
-						<span id="logo"> <img src="<?php echo ASSETS_URL; ?>/img/logo.png" alt="GEOHTI"> </span>
-						<!-- END LOGO PLACEHOLDER -->
-
-						<!-- Note: The activity badge color changes when clicked and resets the number to 0
-						Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-					<!--	<span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 21 </b> </span> -->
-
-						<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
-						<?php if (FALSE){?><div class="ajax-dropdown">
-
-							<!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
-							<div class="btn-group btn-group-justified" data-toggle="buttons">
-								<label class="btn btn-default">
-									<input type="radio" name="activity" id="<?php echo APP_URL; ?>/ajax/notify/mail.php">
-									Msgs (14) </label>
-								<label class="btn btn-default">
-									<input type="radio" name="activity" id="<?php echo APP_URL; ?>/ajax/notify/notifications.php">
-									notify (3) </label>
-								<label class="btn btn-default">
-									<input type="radio" name="activity" id="<?php echo APP_URL; ?>/ajax/notify/tasks.php">
-									Tasks (4) </label>
-							</div>
-
-							<!-- notification content -->
-							<div class="ajax-notifications custom-scroll">
-
-								<div class="alert alert-transparent">
-									<h4>Click a button to show messages here</h4>
-									This blank page message helps protect your privacy, or you can show the first message here automatically.
-								</div>
-
-								<i class="fa fa-lock fa-4x fa-border"></i>
-
-							</div>
-							<!-- end notification content -->
-
-							<!-- footer: refresh area -->
-							<span> Last updated on: 12/12/2013 9:43AM
-								<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
-									<i class="fa fa-refresh"></i>
-								</button> </span>
-							<!-- end footer -->
-
-						</div><?php }?>
-						<!-- END AJAX-DROPDOWN -->
+						<span id="logo"> <img src="<?php echo ASSETS_URL; ?>/img/logo.png" alt="GEOHTI" style="max-height: 38px; "> </span>
+					
 					</div>
 
 					<!-- projects dropdown -->
 					<div class="project-context hidden-xs">
-
-						<span class="label">Projects:</span>
-						<span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">Active projects <i class="fa fa-angle-down"></i></span>
+						<span class="label">Proyectos:</span>
+						<span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">
+							<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">Pendientes</a>
+							
+						</span>
 
 
 						<!-- Suggestion: populate this list with fetch and push technique -->
@@ -221,7 +189,7 @@
 							<span> <a href="<?php echo make_url("Login") ?>" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
 						</div>
 						<!-- end logout button -->
-
+						<?php  if (FALSE){?>
 						<!-- search mobile button (this is hidden till mobile view port) -->
 						<div id="search-mobile" class="btn-header transparent pull-right">
 							<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
@@ -229,7 +197,7 @@
 						<!-- end search mobile button -->
 
 						<!-- input: search field -->
-						<?php  if (FALSE){?>
+						
 						<form action="<?php echo APP_URL; ?>/search.php" class="header-search pull-right">
 							<input type="text" name="param" placeholder="Find reports and more" id="search-fld">
 							<button type="submit">
@@ -322,13 +290,13 @@
 				<div id="shortcut">
 					<ul>
 						<li>
-							<a href="<?php echo APP_URL; ?>/inbox.php" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
+							<a href="<?php echo APP_URL; ?>/inbox.php" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Cotizaciones <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
 						</li>
 						<li>
-							<a href="<?php echo APP_URL; ?>/calendar.php" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
+							<a href="<?php echo APP_URL; ?>/calendar.php" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Seguimiento</span> </span> </a>
 						</li>
 						<li>
-							<a href="<?php echo APP_URL; ?>/gmap-xml.php" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
+							<a href="<?php echo APP_URL; ?>/gmap-xml.php" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Nuevos</span> </span> </a>
 						</li>
 						<li>
 							<a href="<?php echo APP_URL; ?>/invoice.php" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
@@ -341,6 +309,7 @@
 						</li>
 					</ul>
 				</div>
+
 				<!-- END SHORTCUT AREA -->
 
 		<?php

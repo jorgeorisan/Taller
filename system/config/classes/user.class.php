@@ -53,7 +53,7 @@ class User extends AutoUser {
 		public function getAllUsers()
 		{
 
-			$sql= "SELECT id,first_name,last_name,email,type,enabled FROM user";//. $num ;
+			$sql= "SELECT id,nombre,apellido_pat,email,type,enabled FROM user";//. $num ;
 
 			$res=$this->db->query($sql);
 			$set=array();
@@ -65,16 +65,18 @@ class User extends AutoUser {
 					{$set[]=$row;}
 			}
 			//echo $this->db->error;
-			$res->close();
+			
 
 			return $set;
 		}
-		public function addUser($email,$first_name,$last_name,$test)
+		
+
+		public function addUser($_request)
 		{
-			$email=$this->db->real_escape_string($email);
-			$first_name=$this->db->real_escape_string($first_name);
-			$last_name=$this->db->real_escape_string($last_name);
-			$sql= "INSERT INTO user(email,first_name,last_name) VALUES('".$email."','".$first_name."','".$last_name."');";
+			$_request['password']=password_hash($_request['password'],PASSWORD_DEFAULT);
+			
+			$data=fromArray($_request,'user',$this->db,"add");
+			$sql= "INSERT INTO user (".$data[0].") VALUES(".$data[1].");";
 			$res=$this->db->query($sql);
 			//echo $this->db->error;
 			//$res->close();

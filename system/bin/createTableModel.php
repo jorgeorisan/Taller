@@ -434,8 +434,8 @@ $filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."classes".
 $output='<?php
 
 require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "' . $table_name . '.auto.class.php");
-class ' . $model_name . ' extends Auto' . $model_name . ' { 
 
+class ' . $model_name . ' extends Auto' . $model_name . ' { 
 
 		public function getAjax' . $model_name . 'Rows($onPage=1,$numRows=10,$sortIndex="id",$shortOrder="asc"){
 			$onPage=1 * $onPage;
@@ -493,97 +493,8 @@ if (file_exists($filename)){
 file_put_contents($filename, $output) ;
 
 
-$output='<?php
-
-if (  isset($_POST["oper"]) && $_POST["oper"] == "edit" && isset($_POST["id"]) && $_POST["id"]*1 > 0    ){
-		$' . $table_name . '=new ' . $model_name . '();
-		$' . $table_name . '->load($_POST["id"] * 1 );
-';	
-foreach ($fields as $k=>$v){ 
-	if ($v['num'] != 252){
-		$output.='	
-				if (isset($_POST["' . $v['database_name'] . '"]) ){
-					$' . $table_name . '->set' . ucfirst($v['model_name']) . '($_POST["' . $v['database_name'] . '"]);
-				}
-				';
-	}
-}
-$output.='		$' . $table_name . '->save();
-
-}elseif (  isset($_POST["oper"]) && $_POST["oper"] == "add"    ){
-		$' . $table_name . '=new ' . $model_name . '();
-';	
-foreach ($fields as $k=>$v){ 
-		if ($v['num'] != 252 && $v['database_name']!='id'){
-			$output.='	
-			if (isset($_POST["' . $v['database_name'] . '"]) ){
-				$' . $table_name . '->set' . ucfirst($v['model_name']) . '($_POST["' . $v['database_name'] . '"]);
-			}
-			';
-		}
-}
-
-$output.='		$' . $table_name . '->save();
-
-}
-
-if (  isset($_POST["rows"]) && isset($_POST["page"]) && isset($_POST["sidx"]) &&  isset($_POST["sord"])   ){
-
-	$aaa=new ' . $model_name . '();
-	$res=$aaa->getAjax' . $model_name . 'Rows(1*$_POST["page"], $_POST["rows"], $_POST["sidx"] , $_POST["sord"]);
-
-if (isset($_GET["callback"])) {echo htmlspecialchars($_GET["callback"]);} echo "".$res."";die;?>{
-
-}<?php
-
-}';
-
-$filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."pages".DIRECTORY_SEPARATOR."Ajax_".$table_name.".php";
 
 
-if (file_exists($filename)){
-	$filename.="__".date('Ymdhsi')."-".uniqid();
-}
-
-file_put_contents($filename, $output) ;
-
-
-$filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."bin".DIRECTORY_SEPARATOR."Template_jqgrid_page.php";
-
-$output=file_get_contents($filename);
-
-$output = str_replace("___MODEL_NAME___", $model_name, $output);
-$output = str_replace("___TABLE_NAME___", $table_name, $output);
-
-$col_names_ar=array();
-$jqfields="";
-foreach ($fields as $k=>$v){
-	if ($v['num'] != 252 && $v['database_name']!='id') {
-		$col_names_ar[]=$v['database_name'];
-		$jqfields .= ',
-                    {
-						label: \'' . $v['database_name'] . '\',
-                        name: \'' . $v['database_name'] . '\'';
-         if($v['database_name']!='created' && $v['database_name']!='modified'){               
-         $jqfields.=',
-                        editable: true';
-         }
-         $jqfields.=' 
-                    }';
-	}
-}
-$output = str_replace("___COL_NAMES___", "'id','".implode("','", $col_names_ar)."'", $output);
- $output = str_replace("___FIELDS___", $jqfields, $output);
-  
-  $filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."pages".DIRECTORY_SEPARATOR.$model_name."_jqgrid.php";
-
-
-if (file_exists($filename)){
-	$filename.="__".date('Ymdhsi')."-".uniqid();
-}                  
-                    
-
-file_put_contents($filename, $output) ;
 
 /*
 $output  = <<<EOF

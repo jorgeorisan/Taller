@@ -22,59 +22,53 @@ ex:
 
 */
 $page_nav = array(
-
-	"campagins" => array(
-		"title" => "Campaigns",
+	"solicitudes" => array(
+		"title" => "Solicitudes",
 		"icon" => "fa-flag",
-		"url" => APP_URL."/Campaigns/index",
+		//"url" => APP_URL."/solicitudes/index",
 		"sub" => array(
-				"campaigns" => array(
-				"title" => "Campaigns",
-				"url" => APP_URL."/Campaigns/index"
-					),
-					'progress' => array(
-						'title' => 'Add campaign',
-						'url' => APP_URL."/Campaigns/add"
-					)
-				)
-
-		),
-		"results" => array(
-			"title" => "Results",
-			"icon" => "fa-book",
-			"url" => APP_URL."/Results/index",
-			"sub" => array(
-					"projectresults" => array(
-					"title" => "Project results",
-					"url" => APP_URL."/Results/index"
-					),
-					"campaignresults" => array(
-					"title" => "Campaign results",
-					"url" => APP_URL."/Results/detail"
-						)
-					)
-			),
-			"manageusers" => array(
-				"title" => "users",
-				"icon" => "fa-user",
-				"url" => APP_URL."/Users/index",
-				"sub" => array(
-						"clients" => array(
-						"title" => "Users",
-						"url" => APP_URL."/Users/index"
-						),
-						'progress' => array(
-							'title' => 'Add user',
-							'url' => APP_URL."/Users/add"
-						),
-						'progress' => array(
-							'title' => 'Add test',
-							'url' => APP_URL."/Users/test"
-						)
-
-				)
-			)
-
+			"campaigns" => array( "title" => "solicitudes", "url" => APP_URL."/solicitudes/index" ),
+			'progress' => array( 'title' => 'Agregar solicitud', 'url' => APP_URL."/solicitudes/add" )
+		)
+	),
+	"Autos" => array(
+		"title" => "Autos",
+		"icon" => "fa-automobile",
+		"sub" => array(
+			"projectresults"  => array( "title" => "Project results", "url" => APP_URL."/Results/index" ),
+			"campaignresults" => array( "title" => "Campaign results", "url" => APP_URL."/Results/detail" )
+		)
+	),
+	"manageclients" => array(
+		"title" => "Clientes",
+		"icon" => "fa-users",
+		//"url" => APP_URL."/clientes/index",
+		"sub" => array(
+			'clients' => array('title'  => 'Add Cliente','url' => APP_URL."/clientes/add" )
+		)
+	),
+	"catalogos" => array(
+		"title" => "Catalogos",
+		"icon" => "fa-book",
+		"url" => APP_URL."/catalogos/index",
+		"sub" => array(
+			"catalogos" => array( "title" => "Catalogos", "url" => APP_URL."/catalogos/index" )
+		)
+	),
+	"manageusers" => array(
+		"title" => "Usuarios",
+		"icon" => "fa-lock",
+		//"url" => APP_URL."/Users/index",
+		"sub" => array(
+			'users' => array( 'title' => 'Usuarios', 'url' => APP_URL."/Users/index" ),
+			'addusers' => array( 'title' => 'Nuevo Usuario', 'url' => APP_URL."/Users/add" )
+		)
+	),
+	"examples" => array(
+		"title" => "SmartAdmin",
+		"icon" => "fa-fighter-jet",
+		"url" => APP_URL."/Examples/index"
+	)
 );
 
 /*

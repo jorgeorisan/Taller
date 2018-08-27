@@ -1,6 +1,5 @@
 <?php
-	// Initiate Session
-	if (session_id() == '') session_start();
+if (session_id() == ''){ session_start(); }
 
 //configure constants
 $directory = realpath(dirname(__FILE__));
@@ -12,6 +11,10 @@ $app_path=str_replace(DIRECTORY_SEPARATOR, '/', substr($directory, strlen($docum
 if(strpos($directory, $document_root)===0) {
     $base_url .= str_replace(DIRECTORY_SEPARATOR, '/', substr($directory, strlen($document_root)));
 }
+if($_SERVER["SERVER_NAME"]=='138.128.161.42'){
+	 $base_url =$base_url."/~sistemamyg" ;
+}
+
 
 defined("APP_URL") ? null : define("APP_URL", str_replace("/system/config", "", $base_url));
 defined("APP_PATH") ? null : define("APP_PATH", str_replace("/system/config", "", $app_path));
@@ -35,6 +38,7 @@ SYSTEM_DIR /var/www/html/blogs/system
 ASSETS_URL http://192.168.56.101/blogs/assets
 */
 
+ 
 if (getenv('MYSQL_SOCKET') != null){
 
 	/* Database Production
@@ -58,20 +62,20 @@ if (getenv('MYSQL_SOCKET') != null){
 	/* Database local*/
 	defined("DB_HOST") ? null : define("DB_HOST", "127.0.0.1");
 	if($_SERVER["SERVER_NAME"]){
-		$url_actual = $_SERVER["SERVER_NAME"];
+	
 
        // echo "<strong>$url_actual</strong>";
-	    if($url_actual!='localhost'){
-	        //defined("DB_USER") ? null : define("DB_USER", "bs_admin2user");
-	       // defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "m_X0.bAb3,d^");
+	    if($_SERVER["SERVER_NAME"]!='localhost'){
+	    	defined("DB_USER") ? null : define("DB_USER", "sistemam_taller");
+	        defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "1L7(IvbxCTGI");
+	        defined("DB_NAME") ? null : define("DB_NAME", "sistemam_tallerhp");
 	    }else{
-	        defined("DB_USER") ? null : define("DB_USER", "root");
-	        defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "Secret3011");
-
+	    	defined("DB_USER") ? null : define("DB_USER", "root");
+			defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "");
+			defined("DB_NAME") ? null : define("DB_NAME", "a1th3_soceng");
 	    }
 
 	}
-	defined("DB_NAME") ? null : define("DB_NAME", "sistemam_tallerhp");
 	defined("DB_PORT") ? null : define("DB_PORT", null);
 	defined("DB_SOCKET") ? null : define("DB_SOCKET", null);
 }

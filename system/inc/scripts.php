@@ -81,7 +81,6 @@
 
 		<script type="text/javascript">
 			// DO NOT REMOVE : GLOBAL FUNCTIONS!
-
 			function redirectAfterToast(url)
 			{
 				window.setTimeout(function(){
@@ -154,9 +153,155 @@
 
 				toastr.error(message);
 			}
+			/*/ Config */
+			var config = {
+				base: $('#base').val()
+			};
 
+			function redirectAfterToast(url)
+			{
+				window.setTimeout(function(){
+			 // Move to a new location or you can do something else
+			 	window.location.replace(url);
+			}, 1500);
+			}
+
+			function notify( type = "success", msg = "", options = {} )
+			{
+				if(type=="error"){ type='danger'; }
+				$.notifyDefaults({
+					type: type,
+					animate: {
+						enter: 'animated flipInY',
+						exit: 'animated flipOutX'
+					}
+				});
+				setTimeout(function() {
+					$.notifyClose();
+				}, 3000);
+				if ( type == "success" ) {
+					var notify=$.notify({
+						title: ( options.title != undefined ? options.title : '<strong>Exito!</strong>'),
+						message: msg
+					});
+				} else if ( type == "danger" ) {
+					var notify=$.notify({
+						title: ( options.title != undefined ? options.title : '<strong>Error!: A ocurrido un error en el proceso. </strong>'),
+						message: msg
+					});
+					setTimeout(function() {
+						$.notifyClose();
+					}, 5000);
+				} else if ( type == "info" ) {
+					var notify=$.notify({
+						title: ( options.title != undefined ? options.title : '<strong>Info:</strong>'),
+						message: msg
+					});
+				} else if ( type == "warning" ) {
+					var notify=$.notify({
+						title: ( options.title != undefined ? options.title : '<strong>Advertencia:</strong>'),
+						message: msg
+					});
+					setTimeout(function() {
+						$.notifyClose();
+					}, 5000);
+				} else {
+					var notify=$.notify({
+						id: null, 
+						class: '',
+						title: '',
+						titleColor: '',
+						titleSize: '',
+						titleLineHeight: '',
+						message: msg,
+						messageColor: '',
+						messageSize: '',
+						messageLineHeight: '',
+						backgroundColor: '',
+						theme: 'light', // dark
+						color: '', // blue, red, green, yellow
+						icon: '',
+						iconText: '',
+						iconColor: '',
+						image: '',
+						imageWidth: 50,
+						maxWidth: null,
+						zindex: null,
+						layout: 1,
+						balloon: false,
+						close: true,
+						closeOnEscape: false,
+						closeOnClick: false,
+						rtl: false,
+						position: 'bottomRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+						target: '',
+						targetFirst: true,
+						toastOnce: false,
+						timeout: 5000,
+						animateInside: true,
+						drag: true,
+						pauseOnHover: true,
+						resetOnHover: false,
+						progressBar: true,
+						progressBarColor: '',
+						progressBarEasing: 'linear',
+						overlay: false,
+						overlayClose: false,
+						overlayColor: 'rgba(0, 0, 0, 0.6)',
+						transitionIn: 'fadeInUp',
+						transitionOut: 'fadeOut',
+						transitionInMobile: 'fadeInUp',
+						transitionOutMobile: 'fadeOutDown',
+						buttons: {},
+						inputs: {},
+						onOpening: function () {},
+						onOpened: function () {},
+						onClosing: function () {},
+						onClosed: function () {}
+					});			
+				}
+			}
+			function borrar(url){ 
+				swal({
+                    title: "Estas seguro?",
+				 	text: "Deseas eliminar este registro?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: 'Si, Eliminar!',
+                    closeOnConfirm: true
+	                },
+	                function(){
+	                    swal("Eliminado!", "Eliminado con exito!", "Exito");
+	                    location.href=url;
+	                }
+            	);
+			}
+			var statSend = false;
+	        function checkSubmit() {
+	            if (!statSend) {
+	                statSend = true;
+	                return true;
+	            } else {
+	                alert("Form sending...");
+	                return false;
+	            }
+	        }
+			function validateEmailStructure( email ) {
+					expr = /^([a-zA-Z0-9_\.\-+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+					if ( ! expr.test(email) ) {
+						return;
+					}
+					return true;
+			}
 
 			$(document).ready(function() {
 				pageSetUp();
-			})
+			});
+
+			 var notifysessiontype=<?php echo (isset($_GET["m"])) ? 1: 0 ;?>;
+			 if(notifysessiontype==1){
+			 	notify('success',"El registro se ha guardado correctamente");
+			 }
 		</script>
+

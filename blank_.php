@@ -1,10 +1,10 @@
 <?php
 
 //initilize the page
-require_once("inc/init.php");
+require_once(SYSTEM_DIR . "/inc/init.php");
 
 //require UI configuration (nav, ribbon, etc.)
-require_once("inc/config.ui.php");
+require_once(SYSTEM_DIR . "/inc/config.ui.php");
 
 /*---------------- PHP Custom Scripts ---------
 
@@ -19,12 +19,12 @@ $page_title = "Blank Page";
 //you can add your custom css in $page_css array.
 //Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
-include("inc/header.php");
+include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["misc"]["sub"]["blank"]["active"] = true;
-include("inc/nav.php");
+$page_nav["ui_elements"]["sub"]["buttons"]["active"] = true;
+include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/nav.php");
 
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->

@@ -1,39 +1,24 @@
 
 <?php
-
 //initilize the page
 require_once(SYSTEM_DIR . "/inc/init.php");
-
 //require UI configuration (nav, ribbon, etc.)
 require_once(SYSTEM_DIR . "/inc/config.ui.php");
 
-
 /*---------------- PHP Custom Scripts ---------
-
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-
-$page_title = "Users";
+$page_title = "Usuarios";
 
 /* ---------------- END PHP Custom Scripts ------------- */
-
-//include header
-//you can add your custom css in $page_css array.
-//Note: all css files are inside css/ folder
-
 $page_css[] = "your_style.css";
 include(SYSTEM_DIR . "/inc/header.php");
 
 //include left panel (navigation)
-//follow the tree in inc/config.ui.php
-//$page_nav["misc"]["sub"]["blank"]["active"] = true;
-
 include(SYSTEM_DIR . "/inc/nav.php");
 
 $u = new User();
-//$users = $u->getAllUsers();
 $users = $u->getAllUsers();
-
 //print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -48,106 +33,62 @@ $users = $u->getAllUsers();
 
 	<!-- MAIN CONTENT -->
 	<div id="content">
-
-		<!-- widget grid -->
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Users","add")?>" >Add user</a></p>
-			<!-- row -->
+			 <p><a class="btn btn-success" href="<?php echo make_url("Users","add")?>" >Nuevo Usuario</a></p>
 			<div class="row">
-
-				<!-- NEW WIDGET START -->
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-					<!-- Widget ID (each widget will need unique ID)-->
-					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-						<!-- widget options:
-						usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-
-						data-widget-colorbutton="false"
-						data-widget-editbutton="false"
-						data-widget-togglebutton="false"
-						data-widget-deletebutton="false"
-						data-widget-fullscreenbutton="false"
-						data-widget-custombutton="false"
-						data-widget-collapsed="true"
-						data-widget-sortable="false"
-
-						-->
+					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
 						<header>
 							<span class="widget-icon"> <i class="fa fa-table"></i> </span>
-							<h2>Users</h2>
-
+							<h2><?php echo $page_title ?></h2>
 						</header>
-
-						<!-- widget div-->
 						<div>
-
-							<!-- widget edit box -->
 							<div class="jarviswidget-editbox">
-								<!-- This area used as dropdown edit box -->
-
 							</div>
-							<!-- end widget edit box -->
-
-							<!-- widget content -->
 							<div class="widget-body">
-								<!--<p>
-									Adds borders to any table row within <code>
-										&lt;table&gt;</code>
-									by adding the <code>
-										.table-bordered</code>
-									with the base class
-								</p>-->
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
-											<th class = "col-md-4" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Name</th>
 											<th class = "col-md-2" data-class="expand"><i class="fa fa-fw  fa-envelope  text-muted hidden-md hidden-sm hidden-xs"></i> Email</th>
+											<th class = "col-md-4" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
 											<th class = "col-md-1" data-hide="phone,tablet"><i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Type</th>
 											<th class = "col-md-1" data-hide="phone,tablet"><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Enabled</th>
 											<th class = "col-md-2" data-hide="phone,tablet"><i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
-
 										</tr>
 									</thead>
 									<tbody>
 										<?php foreach($users as $userrow){
-											//print_r($userrow);
-											/*print_r($userrow['first_name']);
-											print_r($userrow['last_name']);
-											print_r($userrow['email']);
-											print_r($userrow['type']);
-											print_r($userrow['enabled']);*/
 											?>
 											<tr>
-											<td><?php echo $userrow['first_name'].' '.$userrow['last_name']?></td>
-											<td><?=$userrow['email']?></td>
-											<td><?=$userrow['type']?></td>
-											<?php if($userrow['enabled']){?>
-												<td><i class="fa fa-check-square    text-muted hidden-md hidden-sm hidden-xs"></td>
-											<?php }else{?>
-												<td><i class="fa f fa-square-o  text-muted hidden-md hidden-sm hidden-xs"></td>
-											<?php } ?>
-											<td><a class="btn btn-danger btn-xs" href="<?php echo make_url("Users","edit",array('id'=>$userrow['id'])); ?>">Edit</a></td>
+												<td><?php echo htmlentities($userrow['email'])?></td>
+												<td><?php echo htmlentities($userrow['nombre'].' '.$userrow['apellido_pat'])?></td>
+												<td><?php echo htmlentities($userrow['type']) ?></td>
+												<?php if($userrow['enabled']){?>
+													<td><i class="fa fa-check-square    text-muted hidden-md hidden-sm hidden-xs"></td>
+												<?php }else{?>
+													<td><i class="fa f fa-square-o  text-muted hidden-md hidden-sm hidden-xs"></td>
+												<?php } ?>
+												<td>
+													<div class="btn-group">
+														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+															Accion <span class="caret"></span>
+														</button>
+														<ul class="dropdown-menu">
+															<li>
+																<a class="" href="<?php echo make_url("Users","edit",array('id'=>$userrow['id'])); ?>">Editar</a>
+															</li>
+															<li>
+																<a class="" href="<?php echo make_url("Users","cambiarpwd",array('id'=>$userrow['id'])); ?>">Cambiar password</a>
+															</li>
+															<li class="divider"></li>
+															<li>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Users","borrar",array('id'=>$userrow['id'])); ?>',<?php echo $userrow['id']; ?>);">Eliminar</a>
+															</li>
+														</ul>
+													</div>
+												</td>
 											</tr>
 										<?php }?>
-										<!--<tr>
-											<td>Name 2</td>
-											<td>Email 2</td>
-											<td>user</td>
-											<td><i class="fa fa-check-square    text-muted hidden-md hidden-sm hidden-xs"></td>
-											<td><a class="btn btn-danger btn-xs" href="<?php echo make_url("Clients","edit",array('id'=>'1')); ?>">Edit</a>
-											</td>
-										</tr>
-										<tr>
-											<td>Name 3</td>
-											<td>Email 3</td>
-											<td>user</td>
-											<td><i class="fa f fa-square-o  text-muted hidden-md hidden-sm hidden-xs"></td>
-											<td><a class="btn btn-danger btn-xs" href="<?php echo make_url("Clients","edit",array('id'=>'3')); ?>">Edit</a>
-											</td>
-										</tr>-->
-
-
 									</tbody>
 								</table>
 
@@ -172,7 +113,6 @@ $users = $u->getAllUsers();
 
 			</div>
 		-->
-
 
 	</div>
 	<!-- END MAIN CONTENT -->
@@ -230,6 +170,27 @@ $users = $u->getAllUsers();
 				responsiveHelper_dt_basic.respond();
 			}
 		});
+		function Borrar(url,id){
+		bootbox.confirm({
+			message: "<strong>Warning!</strong> The Admin will be removed. Do you want to continue?<br>",
+			
+			buttons: {
+				cancel: {
+					label: '<i class="fa fa-times"></i> Cancel'
+				},
+				confirm: {
+					label: '<i class="fa fa-check"></i> Accept'
+				}
+			},
+			callback: function (result) {
+				if(result){
+					location.href=url;
+				}
+			}
+		});
+				
+			
+	}
 		/* DO NOT REMOVE : GLOBAL FUNCTIONS!
 		 *
 		 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS

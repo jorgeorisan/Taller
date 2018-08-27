@@ -77,10 +77,11 @@ include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/nav.php");
 					<div class="well">
 						<?php
 
-							$md = file_get_contents("docs/smartui/alert.md");
+							/*$md = file_get_contents("docs/smartui/alert.md");
 							$parsedown = new Parsedown();
 							$doc = $parsedown->parse($md);
 							echo str_replace('<pre', '<pre class="prettyprint linenums"', $doc);
+							*/
 
 						?>				
 					</div>

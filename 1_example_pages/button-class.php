@@ -139,10 +139,11 @@ include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/nav.php");
 					<div class="well">
 						<?php
 
-							$md = file_get_contents("docs/smartui/button.md");
+							/*$md = file_get_contents("docs/smartui/button.md");
 							$parsedown = new Parsedown();
 							$doc = $parsedown->parse($md);
 							echo str_replace('<pre', '<pre class="prettyprint linenums"', $doc);
+							*/
 
 						?>				
 					</div>

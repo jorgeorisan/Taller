@@ -95,75 +95,70 @@ if(isset($_POST['email']) && isset($_POST['first_name']) && isset($_POST['last_n
 
 	<!-- MAIN CONTENT -->
 	<div id="content">
-
 		<div class="row">
-				<div class="col-sm-8">
-					<!-- widget content -->
-					<div class="widget-body no-padding">
+				<div class="col-sm-8 col-md-8">
+						<!-- Widget ID (each widget will need unique ID)-->
+						<div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
+							<div class="widget-body no-padding">
+								<form id="main-form" class="smart-form" role="form" method=post action="<?php echo make_url("Users","add");?>" onsubmit="return checkSubmit();">
+									<header>Add user</header>
+									<fieldset>
+										<section>
+											<label class="input"> <i class="icon-append fa fa-envelope"></i>
+												<input type="email" id="email" name="email" placeholder="Email" value="<?php echo $user['email']; ?>">
+											</label>
+										</section>
+										<section>
+											<label class="input"> <i class="icon-append fa fa-user"></i>
+												<input type="text" id="nombre" name="nombre" placeholder="Nombre">
+											</label>
+										</section>
+										<section>
+											<label class="input"> <i class="icon-append fa fa-user"></i>
+												<input type="text" id="apellido_pat" name="apellido_pat" placeholder="Apellido Paterno">
+											</label>
+										</section>
+										<section>
+											<label class="input"> <i class="icon-append fa fa-user"></i>
+												<input type="text" id="apellido_mat" name="apellido_mat" placeholder="Apellido Materno">
+											</label>
+										</section>
+										<section>
+											<label class="input"> <i class="icon-append fa fa-list-alt"></i>
+												<input type="text" id="direccion" name="direccion" placeholder="Direccion">
+											</label>
+										</section>
+											<section>
+												<label class="label">Company</label>
+												<select style="width:100%" class="select2">
+													<?php 
+													$obj = new Company();
+													$list=$obj->getAll();
+													if (is_array($list) || is_object($list)){
+														foreach($list as $val){
+															echo "<option value='".$val['id']."'>".$val['name']."</option>";
+														}
+													}
+													 ?>
+												</select>
+											</section>
+									</fieldset>
+									<footer>
+										<button type="button" onclick=" validateForm();" class="btn btn-primary">
+											Save
+										</button>
+									</footer>
+								</form>
 
-						<form id="smart-form-register" class="smart-form" role="form" method=post action="<?php echo make_url("Users","edit",array('id'=>$user_id));?>" onsubmit="return validateForm();">
-							<header>
-								Edit user
-							</header>
-
-							<fieldset>
-								<section>
-									<label class="input"> <i class="icon-append fa fa-user"></i>
-										<input type="text" id="first_name" name="first_name" placeholder="First name" value="<?=$user['first_name']?>">
-										<b class="tooltip tooltip-bottom-right">Needed to enter first name</b> </label>
-								</section>
-
-								<section>
-									<label class="input"> <i class="icon-append fa fa-user"></i>
-										<input type="text" id="last_name" name="last_name" placeholder="Last name" value="<?=$user['last_name']?>">
-										<b class="tooltip tooltip-bottom-right">Needed to enter last name</b> </label>
-								</section>
-
-								<section>
-									<label class="input"> <i class="icon-append fa fa-envelope"></i>
-										<input type="email" id="email" name="email" placeholder="Email" value="<?=$user['email']?>">
-										<b class="tooltip tooltip-bottom-right">Needed to enter email</b> </label>
-								</section>
-
-								<div class="row">
-									<section class="col col-6">
-										<label class="select">
-											<select name="enabled">
-
-												<option value="0" disabled="">Status</option>
-
-												<option value="1" <?php if($user['enabled']==1) {echo 'selected';}?>>Enabled</option>
-												<option value="2" <?php if($user['enabled']==0) {echo 'selected';}?>>Disabled</option>
-											</select> <i></i> </label>
-									</section>
-
-								</div>
-							</fieldset>
-							<footer>
-								<button type="submit" class="btn btn-primary">
-									Save
-								</button>
-							</footer>
-						</form>
-
-					</div>
+							</div>
+						</div>
 					<!-- end widget content -->
-
 				</div>
 				<!-- end widget div -->
-
 			</div>
 			<!-- end widget -->
-
-				</div>
-
-			</div>
-
-
-
 	</div>
 	<!-- END MAIN CONTENT -->
-
 </div>
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->

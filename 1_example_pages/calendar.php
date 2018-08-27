@@ -33,7 +33,7 @@ include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/nav.php");
 	<?php
 		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
 		//$breadcrumbs["New Crumb"] => "http://url.com"
-		$breadcrumbs[$page_nav["cool"]["title"]] = "";
+		$breadcrumbs["cool"] = "";
 		include(SYSTEM_DIR.DIRECTORY_SEPARATOR."inc/ribbon.php");
 	?>
 

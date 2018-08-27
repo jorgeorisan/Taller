@@ -8,10 +8,11 @@ session_start();
 // PAGE LOGIC
 $showloginerror=0;
 // && (preg_match("/^([a-z0-9-_.]{1,50}@illumant.com)$/",trim(strtolower($_POST['email']))))  //para que el correo pertenesca a una compañia
-if ( isset($_POST['email']) && preg_match("/^(\S{7,50})$/",trim(strtolower($_POST['password']))) ) {
+if ( isset($_POST['email']) && trim(strtolower($_POST['password'])) ) {
 	$id=0;
 	$a = new Auth();
 	$id =  $a->validateCredentials($_POST['email'],$_POST['password']);
+	
 	if ($id>0){
 		// is authorized
 //		load user / start session
@@ -21,13 +22,14 @@ if ( isset($_POST['email']) && preg_match("/^(\S{7,50})$/",trim(strtolower($_POS
 		$_SESSION['user_info']=array(
 			'id'=>$u->getId,
 			'email'=>$u->getEmail(),
-			'first_name'=>$u->getFirstName(),
-			'last_name'=>$u->getLastName(),
+			'nombre'=>$u->getNombre(),
+			'apellido_pat'=>$u->getApellidoPat(),
 			'initials'=>$u->getInitials(),
 			'type'=>$u->getType()
 			);
 		$_SESSION['CSRFToken']=CSRFToken();
-		$_SESSION['getCSRF']=CSRFToken();
+		 $_SESSION['getCSRF']=CSRFToken();
+		
 		// redirect to default page for authenticated user
 		redirect(make_url());
 	}else{

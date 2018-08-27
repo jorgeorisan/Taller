@@ -1,14 +1,14 @@
-<?php
+<?php 
 
 	class AutoUser {
 
 	// Variables
 		protected $db;
-
+		
 		protected $id = 0;
 		protected $email = "";
-		protected $first_name = "";
-		protected $last_name = "";
+		protected $nombre = "";
+		protected $apellido_pat = "";
 		protected $initials = "";
 		protected $password = "";
 		protected $type = "";
@@ -16,8 +16,8 @@
 		protected $deleted = 0;
 		protected $token = "";
 		protected $token_expires = "";
-		protected $modified = "";
-		protected $created = "";
+		protected $created_date = "";
+		protected $id_company = 0;
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -41,71 +41,71 @@
 
 
 	// Setter Methods
-		public function setId( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "ID","i") )
+		public function setId( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "ID","i") ) 
  				$this->id = $value;
 		}
-
-		public function setEmail( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "EMAIL","s") )
+		
+		public function setEmail( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "EMAIL","s") ) 
  				$this->email = $value;
 		}
-
-		public function setFirstName( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "FIRSTNAME","s") )
- 				$this->first_name = $value;
+		
+		public function setNombre( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "NOMBRE","s") ) 
+ 				$this->nombre = $value;
 		}
-
-		public function setLastName( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "LASTNAME","s") )
- 				$this->last_name = $value;
+		
+		public function setApellidoPat( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "APELLIDOPAT","s") ) 
+ 				$this->apellido_pat = $value;
 		}
-
-		public function setInitials( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "INITIALS","s") )
+		
+		public function setInitials( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "INITIALS","s") ) 
  				$this->initials = $value;
 		}
-
-		public function setPassword( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "PASSWORD","s") )
+		
+		public function setPassword( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "PASSWORD","s") ) 
  				$this->password = $value;
 		}
-
-		public function setType( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "TYPE","s") )
+		
+		public function setType( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "TYPE","s") ) 
  				$this->type = $value;
 		}
-
-		public function setEnabled( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "ENABLED","i") )
+		
+		public function setEnabled( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "ENABLED","i") ) 
  				$this->enabled = $value;
 		}
-
-		public function setDeleted( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "DELETED","i") )
+		
+		public function setDeleted( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "DELETED","i") ) 
  				$this->deleted = $value;
 		}
-
-		public function setToken( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "TOKEN","s") )
+		
+		public function setToken( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "TOKEN","s") ) 
  				$this->token = $value;
 		}
-
-		public function setTokenExpires( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "TOKENEXPIRES","s") )
+		
+		public function setTokenExpires( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "TOKENEXPIRES","s") ) 
  				$this->token_expires = $value;
 		}
-
-		public function setModified( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "MODIFIED","s") )
- 				$this->modified = $value;
+		
+		public function setCreatedDate( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "CREATEDDATE","s") ) 
+ 				$this->created_date = $value;
 		}
-
-		public function setCreated( $value ){
-			if ( $this->validclassateInput("/^.*$/", $value, "CREATED","s") )
- 				$this->created = $value;
+		
+		public function setIdCompany( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDCOMPANY","i") ) 
+ 				$this->id_company = $value;
 		}
-
+		
 		public function setValidclass( $value ){
 			if ( $this->validclassateInput('/^(true|false)$/', ( $value ) ? 'true' : 'false', "Validclass",'s') )
 				$this->validclass = $value;
@@ -118,115 +118,115 @@
 
 			$this->statusclass[] = $value;
 			$this->statusclass = array_unique($this->statusclass );
-
+			
 		}
 
 
 	// Getter Methods
-		public function getId($sanitize=true){
+		public function getId($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->id) ;
  			}else{
  				return $this->id ;
  			}
 		}
-
-		public function getEmail($sanitize=true){
+		
+		public function getEmail($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->email) ;
  			}else{
  				return $this->email ;
  			}
 		}
-
-		public function getFirstName($sanitize=true){
+		
+		public function getNombre($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->first_name) ;
+ 				return htmlspecialchars($this->nombre) ;
  			}else{
- 				return $this->first_name ;
+ 				return $this->nombre ;
  			}
 		}
-
-		public function getLastName($sanitize=true){
+		
+		public function getApellidoPat($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->last_name) ;
+ 				return htmlspecialchars($this->apellido_pat) ;
  			}else{
- 				return $this->last_name ;
+ 				return $this->apellido_pat ;
  			}
 		}
-
-		public function getInitials($sanitize=true){
+		
+		public function getInitials($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->initials) ;
  			}else{
  				return $this->initials ;
  			}
 		}
-
-		public function getPassword($sanitize=true){
+		
+		public function getPassword($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->password) ;
  			}else{
  				return $this->password ;
  			}
 		}
-
-		public function getType($sanitize=true){
+		
+		public function getType($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->type) ;
  			}else{
  				return $this->type ;
  			}
 		}
-
-		public function getEnabled($sanitize=true){
+		
+		public function getEnabled($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->enabled) ;
  			}else{
  				return $this->enabled ;
  			}
 		}
-
-		public function getDeleted($sanitize=true){
+		
+		public function getDeleted($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->deleted) ;
  			}else{
  				return $this->deleted ;
  			}
 		}
-
-		public function getToken($sanitize=true){
+		
+		public function getToken($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->token) ;
  			}else{
  				return $this->token ;
  			}
 		}
-
-		public function getTokenExpires($sanitize=true){
+		
+		public function getTokenExpires($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->token_expires) ;
  			}else{
  				return $this->token_expires ;
  			}
 		}
-
-		public function getModified($sanitize=true){
+		
+		public function getCreatedDate($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->modified) ;
+ 				return htmlspecialchars($this->created_date) ;
  			}else{
- 				return $this->modified ;
+ 				return $this->created_date ;
  			}
 		}
-
-		public function getCreated($sanitize=true){
+		
+		public function getIdCompany($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->created) ;
+ 				return htmlspecialchars($this->id_company) ;
  			}else{
- 				return $this->created ;
+ 				return $this->id_company ;
  			}
 		}
-
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -241,16 +241,12 @@
 			if ( $id == 0 )
 				return $this->killInvalidclass( "The ID not validclass." );
 
-			// Get data
+			// Get data 
 			$stmt = $this->db->prepare( $sql );
 			$stmt->mbind_param( 'i', $id );
 			$stmt->execute();
-           // printf("Versión del servidor MySQL: %s\n", mysql_get_server_info());
 
 			$res = $stmt->get_result();
-
-
-
 			$res = ( is_null($res) || ! $res )? [] : $res->fetch_array(MYSQLI_ASSOC) ;
 			$stmt->close();
 			if ( sizeof( $res ) == 0 ) {
@@ -259,8 +255,8 @@
 
 			$this->setId( $res['id'] );
 			$this->setEmail( $res['email'] );
-			$this->setFirstName( $res['first_name'] );
-			$this->setLastName( $res['last_name'] );
+			$this->setNombre( $res['nombre'] );
+			$this->setApellidoPat( $res['apellido_pat'] );
 			$this->setInitials( $res['initials'] );
 			$this->setPassword( $res['password'] );
 			$this->setType( $res['type'] );
@@ -268,20 +264,19 @@
 			$this->setDeleted( $res['deleted'] );
 			$this->setToken( $res['token'] );
 			$this->setTokenExpires( $res['token_expires'] );
-			$this->setModified( $res['modified'] );
-			$this->setCreated( $res['created'] );
+			$this->setCreatedDate( $res['created_date'] );
+			$this->setIdCompany( $res['id_company'] );
 			return true;
 		}
 		// end function load
 
 		public function save() {
 			if ($this->getId()==0){ // insert new
-				$sql = "INSERT INTO user SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),";
-
+				$sql = "INSERT INTO user SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),"; 
 
 			$sql .= " `email` = ? ,";
-			$sql .= " `first_name` = ? ,";
-			$sql .= " `last_name` = ? ,";
+			$sql .= " `nombre` = ? ,";
+			$sql .= " `apellido_pat` = ? ,";
 			$sql .= " `initials` = ? ,";
 			$sql .= " `password` = ? ,";
 			$sql .= " `type` = ? ,";
@@ -289,14 +284,16 @@
 			$sql .= " `deleted` = ? ,";
 			$sql .= " `token` = ? ,";
 			$sql .= " `token_expires` = ? ,";
+			$sql .= " `created_date` = ? ,";
+			$sql .= " `id_company` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
-				$sql = "UPDATE user SET modified=UTC_TIMESTAMP(),";
+				$sql = "UPDATE user SET modified=UTC_TIMESTAMP(),";	
 
 			$sql .= " `email` = ? ,";
-			$sql .= " `first_name` = ? ,";
-			$sql .= " `last_name` = ? ,";
+			$sql .= " `nombre` = ? ,";
+			$sql .= " `apellido_pat` = ? ,";
 			$sql .= " `initials` = ? ,";
 			$sql .= " `password` = ? ,";
 			$sql .= " `type` = ? ,";
@@ -304,17 +301,20 @@
 			$sql .= " `deleted` = ? ,";
 			$sql .= " `token` = ? ,";
 			$sql .= " `token_expires` = ? ,";
+			$sql .= " `created_date` = ? ,";
+			$sql .= " `id_company` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
 
-			// Save data
+			
+			// Save data 
 			$stmt = $this->db->prepare( $sql );
 			//$stmt->mbind_param( 'i', $id );
 
 			$stmt->mbind_param( 's', $this->email );
-			$stmt->mbind_param( 's', $this->first_name );
-			$stmt->mbind_param( 's', $this->last_name );
+			$stmt->mbind_param( 's', $this->nombre );
+			$stmt->mbind_param( 's', $this->apellido_pat );
 			$stmt->mbind_param( 's', $this->initials );
 			$stmt->mbind_param( 's', $this->password );
 			$stmt->mbind_param( 's', $this->type );
@@ -322,35 +322,34 @@
 			$stmt->mbind_param( 'i', $this->deleted );
 			$stmt->mbind_param( 's', $this->token );
 			$stmt->mbind_param( 's', $this->token_expires );
+			$stmt->mbind_param( 's', $this->created_date );
+			$stmt->mbind_param( 'i', $this->id_company );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
 
-
 			$stmt->execute();
-			if ($this->getId()==0)
-			{
-				//echo '.................INSERTING...'.$this->getId();
+			if ($this->getId()==0){
 				$this->setId( $this->db->insert_id );
 			}
 			return $this->getId();
 		}
-
+		
 
 		public function updateFields($fieldstoupdate) {
 			if ($this->getId()==0){ // insert new
 				// only updates no save new here
 			} else { // updated existing
-				$sql = "UPDATE user SET modified=UTC_TIMESTAMP(),";
+				$sql = "UPDATE user SET modified=UTC_TIMESTAMP(),";	
 
 			if (in_array("email",$fieldstoupdate)){
 				$sql .= " `email` = ? ,";
 			}
-			if (in_array("first_name",$fieldstoupdate)){
-				$sql .= " `first_name` = ? ,";
+			if (in_array("nombre",$fieldstoupdate)){
+				$sql .= " `nombre` = ? ,";
 			}
-			if (in_array("last_name",$fieldstoupdate)){
-				$sql .= " `last_name` = ? ,";
+			if (in_array("apellido_pat",$fieldstoupdate)){
+				$sql .= " `apellido_pat` = ? ,";
 			}
 			if (in_array("initials",$fieldstoupdate)){
 				$sql .= " `initials` = ? ,";
@@ -373,23 +372,29 @@
 			if (in_array("token_expires",$fieldstoupdate)){
 				$sql .= " `token_expires` = ? ,";
 			}
+			if (in_array("created_date",$fieldstoupdate)){
+				$sql .= " `created_date` = ? ,";
+			}
+			if (in_array("id_company",$fieldstoupdate)){
+				$sql .= " `id_company` = ? ,";
+			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
 
-
-			// Save data
+			
+			// Save data 
 			$stmt = $this->db->prepare( $sql );
 			//$stmt->mbind_param( 'i', $id );
 
 			if (in_array("email",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->email  );
 			}
-			if (in_array("first_name",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->firstName  );
+			if (in_array("nombre",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->nombre  );
 			}
-			if (in_array("last_name",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->lastName  );
+			if (in_array("apellido_pat",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->apellidoPat  );
 			}
 			if (in_array("initials",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->initials  );
@@ -412,6 +417,12 @@
 			if (in_array("token_expires",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->tokenExpires  );
 			}
+			if (in_array("created_date",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->createdDate  );
+			}
+			if (in_array("id_company",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idCompany  );
+			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );
 			}
@@ -422,11 +433,11 @@
 			//}
 			return $this->getId();
 		}  // updateFields
-
+		
 
 		public function getAll() {
 			$sql="SELECT id FROM user WHERE 1";
-			// Get data
+			// Get data 
 			$stmt = $this->db->prepare( $sql );
 			$stmt->execute();
 
@@ -446,7 +457,7 @@
 			//if ( ! $this->validclass )
 			//	return $this->validclass;
 
-			if ( ! preg_match($pcre, $input) ){
+			if ( ! preg_match($pcre, $input) ){ 
 				return $this->killInvalidclass( "The input provided for the field '$field' is not validclass. Value provided: ".htmlentities($input),$field);
 			}else{
 				unset($this->statusclass[$field]);

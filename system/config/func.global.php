@@ -92,6 +92,14 @@ function formatValidatePassword($p){
 
  }
 
+function informSuccess($message = null, $redirect = true, $redirectUrl = null, $page = 'index'){
+        if (!$message) {
+            $message = "The action was successful";
+        }
+        $page="/".$page;
+      redirect($redirectUrl.$page."?m=1");
+
+}
 
 
 
@@ -99,6 +107,8 @@ function formatValidatePassword($p){
 /****
 Database functions
 ****/
+
+
 
 function start_connection($serverDB=DB_HOST,$userDB=DB_USER,$passDB=DB_PASSWORD,$nameDB=DB_NAME,$portDB=DB_PORT,$socketDB=DB_SOCKET)
 {
@@ -152,6 +162,61 @@ function validateQuery($con,$query)
   return mysqli_real_escape_string($con,$query);
 }
 
+function fromArray($array, $table, $db, $method )
+{
+  $data    = array();
+  $columns = $values = "";
+    foreach ($array as $rowKey => $row) {
+      $result = $db->query("SHOW COLUMNS FROM ".$table." WHERE Field = '".$rowKey."'");
+      if ($result->num_rows === 1) {
+        if($method=="add"){
+          $columns .= $rowKey.",";
+          $values  .= "'".$db->real_escape_string($row)."',";
+        } 
+        if($method=="update"){
+          $columns .= $rowKey."='".$db->real_escape_string($row)."',";
+          $values  .= "'".$db->real_escape_string($row)."',";//no se ocupa
+        } 
+      }
+    }
+    $columns = substr($columns, 0, -1);
+    $values  = substr($values, 0, -1);
+    if ( $columns && $values ){
+      $data[0] = $columns;
+      $data[1] = $values;
+    }
+   
+    return $data;
+}
+function getServer($key = null, $default = null)
+{
+    if (null === $key) {
+        return $_SERVER;
+    }
+
+    return (isset($_SERVER[$key])) ? $_SERVER[$key] : $default;
+}
+function getMethod()
+{
+    return getServer('REQUEST_METHOD');
+}
+function getPost($key = null, $default = null)
+{
+  if (null === $key) {
+      return $_POST;
+  }
+
+  return (isset($_POST[$key])) ? $_POST[$key] : $default;
+}
+
+function isPost()
+{
+    if ('POST' == getMethod()) {
+        return true;
+    }
+
+    return false;
+}
 /** CSRF Token **/
 function CSRFToken($len=8){
     // should move to cryptographically secure random

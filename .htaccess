@@ -132,8 +132,8 @@ Deny from all
 </FilesMatch>
 
 <Files noaccess.html>
-order allow,deny
-allow from all
+#order allow,deny
+#allow from all
 </Files>
 
 #AddType font/ttf .ttf
