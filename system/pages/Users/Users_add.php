@@ -24,14 +24,13 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
-informSuccess("Se ha guardado el registro",true,make_url("Users"),"editar/id/2");
 	if(isPost()){
 		
 		$u = new User();
 		if(!$u->userExists($_POST['email']))
 		{
 			$u->addUser(getPost());
-			informSuccess("Se ha guardado el registro",true,make_url("Users"));
+			informSuccess("Se ha guardado el registro",true,make_url("Users")."ver/id/2");
 		}
 		else
 		{
@@ -43,30 +42,23 @@ informSuccess("Se ha guardado el registro",true,make_url("Users"),"editar/id/2")
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-	<?php
-		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-		//$breadcrumbs["New Crumb"] => "http://url.com"
-		$breadcrumbs["Users"] = APP_URL."/Users/index";
-		include(SYSTEM_DIR . "/inc/ribbon.php");
-	?>
-
-	<!-- MAIN CONTENT -->
-	<div id="content">
-
-		<div class="row">
-				<div class="col-sm-8 col-md-8">
+	 <?php $breadcrumbs["Users"] = APP_URL."/Users/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+    <!-- MAIN CONTENT -->
+    <div id="content">
+        <div class="row">     
+            <section id="widget-grid" class="">
+            	<article class="col-sm-12 col-md-12 col-lg-12"  id="">
+                    <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
+                    data-widget-colorbutton="false" data-widget-editbutton="false" 
+                    data-widget-deletebutton="false" data-widget-collapsed="false">
 						<!-- Widget ID (each widget will need unique ID)-->
-						<div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
-						
-							<div class="widget-body no-padding">
-
-								<form id="main-form" class="smart-form" role="form" method=post action="<?php echo make_url("Users","add");?>" onsubmit="return checkSubmit();">
-									<header>
-										Agregar nuevo Usuario
-									</header>
-
-									<fieldset>
-
+						<header> <span class="widget-icon"> 
+                            <i class="fa fa-plus"></i> </span><h2><?php echo $page_title ?></h2>
+                        </header>
+                        <div style="display: ;">
+							<div class="jarviswidget-editbox" style=""></div>
+                                <div class="widget-body">
+									<form id="main-form" class="smart-form" role="form" method=post action="<?php echo make_url("Users","add");?>" onsubmit="return checkSubmit();">
 										<section>
 											<label class="input"> <i class="icon-append fa fa-envelope"></i>
 												<input type="email" id="email" name="email" placeholder="Email">
@@ -77,13 +69,11 @@ informSuccess("Se ha guardado el registro",true,make_url("Users"),"editar/id/2")
 												<input type="password" id="password" name="password" placeholder="Password">
 											</label>
 										</section>
-
 										<section>
 											<label class="input"> <i class="icon-append fa fa-undo"></i>
 												<input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirmar Password">
 											</label>
 										</section>
-
 										<section>
 											<label class="input"> <i class="icon-append fa fa-user"></i>
 												<input type="text" id="nombre" name="nombre" placeholder="Nombre">
@@ -104,38 +94,34 @@ informSuccess("Se ha guardado el registro",true,make_url("Users"),"editar/id/2")
 												<input type="text" id="direccion" name="direccion" placeholder="Direccion">
 											</label>
 										</section>
-											<section>
-												<label class="label">Company</label>
-												<select style="width:100%" class="select2">
-													<?php 
-													$obj = new Company();
-													$list=$obj->getAll();
-													if (is_array($list) || is_object($list)){
-														foreach($list as $val){
-															echo "<option value='".$val['id']."'>".$val['name']."</option>";
-														}
+										<section>
+											<label class="label">Company</label>
+											<select style="width:100%" class="select2">
+												<?php 
+												$obj = new Company();
+												$list=$obj->getAll();
+												if (is_array($list) || is_object($list)){
+													foreach($list as $val){
+														echo "<option value='".$val['id']."'>".$val['name']."</option>";
 													}
-													 ?>
-												</select>
-											</section>
-									</fieldset>
-									<footer>
-										<button type="button" onclick=" validateForm();" class="btn btn-primary">
-											Save
-										</button>
-									</footer>
-								</form>
-
+												}
+												 ?>
+											</select>
+										</section>
+										<div class="form-actions">
+											<button type="button" onclick=" validateForm();" class="btn btn-primary">
+												Guardar
+											</button>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
-					<!-- end widget content -->
+					</div>
+				</article>
+			</section>
 
-				</div>
-				<!-- end widget div -->
-
-			</div>
-			<!-- end widget -->
-
+		</div>
 	</div>
 
 </div>

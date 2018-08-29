@@ -22,46 +22,54 @@ ex:
 
 */
 $page_nav = array(
-	"solicitudes" => array(
-		"title" => "Solicitudes",
-		"icon" => "fa-flag",
-		//"url" => APP_URL."/solicitudes/index",
+	"Clientes" => array(
+		"title" => "Clientes",
+		"icon" => "fa-users",
 		"sub" => array(
-			"campaigns" => array( "title" => "solicitudes", "url" => APP_URL."/solicitudes/index" ),
-			'progress' => array( 'title' => 'Agregar solicitud', 'url' => APP_URL."/solicitudes/add" )
+			'clientsindex' => array('title'  => 'Clientes','url' => APP_URL."/clientes/index" ),
+			'clients' => array('title'  => 'Nuevo Cliente','url' => APP_URL."/clientes/add" )
 		)
 	),
 	"Autos" => array(
 		"title" => "Autos",
 		"icon" => "fa-automobile",
 		"sub" => array(
-			"projectresults"  => array( "title" => "Project results", "url" => APP_URL."/Results/index" ),
-			"campaignresults" => array( "title" => "Campaign results", "url" => APP_URL."/Results/detail" )
+			"autos"  => array( "title" => "Autos", "url" => APP_URL."/Autos/index" ),
+			"inventario" => array( "title" => "Inventario Autos", "url" => APP_URL."/Autos/inventario" )
 		)
 	),
-	"manageclients" => array(
-		"title" => "Clientes",
-		"icon" => "fa-users",
-		//"url" => APP_URL."/clientes/index",
+	"solicitudes" => array(
+		"title" => "Solicitudes",
+		"icon" => "fa-flag",
+		//"url" => APP_URL."/solicitudes/index",
 		"sub" => array(
-			'clients' => array('title'  => 'Add Cliente','url' => APP_URL."/clientes/add" )
+			"campaigns" => array( "title" => "Cotizacion", "url" => APP_URL."/solicitudes/index" ),
+			'progress' => array( 'title' => 'Refaccion', 'url' => APP_URL."/solicitudes/add" ),
+			'progress' => array( 'title' => 'Incidencias', 'url' => APP_URL."/solicitudes/add" )
 		)
 	),
+	"asignaciones" => array(
+		"title" => "Asignaciones",
+		"icon" => "fa-flag",
+		//"url" => APP_URL."/solicitudes/index",
+		"sub" => array(
+			"campaigns" => array( "title" => "Asignacion de trabajo", "url" => APP_URL."/asignacion/index" ),
+			'progress' => array( 'title' => 'Refaccion', 'url' => APP_URL."/solicitudes/add" ),
+			'progress' => array( 'title' => 'Incidencias', 'url' => APP_URL."/solicitudes/add" )
+		)
+	)
+);
+
+$page_navadmin = array(
 	"catalogos" => array(
-		"title" => "Catalogos",
-		"icon" => "fa-book",
-		"url" => APP_URL."/catalogos/index",
+		"title" => "Catalogo Admin",
+		"icon"  => "fa-book",
 		"sub" => array(
-			"catalogos" => array( "title" => "Catalogos", "url" => APP_URL."/catalogos/index" )
-		)
-	),
-	"manageusers" => array(
-		"title" => "Usuarios",
-		"icon" => "fa-lock",
-		//"url" => APP_URL."/Users/index",
-		"sub" => array(
-			'users' => array( 'title' => 'Usuarios', 'url' => APP_URL."/Users/index" ),
-			'addusers' => array( 'title' => 'Nuevo Usuario', 'url' => APP_URL."/Users/add" )
+			"cattaller" 	 => array( "title" => "Taller",      "url" => APP_URL."/Catalogos/taller" ),
+			'users'     	 => array( 'title' => 'Usuarios',    'url' => APP_URL."/Users/index" ),
+			"catmodelo" 	 => array( "title" => "Modelo",      "url" => APP_URL."/Catalogos/modelo" ),
+			"catmarca"  	 => array( "title" => "Marca",       "url" => APP_URL."/Catalogos/marca" ),
+			"cataseguradora" => array( "title" => "Aseguradora", "url" => APP_URL."/Catalogos/aseguradora" )
 		)
 	),
 	"examples" => array(
@@ -70,6 +78,8 @@ $page_nav = array(
 		"url" => APP_URL."/Examples/index"
 	)
 );
+$page_nav=array_merge($page_nav, $page_navadmin);
+//echo json_encode($page_nav);
 
 /*
 $page_nav = array(
