@@ -78,72 +78,95 @@ if(isset($_POST['name']) && isset($_POST['description']))
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-	<?php
-		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-		//$breadcrumbs["New Crumb"] => "http://url.com"
-		$breadcrumbs["Clients"] = APP_URL."/Clients/index";
-		include(SYSTEM_DIR . "/inc/ribbon.php");
-	?>
-
-	<!-- MAIN CONTENT -->
-	<div id="content">
-		<h2>
-			Add client
-		</h2>
-		<section id="widget-grid" class="">
-
-			<div class="row">
-					<div class="col-sm-8">
-						<!-- widget content -->
-						<div class="widget-body no-padding">
-
-							<form id="smart-form-register" class="smart-form" role="form" method=post action="<?php echo make_url("Clients","add");?>" onsubmit="return validateForm();">
-								<fieldset>
-									<section>
-										<label class="input"> <i class="icon-append fa fa-user"></i>
-											<input type="text" id="name" name="name" placeholder="Name">
-											<b class="tooltip tooltip-bottom-right">Needed to enter client name</b> </label>
-									</section>
-
-									<section>
-										<label class="input"> <i class="icon-append fa fa-file-text"></i>
-											<input type="text" id="description" name="description" placeholder="Description">
-											<b class="tooltip tooltip-bottom-right">Needed to enter client description</b> </label>
-									</section>
-
-
-
-									<!--<div class="row">
-										<section class="col col-6">
-											<label class="select">
-												<select id="status" name="status">
-													<option value="0" selected="" disabled="">Status</option>
-													<option value="1">Enabled</option>
-													<option value="2">Disabled</option>
-													<option value="3">Deleted</option>
-												</select> <i></i> </label>
-										</section>
-
-									</div>-->
-								</fieldset>
-								<footer>
-									<button type="submit" class="btn btn-primary">
-										Save
-									</button>
-								</footer>
-							</form>
-
-						</div>
-						<!-- end widget content -->
-
-					</div>
-					<!-- end widget div -->
-
-				</div>
-				<!-- end widget -->
-
-		</div>
-	</div>
+     <?php $breadcrumbs["Clientes"] = APP_URL."/Clientes/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+    <!-- MAIN CONTENT -->
+    <div id="content">
+        <div class="row">     
+            <section id="widget-grid" class="">
+                <article class="col-sm-12 col-md-12 col-lg-12"  id="">
+                    <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
+                    data-widget-colorbutton="false" data-widget-editbutton="false" 
+                    data-widget-deletebutton="false" data-widget-collapsed="false">
+                        <!-- Widget ID (each widget will need unique ID)-->
+                        <header>
+                            <span class="widget-icon"> 
+                                <i class="fa fa-plus"></i>
+                            </span>
+                            <h2><?php echo $page_title ?></h2>
+                        </header>
+                        <div style="display: ;">
+                            <div class="jarviswidget-editbox" style=""></div>
+                            <div class="widget-body">
+								<form action= "" method="POST" id="frmAltaCliente">
+				                    <div class="col-sm-6">
+				                        <div class="form-group">
+				                            <label for="name">Nombre del Cliente</label>
+				                            <input type="text" class="form-control" placeholder="Nombre Cliente" name="nomCliente">
+				                            <input type="text" class="form-control" name="idCliente" style="display: none;">                                                  
+				                        </div>
+				                        <div class="form-group">
+				                            <label for="name">Número Interior</label>
+				                            <input type="text" class="form-control" placeholder="Número Interior" name="numInt">                                                    
+				                        </div> 
+				                        <div class="form-group">
+				                            <label for="name">CP</label>
+				                            <input type="text" class="form-control" placeholder="CP" name="cp">                                                    
+				                        </div> 
+				                        <div class="form-group">
+				                            <label for="name">Ciudad</label>
+				                            <input type="text" class="form-control" placeholder="Ciudad" name="ciudad">                                                    
+				                        </div> 
+				                        <div class="form-group">
+				                            <label for="name">Teléfono</label>
+				                            <input type="text" class="form-control" placeholder="(55) 5555-5555" name="telefonoCli">                                                    
+				                        </div> 
+				                        <div class="form-group">
+				                            <label for="email">RFC</label>
+				                            <input type="text" class="form-control" placeholder="RFC" name="rfcCliente">                                                                                               
+				                        </div>
+				                    </div>  
+				                    <div class="col-sm-6">
+				                        <div class="form-group">
+				                            <label for="name">Calle</label>
+				                            <input type="text" class="form-control" placeholder="Calle" name="calle">                                                    
+				                        </div> 
+				                        <div class="form-group">
+				                            <label for="name">Número Exterior</label>
+				                            <input type="text" class="form-control" placeholder="Número Exterior" name="numExt">                                                    
+				                        </div>
+				                        <div class="form-group">
+				                            <label for="name">Colonia</label>
+				                            <input type="text" class="form-control" placeholder="Colonia" name="colonia">                                                    
+				                        </div>
+				                        <div class="form-group">
+				                            <label for="name">Estado</label>
+				                            <input type="text" class="form-control" placeholder="Estado" name="estado">                                                    
+				                        </div> 
+				                        <div class="form-group">
+				                            <label for="email">Correo</label>
+				                            <input type="email" class="form-control" placeholder="example@email.com" name="correo">                                                                                               
+				                        </div>
+				                        <br>
+				                    </div>
+				                    
+				                    <div class="form-group">                        
+				                        <button type="button" class="btn btn-primary btn-sm m-t-10 waves-effect" style='width:120px;' onclick="buscarCli()" ondblclick="">Buscar</button>&nbsp;
+				                        <button type="button" class="btn btn-primary btn-sm m-t-10 waves-effect" style='width:120px;' onclick="modificar()" ondblclick="">Modificar</button>&nbsp;
+				                        <button type="button" class="btn btn-primary btn-sm m-t-10 waves-effect" style='width:120px;' onclick="grabar()" ondblclick="">Alta</button>
+				                        <script type="text/javascript" src="/js/jquery.js"></script>
+				                        <script>
+				                            
+				                        </script> 
+				                        <div id="resultado"></div>
+				                    </div>
+				                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </div>
 </div>
 	<!-- END MAIN CONTENT -->
 

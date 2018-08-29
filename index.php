@@ -86,6 +86,15 @@ Routing section
        if ($request['page']==='detail'){$page="Results_detail.php"; }
 
       }
+      if ( $request['section'] === 'Catalogos' ) {
+       $page = "Catalogos_taller.php";
+       $dir  = "Catalogos";//si esta en carpeta
+       if ($request['page'] === 'taller') { $page = "Catalogos_taller.php"; }
+       if ($request['page'] === 'talleradd') { $page = "Catalogos_talleradd.php"; }
+       if ($request['page'] === 'modelo') { $page = "Catalogos_modelo.php"; }
+       if ($request['page'] === 'marca')  { $page = "Catalogos_marca.php";  }
+       if ($request['page'] === 'marca')  { $page = "Catalogos_marca.php";  }
+      }
 
       if ($request['section']==='Users'){
        $page="Users_index.php";
