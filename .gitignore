@@ -2,6 +2,9 @@
 .idea/
 .ftpquota
 error_log
+.well-known
+cgi-bin
+.DS_Store
 
 #system/
 #system/config/config.php
