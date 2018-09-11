@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar nuevo taller";
+$page_title = "Ver taller";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,15 +24,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
-if(isPost()){
-    $obj = new Taller();
-    $id=$obj->addAll(getPost());
-    if($id>0){
-        informSuccess(true, make_url("Catalogos","taller"));
-    }else{
-        informError(true,make_url("Catalogos","taller"));
-    }
+
+
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","taller"));
+
+$obj = new Taller();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","taller"));
 }
+
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
@@ -49,61 +53,63 @@ if(isPost()){
                         <!-- Widget ID (each widget will need unique ID)-->
                         <header>
                             <span class="widget-icon"> 
-                                <i class="fa fa-plus"></i>
+                                <i class="fa fa-eye"></i>
                             </span>
                             <h2><?php echo $page_title ?></h2>
                         </header>
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","talleradd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                <form id="main-form" class="" role="form" method=post 
+                                action="<?php echo make_url("Catalogos","talleredit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                    <input type="text" class="" name="idTaller" hidden>
                                     <fieldset>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Nombre del Taller</label>
-                                                <input type="text" class="form-control" placeholder="Nombre Taller" name="nombre">                                                    
+                                                <input type="text" class="form-control" placeholder="Nombre Taller" id="nombre" name="nombre" value="<?php echo $data['nombre']; ?>">                                                    
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Calle</label>
-                                                <input type="text" class="form-control" placeholder="Calle" name="calle" >                        
+                                                <input type="text" class="form-control" placeholder="Calle" name="calle" value="<?php echo $data['calle']; ?>">                        
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Número Exterior</label>
-                                                <input type="text" class="form-control" placeholder="Número exterior" name="numext" >                                               
+                                                <input type="text" class="form-control" placeholder="Número exterior" name="numext" value="<?php echo $data['numext']; ?>">                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Número Interior</label>
-                                                <input type="text" class="form-control" placeholder="Número interior" name="numinte" >                                                                       
+                                                <input type="text" class="form-control" placeholder="Número interior" name="numinte" value="<?php echo $data['numinte']; ?>">                                                                       
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Colonia</label>
-                                                <input type="text" class="form-control" placeholder="Colonia" name="colonia" >                                                           
+                                                <input type="text" class="form-control" placeholder="Colonia" name="colonia" value="<?php echo $data['colonia']; ?>">                                                           
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Ciudad</label>
-                                                <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" > 
+                                                <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" value="<?php echo $data['ciudad']; ?>"> 
                                             </div>
                                         </div>  
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Estado</label>
-                                                <input type="text" class="form-control" placeholder="Estado" name="estado" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Estado" name="estado" value="<?php echo $data['estado']; ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">CP</label>
-                                                <input type="text" maxlength="5" class="form-control" id="cp" placeholder="CP" name="cp">                                                                                                                                                       
+                                                <input type="text" maxlength="5" class="form-control" id="cp" placeholder="CP" name="cp" value="<?php echo $data['cp']; ?>">                                                                                                                                                       
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">RFC</label>
-                                                <input type="text" class="form-control" placeholder="RFC" name="rfc" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="RFC" name="rfc" value="<?php echo $data['rfc']; ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Correo</label>
-                                                <input type="email" class="form-control" placeholder="example@email.com" name="correo">                                                                                               
+                                                <input type="email" class="form-control" placeholder="example@email.com" name="correo" value="<?php echo $data['correo']; ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Teléfono</label>
-                                                <input type="text" class="form-control" placeholder="" name="telefono">                                                                                                                     
+                                                <input type="text" class="form-control" placeholder="" name="telefono" value="<?php echo $data['telefono']; ?>">                                                                                                                     
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Logotipo</label>
@@ -113,19 +119,7 @@ if(isPost()){
                                             </div>
                                         </div>
                                     </fieldset>
-                                    <div class="form-actions" style="text-align: center">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
-                                                    Cancelar
-                                                </button>
-                                                <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
-                                                    <i class="fa fa-save"></i>
-                                                    Guardar
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </form>
                             </div>
                         </div>
@@ -155,6 +149,7 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
+    
     function validateForm()
     {
         var nombre = $("input[name=nombre]").val();

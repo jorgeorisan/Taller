@@ -68,7 +68,7 @@ updated token / token experation
 			$token=substr(sha1(uniqid().rand(1,1000).rand(1,1000)),rand(3,10),4);
  			$token.="-".substr(sha1(uniqid().rand(1,1000).rand(1,1000)),rand(3,10),4);
  			$token.="-".substr(sha1(uniqid().rand(1,1000).rand(1,1000)),rand(3,10),4);
-			$update_sql = "UPDATE  `user`  SET `password` = '', `token` = '" . $token . "', `token_expires` =  DATE_ADD(UTC_TIMESTAMP(), INTERVAL 15 MINUTE)  WHERE  `email` = ? AND  `enabled` = 1 AND `deleted` = 0 ";
+			$update_sql = "UPDATE  `user`  SET `password` = '', `token` = '" . $token . "', `token_expires` =  DATE_ADD(UTC_TIMESTAMP(), INTERVAL 15 MINUTE)  WHERE  `email` = ? AND  `status` = 'active' AND `deleted_date` is NULL";
 
 	 		// Insert site content
 			if ( ! $stmt = $this->db->prepare( $update_sql ) ) return false;
@@ -85,7 +85,7 @@ updated token / token experation
 
 
 		public function resetPassword($e,$t,$p){
-			$sql="UPDATE user SET password = ? , `token` = '' , `token_expires` = DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 YEAR)  WHERE email = ? AND token = ? AND token_expires > UTC_TIMESTAMP()  AND  `enabled` = 1 AND `deleted` = 0";
+			$sql="UPDATE user SET password = ? , `token` = '' , `token_expires` = DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 YEAR)  WHERE email = ? AND token = ? AND token_expires > UTC_TIMESTAMP()  AND  `status` = 'active' AND `deleted_date` is NULL";
 			$ret=false;
 			if ( ! $stmt = $this->db->prepare( $sql ) ) return false;
 			$p=password_hash($p, PASSWORD_DEFAULT);
@@ -104,14 +104,19 @@ updated token / token experation
 		
 		public function validateCredentials($e,$p){
 			$id=0;
-			$sql = "SELECT `id`,`password` FROM user WHERE `email` = ?  AND  `enabled` = 1 AND `deleted` = 0 ";
+
+			$sql = "SELECT `id`,`password` FROM user WHERE `email` = ?  AND  `status` = 'active' AND `deleted_date` is NULL ";
 
 			if ( ! $stmt = $this->db->prepare( $sql ) ) return false;
+
 			$e=strtolower($e);
 			$stmt->mbind_param( 's', $e );
 			$stmt->execute( $stmt );	
 			
-  			$stmt->bind_result($ti, $tp);
+  			 $stmt->bind_result($ti, $tp);
+
+
+			
 		    /* fetch values */
 		    if ($stmt->fetch()) {
 				if ( password_verify($p, $tp) ){ 

@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Aseguradora";
+$page_title = "Editar taller";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,20 +24,32 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+
+
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","taller"));
+
+$obj = new Taller();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","taller"));
+}
 if(isPost()){
-    $obj = new Aseguradora();
-    $id=$obj->addAll(getPost());
-    if($id>0){
-        informSuccess(true, make_url("Catalogos","aseguradora"));
+    $obj = new Taller();
+    $id = $obj->updateAll($id,getPost());
+    if( $id  ) {
+         informSuccess(true, make_url("Catalogos","taller"));
     }else{
-        informError(true,make_url("Catalogos","aseguradora"));
+        informError(true, make_url("Catalogos","talleredit",array('id'=>$id)),"talleredit");
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Aseguradora"] = APP_URL."/Catalogos/aseguradora"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Taller"] = APP_URL."/Catalogos/taller"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -49,67 +61,75 @@ if(isPost()){
                         <!-- Widget ID (each widget will need unique ID)-->
                         <header>
                             <span class="widget-icon"> 
-                                <i class="fa fa-plus"></i>
+                                <i class="fa fa-edit"></i>
                             </span>
                             <h2><?php echo $page_title ?></h2>
                         </header>
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","aseguradoraadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">     
-                                    <fieldset>    
+                                <form id="main-form" class="" role="form" method=post 
+                                action="<?php echo make_url("Catalogos","talleredit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                    <input type="text" class="" name="idTaller" hidden>
+                                    <fieldset>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="name">Aseguradora</label>
-                                                <input type="text" class="form-control" placeholder="Nombre Aseguradora" name="nombre" >                                                                                               
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="name">Teléfono</label>
-                                                <input type="text" class="form-control" placeholder="Teléfono" name="telefono" >                                                                                               
+                                                <label for="name">Nombre del Taller</label>
+                                                <input type="text" class="form-control" placeholder="Nombre Taller" id="nombre" name="nombre" value="<?php echo $data['nombre']; ?>">                                                    
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Calle</label>
-                                                <input type="text" class="form-control" placeholder="Calle" name="calle" >                                                                                               
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="name">Número Interior</label>
-                                                <input type="text" class="form-control" placeholder="Número Interior" name="num_int" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Calle" name="calle" value="<?php echo $data['calle']; ?>">                        
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Número Exterior</label>
-                                                <input type="text" class="form-control" placeholder="Número Exterior" name="num_ext" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Número exterior" name="numext" value="<?php echo $data['numext']; ?>">                                               
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Correo</label>
-                                                <input type="email" class="form-control" placeholder="example@email.com" name="email">                                                          
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="name">CP</label>
-                                                <input type="text" class="form-control" placeholder="CP" name="cp" >                                                                                               
+                                                <label for="name">Número Interior</label>
+                                                <input type="text" class="form-control" placeholder="Número interior" name="numinte" value="<?php echo $data['numinte']; ?>">                                                                       
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Colonia</label>
-                                                <input type="text" class="form-control" placeholder="Colonia" name="colonia" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Colonia" name="colonia" value="<?php echo $data['colonia']; ?>">                                                           
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Ciudad</label>
-                                                <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" value="<?php echo $data['ciudad']; ?>"> 
                                             </div>
+                                        </div>  
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Estado</label>
-                                                <input type="text" class="form-control" placeholder="Estado" name="estado" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Estado" name="estado" value="<?php echo $data['estado']; ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Url</label>
-                                                <input type="text" class="form-control" placeholder="Url" name="url" >                                                                                               
+                                                <label for="name">CP</label>
+                                                <input type="text" maxlength="5" class="form-control" id="cp" placeholder="CP" name="cp" value="<?php echo $data['cp']; ?>">                                                                                                                                                       
                                             </div>
-                                        </div>   
-                                    </fieldset> 
+                                            <div class="form-group">
+                                                <label for="name">RFC</label>
+                                                <input type="text" class="form-control" placeholder="RFC" name="rfc" value="<?php echo $data['rfc']; ?>">                                                                                               
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Correo</label>
+                                                <input type="email" class="form-control" placeholder="example@email.com" name="correo" value="<?php echo $data['correo']; ?>">                                                                                               
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Teléfono</label>
+                                                <input type="text" class="form-control" placeholder="" name="telefono" value="<?php echo $data['telefono']; ?>">                                                                                                                     
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Logotipo</label>
+                                                <input type="file" class="form-control"  id="imagen1" name="logo" onchange="vistaPrevia(this, 'logoTallerPrev');" multiple>
+                                                <fieldset id="logoTallerPrev" class="0">
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </fieldset>
                                     <div class="form-actions" style="text-align: center">
                                         <div class="row">
-                                           <div class="col-md-12">
+                                            <div class="col-md-12">
                                                 <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
                                                     Cancelar
                                                 </button>
@@ -119,7 +139,7 @@ if(isPost()){
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>                              
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -129,6 +149,7 @@ if(isPost()){
         </div>
     </div>
 </div>
+
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
 
@@ -148,16 +169,16 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
-   
+    
     function validateForm()
     {
-       var nombre = $("input[name=nombre]").val();
+        var nombre = $("input[name=nombre]").val();
         if ( ! nombre )  return notify("info","El nombre es requerido");
 
-        $("#main-form").submit(); 
+        $("#main-form").submit();       
     }
     $(document).ready(function() {
-     
+    
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.
          * It initializes and checks for all basic elements of the page

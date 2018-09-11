@@ -25,6 +25,7 @@ if ( isset($_POST['email']) && trim(strtolower($_POST['password'])) ) {
 			'nombre'=>$u->getNombre(),
 			'apellido_pat'=>$u->getApellidoPat(),
 			'initials'=>$u->getInitials(),
+			'id_taller'=>$u->getIdTaller(),
 			'type'=>$u->getType()
 			);
 		$_SESSION['CSRFToken']=CSRFToken();
@@ -34,7 +35,7 @@ if ( isset($_POST['email']) && trim(strtolower($_POST['password'])) ) {
 		redirect(make_url());
 	}else{
 		$showloginerror=1;
-        echo ('Error');
+        echo ('Error to validate');
 	}
 } elseif ( isset($_POST['email'])){
   $showloginerror=1;

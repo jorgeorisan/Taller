@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Marca";
+$page_title = "Editar Marca";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,13 +24,23 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","marca"));
+
+$obj = new Marca();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","marca"));
+}
 if(isPost()){
     $obj = new Marca();
-    $id=$obj->addAll(getPost());
-    if($id>0){
-        informSuccess(true, make_url("Catalogos","marca"));
+    $id = $obj->updateAll($id,getPost());
+    if( $id  ) {
+         informSuccess(true, make_url("Catalogos","marca"));
     }else{
-        informError(true,make_url("Catalogos","marca"));
+        informError(true, make_url("Catalogos","marcaedit",array('id'=>$id)),"marcaedit");
     }
 }
 ?>
@@ -42,23 +52,26 @@ if(isPost()){
     <div id="content">
         <div class="row">     
             <section id="widget-grid" class="">
-                <article class="col-sm-12 col-md-6 col-lg-6"  id="">
+                 <article class="col-sm-12 col-md-6 col-lg-6"  id="">
                     <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
                     data-widget-colorbutton="false" data-widget-editbutton="false" 
                     data-widget-deletebutton="false" data-widget-collapsed="false">
                         <!-- Widget ID (each widget will need unique ID)-->
-                        <header> <span class="widget-icon"> 
-                            <i class="fa fa-plus"></i> </span><h2><?php echo $page_title ?></h2>
+                        <header>
+                            <span class="widget-icon"> 
+                                <i class="fa fa-edit"></i>
+                            </span>
+                            <h2><?php echo $page_title ?></h2>
                         </header>
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
-                                    <div class="tl-body">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                   <div class="tl-body">
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Marca</label>
-                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre"  >
+                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre" value="<?php echo $data['nombre']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">

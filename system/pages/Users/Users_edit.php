@@ -11,7 +11,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Edit user";
+$page_title = "Editar usuario";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -26,139 +26,117 @@ include(SYSTEM_DIR . "/inc/header.php");
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
 
+
 if(isset($request['params']['id'])   && $request['params']['id']>0)
-	{$user_id=$request['params']['id'];}
+    $id=$request['params']['id'];
 else
-	{die("No user selected to edit!");}
+    informError(true,make_url("Users","User"));
 
-
-$u = new User();
-$user=$u->getUser($user_id);
-
-//$user->load($user_id);
-$error_message="";
-$success_message="";
-$warning_message="";
-if(isset($_POST['email']) && isset($_POST['first_name']) && isset($_POST['last_name']))//&& validateCSRFToken() )
-{
-
-	if(isset($_POST['enabled']) && $_POST['enabled']==1)
-		$enabled_int=1;
-	else
-		$enabled_int=0;
-
-		$result=$u->saveUser($user_id,$_POST['email'],$_POST['first_name'],$_POST['last_name'],$enabled_int);
-
-		if($result)
-		{
-			redirect(make_url("Users"));
-			//$success_message="User saved correctly";
-		}
-		else
-		{
-			$error_message="Error saving user";
-
-		}
-
-		/*$user -> setEmail($_POST['email']);
-		$user -> setFirstName($_POST['first_name']);
-		$user -> setLastName($_POST['last_name']);
-
-		$user -> setEnabled($enabled_int);
-		$user -> save();
-
-		if ($user->getValid()){
-			redirect(make_url("Users"));
-		}else{
-			if (empty($user->getStatus()) )
-			{
-				$error_message="There was an error while saving !";
-			}else{
-				//print_r($user->getStatus());
-				$error_message="User status error!";
-				//(())$errormessage="<p>".implode($user->getStatus(),"</p><p>")."</p>";
-			}
-		}
-		*/
+$obj = new User();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Users","User"));
+}
+if(isPost()){
+    $obj = new User();
+    $id = $obj->updateAll($id,getPost());
+    if ( $id ) {
+        informSuccess(true, make_url("Users","users"));
+    }else{
+        informError(true, make_url("Users","edit",array('id'=>$data['id']) ) );
+    }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-	<?php
-		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-		//$breadcrumbs["New Crumb"] => "http://url.com"
-		$breadcrumbs["Users"] = APP_URL."/Users/index";
-		include(SYSTEM_DIR . "/inc/ribbon.php");
-		//echo $user['enabled'];
-	?>
-
-	<!-- MAIN CONTENT -->
-	<div id="content">
-		<div class="row">
-				<div class="col-sm-8 col-md-8">
+	 <?php $breadcrumbs["Users"] = APP_URL."/Users/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+    <!-- MAIN CONTENT -->
+    <div id="content">
+        <div class="row">     
+            <section id="widget-grid" class="">
+            	<article class="col-sm-12 col-md-8 col-lg-6"  id="">
+                    <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
+                    data-widget-colorbutton="false" data-widget-editbutton="false" 
+                    data-widget-deletebutton="false" data-widget-collapsed="false">
 						<!-- Widget ID (each widget will need unique ID)-->
-						<div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
-							<div class="widget-body no-padding">
-								<form id="main-form" class="smart-form" role="form" method=post action="<?php echo make_url("Users","add");?>" onsubmit="return checkSubmit();">
-									<header>Add user</header>
-									<fieldset>
-										<section>
-											<label class="input"> <i class="icon-append fa fa-envelope"></i>
-												<input type="email" id="email" name="email" placeholder="Email" value="<?php echo $user['email']; ?>">
-											</label>
-										</section>
-										<section>
-											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" id="nombre" name="nombre" placeholder="Nombre">
-											</label>
-										</section>
-										<section>
-											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" id="apellido_pat" name="apellido_pat" placeholder="Apellido Paterno">
-											</label>
-										</section>
-										<section>
-											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" id="apellido_mat" name="apellido_mat" placeholder="Apellido Materno">
-											</label>
-										</section>
-										<section>
-											<label class="input"> <i class="icon-append fa fa-list-alt"></i>
-												<input type="text" id="direccion" name="direccion" placeholder="Direccion">
-											</label>
-										</section>
+						<header> <span class="widget-icon"> 
+                            <i class="fa fa-edit"></i> </span><h2><?php echo $page_title ?></h2>
+                        </header>
+                        <div style="display: ;">
+							<div class="jarviswidget-editbox" style=""></div>
+                                <div class="widget-body">
+									<form id="main-form" class="smart-form" role="form" method=post action="<?php echo make_url("Users","edit",array('id'=>$data['id']));?>" onsubmit="return checkSubmit();">
+										
 											<section>
-												<label class="label">Company</label>
-												<select style="width:100%" class="select2">
+												<label class="input"> <i class="icon-append fa fa-envelope"></i>
+													<?php echo $data['email']; ?>
+												</label>
+											</section>
+											<section>
+												<label class="input"> <i class="icon-append fa fa-user"></i>
+													<input type="text" id="nombre" name="nombre" placeholder="Nombre" value="<?php echo $data['nombre']; ?>">
+												</label>
+											</section>
+											<section>
+												<label class="input"> <i class="icon-append fa fa-user"></i>
+													<input type="text" id="apellido_pat" name="apellido_pat" placeholder="Apellido Paterno" value="<?php echo $data['apellido_pat']; ?>">
+												</label>
+											</section>
+											<section>
+												<label class="input"> <i class="icon-append fa fa-user"></i>
+													<input type="text" id="apellido_mat" name="apellido_mat" placeholder="Apellido Materno" value="<?php echo $data['apellido_mat']; ?>">
+												</label>
+											</section>
+											<section>
+												<label class="input"> <i class="icon-append fa fa-list-alt"></i>
+													<input type="text" id="direccion" name="direccion" placeholder="Direccion" value="<?php echo $data['direccion']; ?>">
+												</label>
+											</section>
+											<section>
+												<label class="label">Selecciona el taller</label>
+												<select style="width:100%" class="select2" name="id_taller" id="id_taller">
+													
 													<?php 
-													$obj = new Company();
-													$list=$obj->getAll();
+													$obj = new Taller();
+													$list=$obj->getAllArr();
 													if (is_array($list) || is_object($list)){
 														foreach($list as $val){
-															echo "<option value='".$val['id']."'>".$val['name']."</option>";
+															$selected = "";
+															if ($data['id_taller'] == $val['id'] ) {
+																$selected = "selected";
+															}
+															echo "<option value='".$val['id']."' $selected >".$val['nombre']."</option>";
 														}
 													}
 													 ?>
 												</select>
 											</section>
-									</fieldset>
-									<footer>
-										<button type="button" onclick=" validateForm();" class="btn btn-primary">
-											Save
-										</button>
-									</footer>
-								</form>
-
+									
+										<div class="form-actions" style="text-align: center">
+	                                        <div class="row">
+	                                            <div class="col-md-12">
+	                                                <button class="btn btn-default btn-sm" type="button" onclick="window.history.go(-1); return false;">
+	                                                    Cancelar
+	                                                </button>
+	                                                <button class="btn btn-primary btn-sm" type="button" onclick=" validateForm();">
+	                                                    <i class="fa fa-save"></i>
+	                                                    Guardar
+	                                                </button>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+									</form>
+								</div>
 							</div>
 						</div>
-					<!-- end widget content -->
-				</div>
-				<!-- end widget div -->
-			</div>
-			<!-- end widget -->
+					</div>
+				</article>
+			</section>
+
+		</div>
 	</div>
-	<!-- END MAIN CONTENT -->
+
 </div>
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
@@ -180,39 +158,23 @@ if(isset($_POST['email']) && isset($_POST['first_name']) && isset($_POST['last_n
 
 <script>
 
-function validateForm()
-{
-	//alert("validating form");
-
-	var x = document.getElementById("email").value;
-	showalert=true;
-
-	if (x == "")
+	function validateForm()
 	{
-		showWarning("Email is missing");
-		return false;
+		
+		var email = $("#email").val();
+		if (email == ""){ notify("info","Se necesita un email"); return false; }
+		
+		var x = $("#nombre").val();
+		if (x == ""){ notify("warning","Se necesita un nombre"); return false; }
+			
+		var x = $("#apellido_pat").val();
+		if (x == ""){ notify("warning","Se necesita un apellido"); return false; }
 
+		var idtaller = $("#id_taller").val();
+		if (idtaller == ""){ notify("info","Se necesita un taller"); return false; }
+	
+	    $("#main-form").submit();		
 	}
-	else
-	{
-		var x = document.getElementById("first_name").value;
-		if (x == "")
-		{
-				showWarning("First name must be filled out");
-				return false;
-		}
-		else
-		{
-			var x = document.getElementById("last_name").value;
-			if (x == "")
-			{
-				showWarning("Last name must be filled out");
-				return false;
-			}
-		}
-	}
-
-}
 	$(document).ready(function() {
 		/* DO NOT REMOVE : GLOBAL FUNCTIONS!
 		 *
@@ -246,17 +208,7 @@ function validateForm()
 
 		 pageSetUp();
 
-		 <?php if($error_message!=""){?>
-			 var message = <?php echo json_encode($error_message); ?>;
-			showError(message);<?php }?>
-
-			<?php if($success_message!=""){?>
- 			 var message = <?php echo json_encode($success_message); ?>;
- 			showSuccess(message);<?php }?>
-
-			<?php if($warning_message!=""){?>
- 			 var message = <?php echo json_encode($warning_message); ?>;
- 			showWarning(message);<?php }?>
+	
 		/*
 		 * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
 		 * eg alert("my home function");

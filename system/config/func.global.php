@@ -92,14 +92,41 @@ function formatValidatePassword($p){
 
  }
 
-function informSuccess($message = null, $redirect = true, $redirectUrl = null, $page = 'index'){
-        if (!$message) {
-            $message = "The action was successful";
-        }
+function informSuccess( $redirect = true, $redirectUrl = null, $page = 'index'){
+  switch ($page) {
+
+    case 'index':
+      $page = "/".$page;
+      $page = $page."?m=1";
+      break;
+
+    default:
+      $page = "";
+      $page = $page."&m=1";
+     
+      break;
+  }
+      redirect($redirectUrl.$page);
+}
+function informError( $redirect = true, $redirectUrl = null, $page = 'index'){
         $page="/".$page;
-      redirect($redirectUrl.$page."?m=1");
+      redirect($redirectUrl.$page."?m=2");
 
 }
+/*****/////**********/
+/** CATALOGOS GENERALES
+/////////////*/
+function catModelo()
+{
+  $array= array();
+  $cont=0;
+  for ($i=date('Y'); $i >= 1990; $i--) { 
+    $array[$cont]=$i;
+    $cont++;
+  }
+    return $array;
+}
+
 
 
 
@@ -175,13 +202,13 @@ function fromArray($array, $table, $db, $method )
         } 
         if($method=="update"){
           $columns .= $rowKey."='".$db->real_escape_string($row)."',";
-          $values  .= "'".$db->real_escape_string($row)."',";//no se ocupa
+          $values  .= "";//no se ocupa
         } 
       }
     }
     $columns = substr($columns, 0, -1);
     $values  = substr($values, 0, -1);
-    if ( $columns && $values ){
+    if ( $columns ){
       $data[0] = $columns;
       $data[1] = $values;
     }
@@ -216,6 +243,33 @@ function isPost()
     }
 
     return false;
+}
+function delete($id,$module,$table){
+  $obj = "";
+  switch ($table) {
+    case 'taller':  $obj = new Taller();  
+      break;
+    case 'user':  $obj = new User();  
+      break;
+    case 'marca':  $obj = new Marca();  
+      break;
+    case 'aseguradora':  $obj = new Aseguradora();  
+      break;
+    case 'modelo':  $obj = new SubMarca();  
+      break;
+    
+    default:
+      # code...
+      break;
+  }
+  
+  $data = $obj->getTable($id);
+  if ( !$data ) {
+      informError(true,make_url($module,$table));
+  }else{
+    if ( $obj->deleteAll($id) ) { informSuccess( true, make_url($module,$table) ); }
+    else { informError(true,make_url($module,$table) ); }
+  }
 }
 /** CSRF Token **/
 function CSRFToken($len=8){

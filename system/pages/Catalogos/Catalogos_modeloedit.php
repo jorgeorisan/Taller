@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Modelo";
+$page_title = "Editar Modelo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,13 +24,23 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","modelo"));
+
+$obj = new SubMarca();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","modelo"));
+}
 if(isPost()){
     $obj = new SubMarca();
-    $id=$obj->addAll(getPost());
-    if($id>0){
-        informSuccess(true, make_url("Catalogos","modelo"));
+    $id = $obj->updateAll($id,getPost());
+    if( $id  ) {
+         informSuccess(true, make_url("Catalogos","modelo"));
     }else{
-        informError(true,make_url("Catalogos","modelo"));
+        informError(true, make_url("Catalogos","modeloedit",array('id'=>$id)),"modeloedit");
     }
 }
 ?>
@@ -56,23 +66,28 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","modeloadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","modeloedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
                                     <div class="tl-body">
                                         <div class="col-sm-13">
                                             <div class="form-group">
-                                                <label for="name">Submarca</label> 
-                                                <input type="text" required class="form-control" placeholder="Capture Submarca" name="nombre" >
+                                                <label for="name">Submodelo</label> 
+                                                <input type="text" required class="form-control" placeholder="Capture Submodelo" name="nombre" value="<?php echo $data['nombre']; ?>" >
                                             </div>                            
                                             <div class="form-group">
-                                                <label for="name">Marca</label><br>
-                                                <select style="width:100%" class="select2" name="id_marca">
-                                                    <option value="">Seleccione una Marca</option>
+                                                <label for="name">Modelo</label><br>
+                                                <select style="width:100%" class="select2" name="id_modelo">
+                                                    <option value="">Seleccione una Modelo</option>
                                                     <?php 
                                                         $obj = new Marca();
                                                         $list=$obj->getAllArr();
                                                         if (is_array($list) || is_object($list)){
-                                                            foreach($list as $val)
-                                                                echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
+                                                            foreach($list as $val){
+                                                                $selected = "";
+                                                                if ($data['id_marca'] == $val['id'] ) {
+                                                                    $selected = "selected";
+                                                                }
+                                                                echo "<option value='".$val['id']."' selected>".$val['nombre']."</option>";
+                                                            }
                                                         }
                                                     ?>
                                                 </select>                                
@@ -126,8 +141,8 @@ if(isPost()){
         var nombre = $("input[name=nombre]").val();
         if ( ! nombre )  return notify("info","El nombre es requerido");
 
-         var id_marca = $('select[name=id_marca] option:selected').val();
-        if ( ! id_marca )  return notify("info","La marca es requerida");
+         var id_modelo = $('select[name=id_modelo] option:selected').val();
+        if ( ! id_modelo )  return notify("info","La modelo es requerida");
 
         $("#main-form").submit();       
     }

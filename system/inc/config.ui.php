@@ -26,16 +26,16 @@ $page_nav = array(
 		"title" => "Clientes",
 		"icon" => "fa-users",
 		"sub" => array(
-			'clientsindex' => array('title'  => 'Clientes','url' => APP_URL."/clientes/index" ),
-			'clients' => array('title'  => 'Nuevo Cliente','url' => APP_URL."/clientes/add" )
+			'clientsindex' => array('title'  => 'Clientes','url' => APP_URL."/Clientes/index" ),
+			'clients' => array('title'  => 'Nuevo Cliente','url' => APP_URL."/Clientes/add" )
 		)
 	),
-	"Autos" => array(
-		"title" => "Autos",
+	"Vehiculos" => array(
+		"title" => "Vehiculos",
 		"icon" => "fa-automobile",
 		"sub" => array(
-			"autos"  => array( "title" => "Autos", "url" => APP_URL."/Autos/index" ),
-			"inventario" => array( "title" => "Inventario Autos", "url" => APP_URL."/Autos/inventario" )
+			"vehiculos"  => array( "title" => "Vehiculos", "url" => APP_URL."/Vehiculos/index" ),
+			"altavehiculo" => array( "title" => "Orden de Reparacion", "url" => APP_URL."/Vehiculos/add" )
 		)
 	),
 	"solicitudes" => array(

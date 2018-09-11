@@ -24,20 +24,22 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+if(isPost()){
 	if(isPost()){
-		
-		$u = new User();
-		if(!$u->userExists($_POST['email']))
+	    $obj = new User();
+	    if(!$obj->userExists($_POST['email']))
 		{
-			$u->addUser(getPost());
-			informSuccess("Se ha guardado el registro",true,make_url("Users")."ver/id/2");
+		    $id=$obj->addAll(getPost());
+		    if($id>0){
+		        informSuccess(true, make_url("Users","users"));
+		    }else{
+		        informError(true,make_url("Users","users"));
+		    }
+		}else{
+			informError(true,make_url("Users","users"));
 		}
-		else
-		{
-			$warning_message="Email already registered!";
-		}
-
 	}
+}
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
@@ -47,7 +49,7 @@ include(SYSTEM_DIR . "/inc/nav.php");
     <div id="content">
         <div class="row">     
             <section id="widget-grid" class="">
-            	<article class="col-sm-12 col-md-12 col-lg-12"  id="">
+            	<article class="col-sm-12 col-md-8 col-lg-6"  id="">
                     <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
                     data-widget-colorbutton="false" data-widget-editbutton="false" 
                     data-widget-deletebutton="false" data-widget-collapsed="false">
@@ -95,24 +97,33 @@ include(SYSTEM_DIR . "/inc/nav.php");
 											</label>
 										</section>
 										<section>
-											<label class="label">Company</label>
-											<select style="width:100%" class="select2">
+											<label class="label">Selecciona el taller</label>
+											<select style="width:100%" class="select2" name="id_taller" id="id_taller">
+												<option value="">Selecciona</option>
 												<?php 
-												$obj = new Company();
-												$list=$obj->getAll();
+												$obj = new Taller();
+												$list=$obj->getAllArr();
 												if (is_array($list) || is_object($list)){
 													foreach($list as $val){
-														echo "<option value='".$val['id']."'>".$val['name']."</option>";
+														echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
 													}
 												}
 												 ?>
 											</select>
 										</section>
-										<div class="form-actions">
-											<button type="button" onclick=" validateForm();" class="btn btn-primary">
-												Guardar
-											</button>
-										</div>
+										<div class="form-actions" style="text-align: center">
+	                                        <div class="row">
+	                                            <div class="col-md-12">
+	                                                <button class="btn btn-default btn-sm" type="button" onclick="window.history.go(-1); return false;">
+	                                                    Cancelar
+	                                                </button>
+	                                                <button class="btn btn-primary btn-sm" type="button" onclick=" validateForm();">
+	                                                    <i class="fa fa-save"></i>
+	                                                    Guardar
+	                                                </button>
+	                                            </div>
+	                                        </div>
+	                                    </div>
 									</form>
 								</div>
 							</div>
@@ -146,25 +157,27 @@ include(SYSTEM_DIR . "/inc/nav.php");
 
 <script>
 	function existadmin(email){
-	        if ( ! email ) return;
-	        if ( ! validateEmailStructure( email ) )
-	            return notify('warning', 'Email no es valido.');
+        if ( ! email ) return;
+        if ( ! validateEmailStructure( email ) )
+            return notify('warning', 'Email no es valido.');
 
-	        $.get(config.base+"/Users/Ajax/user?action=get&object=existadmin&email=" + email, null, function (response) {
-	        		if ( response == 1){
-						$("#email").val('');
-						notify('warning', 'Este email ya existe favor de intentar con otro');
-						return false;
-					}else{
-						return true;
-					}     
-	        });
-	    }
+        $.get(config.base+"/Users/ajax/?action=get&object=existadmin&email=" + email, null, function (response) {
+        		if ( response == 1){
+					$("#email").val('');
+					notify('warning', 'Este email ya existe favor de intentar con otro');
+					return false;
+				}else{
+					return true;
+				}     
+        });
+	}
 	function validateForm()
 	{
 		
 		var email = $("#email").val();
+		var idtaller = $("#id_taller").val();
 		if (email == ""){ notify("info","Se necesita un email"); return false; }
+		if (idtaller == ""){ notify("info","Se necesita un taller"); return false; }
 
 		console.log(existadmin(email));
 
@@ -191,7 +204,7 @@ include(SYSTEM_DIR . "/inc/nav.php");
 	    $('body').on('change', '#email', function(){
 	            if( $(this).val() ){
 	                var email = $("#email").val().trim();
-	                existadmin(email);
+	                console.log(existadmin(email));
 	            }
 	    });
 		

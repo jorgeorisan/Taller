@@ -1,17 +1,17 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "user.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "sub_marca.auto.class.php");
 
-class User extends AutoUser { 
-	private $DB_TABLE = "user";
+class SubMarca extends AutoSubMarca { 
+	private $DB_TABLE = "sub_marca";
 
-	public function getAjaxUserRows($onPage=1,$numRows=10,$sortIndex="id",$shortOrder="asc"){
+	public function getAjaxSubMarcaRows($onPage=1,$numRows=10,$sortIndex="id",$shortOrder="asc"){
 		$onPage=1 * $onPage;
 		$numRows = 1 * $numRows;
 		if ($onPage<1){$onPage=1;}
 		if ($numRows<1 || $numRows>100 ){$numRows=10;}
 		
-		$sql= "SELECT count(l.id) as cnt FROM user l WHERE 1 ";//. $num ; 
+		$sql= "SELECT count(l.id) as cnt FROM sub_marca l WHERE 1 ";//. $num ; 
 
 			if (!$stmt = $this->db->prepare( $sql )){die("bad query");}
 		$stmt->execute();
@@ -29,7 +29,7 @@ class User extends AutoUser {
 		if (in_array($sortIndex,array("id","name"))){}else{$sortIndex="id";} 
 		if (in_array($shortOrder,array("asc","desc"))){}else{$shortOrder="asc";} 
 
-		$sql= "SELECT * FROM user l WHERE 1 ORDER BY " . $sortIndex . " " .$shortOrder." LIMIT " . ($onPage-1)*$numRows . " , " . $numRows . "  ";//. $num ; 
+		$sql= "SELECT * FROM sub_marca l WHERE 1 ORDER BY " . $sortIndex . " " .$shortOrder." LIMIT " . ($onPage-1)*$numRows . " , " . $numRows . "  ";//. $num ; 
 
 			if (!$stmt = $this->db->prepare( $sql )){echo $sql;die("bad query2");}
 			$stmt->execute();
@@ -53,7 +53,7 @@ class User extends AutoUser {
 	//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM user where status='active';";
+		$sql = "SELECT * FROM sub_marca where status='active';";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -67,7 +67,7 @@ class User extends AutoUser {
 	public function getTable($id)
 	{
 		$id=$this->db->real_escape_string($id);
-		$sql= "SELECT * FROM user WHERE id=$id;";
+		$sql= "SELECT * FROM sub_marca WHERE id=$id;";
 		$res=$this->db->query($sql);
 		if(!$res)
 			{die("Error getting result");}
@@ -79,9 +79,8 @@ class User extends AutoUser {
 	//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$_request["password"]=password_hash($_request["password"],PASSWORD_DEFAULT);
-		$data=fromArray($_request,'user',$this->db,"add");
-		$sql= "INSERT INTO user (".$data[0].") VALUES(".$data[1]."); ";
+		$data=fromArray($_request,'sub_marca',$this->db,"add");
+		$sql= "INSERT INTO sub_marca (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
 		$sql= "SELECT LAST_INSERT_ID();";//. $num ;
 		$res=$this->db->query($sql);
@@ -98,8 +97,8 @@ class User extends AutoUser {
 	public function updateAll($id,$_request)
 	{
 		$_request["updated_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'user',$this->db,"update");
-		$sql= "UPDATE user SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'sub_marca',$this->db,"update");
+		$sql= "UPDATE sub_marca SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -112,8 +111,8 @@ class User extends AutoUser {
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'user',$this->db,"update");	
-		$sql= "UPDATE user SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'sub_marca',$this->db,"update");	
+		$sql= "UPDATE sub_marca SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -121,27 +120,19 @@ class User extends AutoUser {
 			return true;
 		}
 	}
-	//metodo comprueba que un usuario ya existe o no
-	public function userExists($email)
+
+	//metodo que sirve para obtener todos los datos de la  marca
+	public function getAllbyid($id)
 	{
-
-		$email=$this->db->real_escape_string($email);
-		$sql= "SELECT * FROM user WHERE email='".$email."' and status='active';";
-		$res=$this->db->query($sql);
-		if(!$res)
-			{die('Error getting result');}
-		//echo $sql;
-		$row = $res->fetch_assoc();
-		//echo $this->db->error;
-		$res->close();
-		if(!$row)
-			{
-				return false;}
-		else
-			{
-				return true;}
-
+		$sql = "SELECT * FROM sub_marca where status='active' and id_marca=$id;";
+		$res = $this->db->query($sql);
+		$set = array();
+		if(!$res){ die("Error getting result"); }
+		else{
+			while ($row = $res->fetch_assoc())
+				{ $set[] = $row; }
+		}
+		return $set;
 	}
-
 
 }

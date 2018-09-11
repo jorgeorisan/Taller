@@ -12,7 +12,7 @@ if(strpos($directory, $document_root)===0) {
     $base_url .= str_replace(DIRECTORY_SEPARATOR, '/', substr($directory, strlen($document_root)));
 }
 if($_SERVER["SERVER_NAME"]=='138.128.161.42'){
-	 $base_url =$base_url."/~sistemamyg" ;
+	 $base_url =$base_url."/~systemmyg" ;
 }
 
 
@@ -62,19 +62,16 @@ if (getenv('MYSQL_SOCKET') != null){
 	/* Database local*/
 	defined("DB_HOST") ? null : define("DB_HOST", "127.0.0.1");
 	if($_SERVER["SERVER_NAME"]){
-	
-
        // echo "<strong>$url_actual</strong>";
 	    if($_SERVER["SERVER_NAME"]!='localhost'){
-	    	defined("DB_USER") ? null : define("DB_USER", "sistemam_taller");
+	    	defined("DB_USER") ? null : define("DB_USER", "systemmy_taller");
 	        defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "1L7(IvbxCTGI");
-	        defined("DB_NAME") ? null : define("DB_NAME", "sistemam_tallerhp");
+	        defined("DB_NAME") ? null : define("DB_NAME", "systemmy_tallerhp");
 	    }else{
 	    	defined("DB_USER") ? null : define("DB_USER", "root");
 			defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "");
-			defined("DB_NAME") ? null : define("DB_NAME", "a1th3_soceng");
+			defined("DB_NAME") ? null : define("DB_NAME", "systemmy_tallerhp");
 	    }
-
 	}
 	defined("DB_PORT") ? null : define("DB_PORT", null);
 	defined("DB_SOCKET") ? null : define("DB_SOCKET", null);
@@ -115,7 +112,7 @@ spl_autoload_register(function ($class_name) {
 if($_SERVER["SERVER_NAME"]){
  	$db = new db(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME,DB_PORT,DB_SOCKET);
  }else{
-	$db = new db('127.0.0.1', 'root', '', "a1th3_soceng",null,null);
+	$db = new db('127.0.0.1', 'root', '', "systemmy_tallerhp",null,null);
    
 }
      

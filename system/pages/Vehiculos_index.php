@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Usuarios";
+$page_title = "Autos";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -17,10 +17,8 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-
-$obj = new User();
+$obj = new Vehiculo();
 $data = $obj->getAllArr();
-
 //print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -36,7 +34,7 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Users","add")?>" >Nuevo Usuario</a></p>
+			 <p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" >Orden de Reparacion</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -52,36 +50,70 @@ $data = $obj->getAllArr();
 									<thead>
 										<tr>
 											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw  fa-envelope  text-muted hidden-md hidden-sm hidden-xs"></i> Email</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
-											<th class = "col-md-1" data-hide="phone tablet">
-												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Type</th>
+												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> No. Orden
+											</th>
+											<th class = "col-md-1" data-hide="">
+												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Datos Auto
+											</th>
+											<th class = "col-md-1" >
+												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i>Matricula
+											</th>
+											<th class = "col-md-2" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Cliente
+											</th>
+											<th class = "col-md-1" data-hide="">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Orden
+											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Status</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Taller</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Taller
+											</th>
+											<th class = "col-md-2" data-hide="phone,tablet">
+												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
+											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php  foreach($data as $row) {
-											$nomtaller="";
-											$objtaller = new Taller();
-											$datataller = $objtaller->getTable($row["id_taller"]);
-											if($datataller){ $nomtaller = $datataller["nombre"]; }
+										<?php foreach($data as $row){
+											$nomtaller      = "";
+											$nommarca       = "";
+											$nomsubmarca    = "";
+											$nomaseguradora = "";
+											$nomcliente     = "";
+											if($row["id_taller"]){
+												$objtaller = new Taller();
+												$datataller = $objtaller->getTable($row["id_taller"]);
+												if($datataller){ $nomtaller = $datataller["nombre"]; }
+											}
+											if($row["id_taller"]){
+												$objmarca = new Marca();
+												$datamarca = $objmarca->getTable($row["id_marca"]);
+												if($datamarca){ $nommarca = $datamarca["nombre"]; }
+											}
+											if($row["id_taller"]){
+												$objsubmarca = new SubMarca();
+												$datasubmarca = $objsubmarca->getTable($row["id_submarca"]);
+												if($datasubmarca){ $nomsubmarca = $datasubmarca["nombre"]; }
+											}
+											if($row["id_aseguradora"]){
+												$objaseguradora = new Aseguradora();
+												$dataaseguradora = $objaseguradora->getTable($row["id_aseguradora"]);
+												if($dataaseguradora){ $nomaseguradora = $dataaseguradora["nombre"]; }
+											}
+											if($row["id_cliente"]){
+												$objcliente = new Cliente();
+												$datacliente = $objcliente->getTable($row["id_cliente"]);
+												if($datacliente){ $nomcliente = $datacliente["nombre"] ." ". $datacliente["apellido_pat"] ." ". $datacliente["apellido_mat"]; }
+											}
 											?>
 											<tr>
-												<td><?php echo htmlentities($row['email'])?></td>
-												<td><?php echo htmlentities($row['nombre'].' '.$row['apellido_pat'])?></td>
-												<td><?php echo htmlentities($row['type']) ?></td>
-												<?php if($row['status']=='active'){?>
-													<td><i class="fa fa-check-square    text-muted hidden-md hidden-sm hidden-xs"></td>
-												<?php }else{?>
-													<td><i class="fa f fa-square-o  text-muted hidden-md hidden-sm hidden-xs"></td>
-												<?php } ?>
+												<td><?php echo htmlentities($row['no_orden'])?></td>
+												<td><?php echo htmlentities($nommarca)."-".htmlentities($nomsubmarca)."-".htmlentities($row['modelo'])."<br>".htmlentities($row['tipo'])." ".htmlentities($row['color'])."<br>".htmlentities($nomaseguradora) ?></td>
+												
+												<td><?php echo htmlentities($row['placas'])?></td>
+												<td><?php echo htmlentities($nomcliente) ?></td>
+												<td><?php echo htmlentities($row['fecha_alta']) ?></td>
 												<td><?php echo htmlentities($nomtaller) ?></td>
+												
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -89,14 +121,17 @@ $data = $obj->getAllArr();
 														</button>
 														<ul class="dropdown-menu">
 															<li>
-																<a class="" href="<?php echo make_url("Users","edit",array('id'=>$row['id'])); ?>">Editar</a>
+																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"><i class="fa fa-plus"></i>Add Inf. Adic.</a>
 															</li>
 															<li>
-																<a class="" href="<?php echo make_url("Users","cambiarpwd",array('id'=>$row['id'])); ?>">Cambiar password</a>
+																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver</a>
+															</li>
+															<li>
+																<a class="" href="<?php echo make_url("Vehiculos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>
 															</li>
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Users","userdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","deletevehiculo",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -105,32 +140,14 @@ $data = $obj->getAllArr();
 										<?php }?>
 									</tbody>
 								</table>
-
 							</div>
-							<!-- end widget content -->
-
-						</div>
-						<!-- end widget div -->
-
-					</div>
-		<!--<div class="row">
-				<div class="col-sm-12">
-					<div class="well">
-						<div class="row">
-							<div class="col-sm-2">
 						</div>
 					</div>
-
-					</div>
-
-				</div>
-
+				</article>
 			</div>
-		-->
-
+		</section>
 	</div>
 	<!-- END MAIN CONTENT -->
-
 </div>
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
@@ -185,57 +202,9 @@ $data = $obj->getAllArr();
 			}
 		});
 	
-		/* DO NOT REMOVE : GLOBAL FUNCTIONS!
-		 *
-		 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
-		 *
-		 * // activate tooltips
-		 * $("[rel=tooltip]").tooltip();
-		 *
-		 * // activate popovers
-		 * $("[rel=popover]").popover();
-		 *
-		 * // activate popovers with hover states
-		 * $("[rel=popover-hover]").popover({ trigger: "hover" });
-		 *
-		 * // activate inline charts
-		 * runAllCharts();
-		 *
-		 * // setup widgets
-		 * setup_widgets_desktop();
-		 *
-		 * // run form elements
-		 * runAllForms();
-		 *
-		 ********************************
-		 *
-		 * pageSetUp() is needed whenever you load a page.
-		 * It initializes and checks for all basic elements of the page
-		 * and makes rendering easier.
-		 *
-		 */
-
 		 pageSetUp();
-
-		/*
-		 * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
-		 * eg alert("my home function");
-		 *
-		 * var pagefunction = function() {
-		 *   ...
-		 * }
-		 * loadScript("js/plugin/_PLUGIN_NAME_.js", pagefunction);
-		 *
-		 * TO LOAD A SCRIPT:
-		 * var pagefunction = function (){
-		 *  loadScript(".../plugin.js", run_after_loaded);
-		 * }
-		 *
-		 * OR
-		 *
-		 * loadScript(".../plugin.js", run_after_loaded);
-		 */
-	})
+		
+	});
 
 </script>
 

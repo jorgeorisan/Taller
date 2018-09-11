@@ -17,8 +17,8 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-$u = new User();
-$users = $u->getAllUsers();
+$obj = new Taller();
+$data = $obj->getAllArr();
 //print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -49,25 +49,32 @@ $users = $u->getAllUsers();
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
-											<th class = "col-md-2" data-class="expand"><i class="fa fa-fw  fa-envelope  text-muted hidden-md hidden-sm hidden-xs"></i> Email</th>
-											<th class = "col-md-4" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
-											<th class = "col-md-1" data-hide="phone,tablet"><i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Type</th>
-											<th class = "col-md-1" data-hide="phone,tablet"><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Enabled</th>
-											<th class = "col-md-2" data-hide="phone,tablet"><i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
+											<th class = "col-md-2" data-class="expand">
+												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> Nombre
+											</th>
+											<th class = "col-md-4" data-hide="phone,tablet">
+												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Correo
+											</th>
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Telefono
+											</th>
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Direccion
+											</th>
+											<th class = "col-md-2" >
+												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
+											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach($users as $userrow){
+										<?php foreach($data as $row){
 											?>
 											<tr>
-												<td><?php echo htmlentities($userrow['email'])?></td>
-												<td><?php echo htmlentities($userrow['nombre'].' '.$userrow['apellido_pat'])?></td>
-												<td><?php echo htmlentities($userrow['type']) ?></td>
-												<?php if($userrow['enabled']){?>
-													<td><i class="fa fa-check-square    text-muted hidden-md hidden-sm hidden-xs"></td>
-												<?php }else{?>
-													<td><i class="fa f fa-square-o  text-muted hidden-md hidden-sm hidden-xs"></td>
-												<?php } ?>
+												<td><?php echo htmlentities($row['nombre'])?></td>
+												<td><?php echo htmlentities($row['correo'])?></td>
+												<td><?php echo htmlentities($row['telefono']) ?></td>
+												<td><?php echo htmlentities($row['ciudad']." ".$row['estado']." Col. ".$row['colonia']." Calle. ".$row['calle']." Num. ".$row['numext']." ".$row['numinte']) ?></td>
+												
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -75,14 +82,14 @@ $users = $u->getAllUsers();
 														</button>
 														<ul class="dropdown-menu">
 															<li>
-																<a class="" href="<?php echo make_url("Users","edit",array('id'=>$userrow['id'])); ?>">Editar</a>
+																<a class="" href="<?php echo make_url("Catalogos","tallershow",array('id'=>$row['id'])); ?>">Ver</a>
 															</li>
 															<li>
-																<a class="" href="<?php echo make_url("Users","cambiarpwd",array('id'=>$userrow['id'])); ?>">Cambiar password</a>
+																<a class="" href="<?php echo make_url("Catalogos","talleredit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Users","borrar",array('id'=>$userrow['id'])); ?>',<?php echo $userrow['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Catalogos","tallerdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -91,32 +98,14 @@ $users = $u->getAllUsers();
 										<?php }?>
 									</tbody>
 								</table>
-
 							</div>
-							<!-- end widget content -->
-
-						</div>
-						<!-- end widget div -->
-
-					</div>
-		<!--<div class="row">
-				<div class="col-sm-12">
-					<div class="well">
-						<div class="row">
-							<div class="col-sm-2">
 						</div>
 					</div>
-
-					</div>
-
-				</div>
-
+				</article>
 			</div>
-		-->
-
+		</section>
 	</div>
 	<!-- END MAIN CONTENT -->
-
 </div>
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
@@ -170,8 +159,6 @@ $users = $u->getAllUsers();
 				responsiveHelper_dt_basic.respond();
 			}
 		});
-
-	}
 	
 		 pageSetUp();
 		
