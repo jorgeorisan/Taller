@@ -111,7 +111,10 @@ function informSuccess( $redirect = true, $redirectUrl = null, $page = 'index'){
 function informError( $redirect = true, $redirectUrl = null, $page = 'index'){
         $page="/".$page;
       redirect($redirectUrl.$page."?m=2");
-
+}
+function informPermiss( $redirect = true, $redirectUrl = null, $page = 'index'){
+        $page="/".$page;
+      redirect($redirectUrl.$page."?m=3");
 }
 /*****/////**********/
 /** CATALOGOS GENERALES
@@ -246,18 +249,25 @@ function isPost()
 }
 function delete($id,$module,$table){
   $obj = "";
+  $pagereturn='index';
   switch ($table) {
-    case 'taller':  $obj = new Taller();  
+    case 'taller':      $obj = new Taller();      $pagereturn=$table;  
       break;
-    case 'user':  $obj = new User();  
+    case 'marca':       $obj = new Marca();       $pagereturn=$table; 
       break;
-    case 'marca':  $obj = new Marca();  
+   case 'submarca':     $obj = new SubMarca();    $pagereturn=$table; 
       break;
-    case 'aseguradora':  $obj = new Aseguradora();  
+    case 'aseguradora': $obj = new Aseguradora(); $pagereturn=$table; 
       break;
-    case 'modelo':  $obj = new SubMarca();  
+    case 'modelo':      $obj = new SubMarca();    $pagereturn=$table; 
       break;
-    
+    case 'trabajo':     $obj = new Trabajo();     $pagereturn=$table;  
+      break;
+    case 'cliente':     $obj = new Cliente();  
+      break;
+    case 'user':        $obj = new User();  
+      break;
+  
     default:
       # code...
       break;
@@ -265,10 +275,10 @@ function delete($id,$module,$table){
   
   $data = $obj->getTable($id);
   if ( !$data ) {
-      informError(true,make_url($module,$table));
+      informError(true,make_url($module,$pagereturn));
   }else{
-    if ( $obj->deleteAll($id) ) { informSuccess( true, make_url($module,$table) ); }
-    else { informError(true,make_url($module,$table) ); }
+    if ( $obj->deleteAll($id) ) { informSuccess( true, make_url($module,$pagereturn) ); }
+    else { informError(true,make_url($module,$pagereturn) ); }
   }
 }
 /** CSRF Token **/

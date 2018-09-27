@@ -34,7 +34,12 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" >Orden de Reparacion</a></p>
+			<div class="col-sm-6 col-md-6 col-lg-2">
+				<p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" >Orden de Reparacion</a></p>
+			</div>
+			<div class="col-sm-6 col-md-6 col-lg-2">
+				  <p><a class="btn btn-info" href="<?php echo make_url("Vehiculos","index")?>" >Modo Vista</a></p>
+			</div>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -84,12 +89,12 @@ $data = $obj->getAllArr();
 												$datataller = $objtaller->getTable($row["id_taller"]);
 												if($datataller){ $nomtaller = $datataller["nombre"]; }
 											}
-											if($row["id_taller"]){
+											if($row["id_marca"]){
 												$objmarca = new Marca();
 												$datamarca = $objmarca->getTable($row["id_marca"]);
 												if($datamarca){ $nommarca = $datamarca["nombre"]; }
 											}
-											if($row["id_taller"]){
+											if($row["id_submarca"]){
 												$objsubmarca = new SubMarca();
 												$datasubmarca = $objsubmarca->getTable($row["id_submarca"]);
 												if($datasubmarca){ $nomsubmarca = $datasubmarca["nombre"]; }
@@ -106,10 +111,10 @@ $data = $obj->getAllArr();
 											}
 											?>
 											<tr>
-												<td><?php echo htmlentities($row['no_orden'])?></td>
-												<td><?php echo htmlentities($nommarca)."-".htmlentities($nomsubmarca)."-".htmlentities($row['modelo'])."<br>".htmlentities($row['tipo'])." ".htmlentities($row['color'])."<br>".htmlentities($nomaseguradora) ?></td>
+												<td><?php echo htmlentities($row['id'])?></td>
+												<td><?php echo htmlentities($nommarca)."-".htmlentities($nomsubmarca)."-".htmlentities($row['modelo'])."<br>".htmlentities($row['TransmisionTipo'])." ".htmlentities($row['color'])."<br>".htmlentities($nomaseguradora) ?></td>
 												
-												<td><?php echo htmlentities($row['placas'])?></td>
+												<td><?php echo htmlentities($row['matricula'])?></td>
 												<td><?php echo htmlentities($nomcliente) ?></td>
 												<td><?php echo htmlentities($row['fecha_alta']) ?></td>
 												<td><?php echo htmlentities($nomtaller) ?></td>
@@ -124,7 +129,10 @@ $data = $obj->getAllArr();
 																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"><i class="fa fa-plus"></i>Add Inf. Adic.</a>
 															</li>
 															<li>
-																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver</a>
+																<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Detalles</a>
+															</li>
+															<li>
+																<a class="" href="<?php echo make_url("Vehiculos","showorden",array('id'=>$row['id'])); ?>"> <i class="fa fa-th-list"></i>Ver Orden</a>
 															</li>
 															<li>
 																<a class="" href="<?php echo make_url("Vehiculos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>

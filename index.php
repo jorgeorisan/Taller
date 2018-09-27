@@ -53,18 +53,25 @@ Routing section
       $dir="";//si esta en carpeta
       $page_num=0;
 
-       /*if ($request['section']==='Dashboard'){
-        $page="Dashboard_index.php";
-        if ($request['page']==='test'){$page="Dashboard_test.php"; }
-        if ($request['page']==='testb'){$page="Dashboard_testb.php"; }
-      }*/
- 
 
+    //*****permisos de usuario  */***///
+      if($request['section']!='Home' && $request['section']!='Examples' && $request['page']!="" && $request['page']!="ajax" ){
+        $page2=($request['page'])? $request['page'] : 'index';
+        $objpermuser = new PermisoUser();
+        
+        $datapermuser  = $objpermuser->getpermisouser($_SESSION['user_id'],$request['section'],$page2);
+        if ( !$datapermuser ) {
+          echo $_SESSION['user_id']."------".$request['section']."-----".$page2;
+          exit; 
+          informPermiss(true,make_url("Home","index"));
+        }
+      }
+      
       if ($request['section']==='Clientes'){
         $page = "Clientes_index.php";
         $dir  = "Clientes";//si esta en carpeta
         if ($request['page']==='add')      { $page = "Clientes_add.php";      }
-        if ($request['page']==='addpopup') { $page = "Clientes_adpopup.php"; }
+        if ($request['page']==='addpopup') { $page = "Clientes_adpopup.php";  }
         if ($request['page']==='edit')     { $page = "Clientes_edit.php";     }
       }
       if ( $request['section'] === 'Catalogos' ) {
@@ -85,31 +92,31 @@ Routing section
         if ($request['page']==='ajax'){$page="Users_ajax.php"; }
        
       }
-       if ($request['section']==='Vehiculos'){
-       $page="Vehiculos_index.php";
-       $dir="Vehiculos";//si esta en carpeta
-       if ($request['page']==='add'){$page="Vehiculos_add.php"; }
-       if ($request['page']==='edit'){$page="Vehiculos_edit.php"; }
-       if ($request['page']==='show'){$page="Vehiculos_show.php"; }
-       if ($request['page']==='ajax'){$page="Vehiculos_ajax.php"; }
+      if ($request['section']==='Vehiculos'){
+        $page="Vehiculos_index.php";
+        $dir="Vehiculos";//si esta en carpeta
+        if ($request['page']==='add'){$page="Vehiculos_add.php"; }
+        if ($request['page']==='edit'){$page="Vehiculos_edit.php"; }
+        if ($request['page']==='show'){$page="Vehiculos_show.php"; }
+        if ($request['page']==='ajax'){$page="Vehiculos_ajax.php"; }
       }
-       //delete pages
-        if(isset($request['params']['id'])){
-          if( $id = $request['params']['id'] ) {
-            $table = explode("delete", $request['page']);
-            if(count($table)>1){
-              delete($id,$request['section'],$table[0]);
-            }
+     //delete pages
+      if(isset($request['params']['id'])){
+        if( $id = $request['params']['id'] ) {
+          $table = explode("delete", $request['page']);
+          if(count($table)>1){
+            delete($id,$request['section'],$table[0]);
           }
         }
-        
-        //end delete
-             /******  DEV ROUTING  ******/
-       if (file_exists("system/pages/".$dir."/".$request['section']."_".$request['page'].".php")){
-        $page = $dir."/".$request['section']."_".$request['page'].".php";
-       }elseif(file_exists("system/pages/".$request['section']."_index.php")){
-        $page = $request['section']."_index.php";
-       }
+      }
+      
+      //end delete
+           /******  DEV ROUTING  ******/
+     if (file_exists("system/pages/".$dir."/".$request['section']."_".$request['page'].".php")){
+      $page = $dir."/".$request['section']."_".$request['page'].".php";
+     }elseif(file_exists("system/pages/".$request['section']."_index.php")){
+      $page = $request['section']."_index.php";
+     }
 /***/
 
 

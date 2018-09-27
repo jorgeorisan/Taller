@@ -34,7 +34,14 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" >Orden de Reparacion</a></p>
+			<div class="col-sm-6 col-md-6 col-lg-2">
+				<p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" >Orden de Reparacion</a></p>
+			</div>
+			<div class="col-sm-6 col-md-6 col-lg-2">
+				  <p><a class="btn btn-info" href="<?php echo make_url("Vehiculos","indexlist")?>" >Modo Lista</a></p>
+			</div>
+			 
+			
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -46,100 +53,119 @@ $data = $obj->getAllArr();
 							<div class="jarviswidget-editbox">
 							</div>
 							<div class="widget-body">
-								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-									<thead>
-										<tr>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> No. Orden
-											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Datos Auto
-											</th>
-											<th class = "col-md-1" >
-												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i>Matricula
-											</th>
-											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Cliente
-											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Orden
-											</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Taller
-											</th>
-											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php foreach($data as $row){
-											$nomtaller      = "";
-											$nommarca       = "";
-											$nomsubmarca    = "";
-											$nomaseguradora = "";
-											$nomcliente     = "";
-											if($row["id_taller"]){
-												$objtaller = new Taller();
-												$datataller = $objtaller->getTable($row["id_taller"]);
-												if($datataller){ $nomtaller = $datataller["nombre"]; }
-											}
-											if($row["id_taller"]){
-												$objmarca = new Marca();
-												$datamarca = $objmarca->getTable($row["id_marca"]);
-												if($datamarca){ $nommarca = $datamarca["nombre"]; }
-											}
-											if($row["id_taller"]){
-												$objsubmarca = new SubMarca();
-												$datasubmarca = $objsubmarca->getTable($row["id_submarca"]);
-												if($datasubmarca){ $nomsubmarca = $datasubmarca["nombre"]; }
-											}
-											if($row["id_aseguradora"]){
-												$objaseguradora = new Aseguradora();
-												$dataaseguradora = $objaseguradora->getTable($row["id_aseguradora"]);
-												if($dataaseguradora){ $nomaseguradora = $dataaseguradora["nombre"]; }
-											}
-											if($row["id_cliente"]){
-												$objcliente = new Cliente();
-												$datacliente = $objcliente->getTable($row["id_cliente"]);
-												if($datacliente){ $nomcliente = $datacliente["nombre"] ." ". $datacliente["apellido_pat"] ." ". $datacliente["apellido_mat"]; }
-											}
-											?>
-											<tr>
-												<td><?php echo htmlentities($row['no_orden'])?></td>
-												<td><?php echo htmlentities($nommarca)."-".htmlentities($nomsubmarca)."-".htmlentities($row['modelo'])."<br>".htmlentities($row['tipo'])." ".htmlentities($row['color'])."<br>".htmlentities($nomaseguradora) ?></td>
-												
-												<td><?php echo htmlentities($row['placas'])?></td>
-												<td><?php echo htmlentities($nomcliente) ?></td>
-												<td><?php echo htmlentities($row['fecha_alta']) ?></td>
-												<td><?php echo htmlentities($nomtaller) ?></td>
-												
-												<td>
-													<div class="btn-group">
-														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-															Accion <span class="caret"></span>
-														</button>
-														<ul class="dropdown-menu">
-															<li>
-																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"><i class="fa fa-plus"></i>Add Inf. Adic.</a>
-															</li>
-															<li>
-																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver</a>
-															</li>
-															<li>
-																<a class="" href="<?php echo make_url("Vehiculos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>
-															</li>
-															<li class="divider"></li>
-															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","deletevehiculo",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
-															</li>
-														</ul>
+							
+								<?php foreach($data as $row){
+									$nomtaller      = "";
+									$nommarca       = "";
+									$nomsubmarca    = "";
+									$nomaseguradora = "";
+									$nomcliente     = "";
+									if($row["id_taller"]){
+										$objtaller = new Taller();
+										$datataller = $objtaller->getTable($row["id_taller"]);
+										if($datataller){ $nomtaller = $datataller["nombre"]; }
+									}
+									if($row["id_marca"]){
+										$objmarca = new Marca();
+										$datamarca = $objmarca->getTable($row["id_marca"]);
+										if($datamarca){ $nommarca = $datamarca["nombre"]; }
+									}
+									if($row["id_submarca"]){
+										$objsubmarca = new SubMarca();
+										$datasubmarca = $objsubmarca->getTable($row["id_submarca"]);
+										if($datasubmarca){ $nomsubmarca = $datasubmarca["nombre"]; }
+									}
+									if($row["id_aseguradora"]){
+										$objaseguradora = new Aseguradora();
+										$dataaseguradora = $objaseguradora->getTable($row["id_aseguradora"]);
+										if($dataaseguradora){ $nomaseguradora = $dataaseguradora["nombre"]; }
+									}
+									if($row["id_cliente"]){
+										$objcliente = new Cliente();
+										$datacliente = $objcliente->getTable($row["id_cliente"]);
+										if($datacliente){ $nomcliente = $datacliente["nombre"] ." ". $datacliente["apellido_pat"] ." ". $datacliente["apellido_mat"]; }
+									}
+									$fechaalta = ($row['fecha_alta']) ?    date('Y-m-d',strtotime($row['fecha_alta'])) : "";
+									$fechaprom = ($row['fecha_promesa']) ? date('Y-m-d',strtotime($row['fecha_promesa'])) : "";
+								    $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$row["id"].DIRECTORY_SEPARATOR.'images';
+                                    $objimg = new ImagenesVehiculo();
+                                    $dataimagenes = $objimg->getAllArr($row["id"]);
+                                    $link="";
+                                    foreach($dataimagenes as $key => $rowimg) {
+                                    	if($link) continue;
+
+                                        $link = $carpetaimg.DIRECTORY_SEPARATOR.$rowimg['nombre'];
+
+
+                                    }
+									?>
+									<div class="col-sm-6 col-md-6 col-lg-4">
+										<!-- product -->
+										<div class="product-content product-wrap clearfix">
+											<div class="row">
+													<div class="col-md-5 col-sm-12 col-xs-12">
+														<div class="product-image"> 
+															<img src="<?php echo $link; ?>" alt="194x228" class="img-responsive"> 
+															<span class="tag2 hot">
+																HOT
+															</span> 
+														</div>
 													</div>
-												</td>
-											</tr>
-										<?php }?>
-									</tbody>
-								</table>
+													<div class="col-md-7 col-sm-12 col-xs-12">
+													<div class="product-deatil">
+															<h5 class="name">
+																<?php echo $nommarca." ".$nomsubmarca." - ". $row['modelo'] ?>
+																<small><strong>Cliente:</strong> <?php echo $nomcliente ?></small>
+																<small><strong>Fecha Alta:</strong> <?php echo htmlentities($fechaalta) ?></small>
+																<small><strong>Fecha Prom:</strong> <?php echo htmlentities($fechaprom) ?></small>
+
+															</h5>
+															<p class="price-container">
+																<span><?php echo htmlentities($row['matricula'])?></span>
+															</p>
+															<span class="tag1"></span> 
+													</div>
+													<div class="description">
+															<p>Pendientes </p>
+													</div>
+
+													<div class="product-info smart-form">
+														
+														<div class="row">
+															<div class="col-md-6 col-sm-6 col-xs-6"> 
+																<div class="btn-group">
+																	<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+																		Accion <span class="caret"></span>
+																	</button>
+																	<ul class="dropdown-menu">
+																		<li>
+																			<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"><i class="fa fa-plus"></i>Add Inf. Adic.</a>
+																		</li>
+																		<li>
+																			<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Detalles</a>
+																		</li>
+																		<li>
+																			<a class="" href="<?php echo make_url("Vehiculos","showorden",array('id'=>$row['id'])); ?>"> <i class="fa fa-th-list"></i>Ver Orden</a>
+																		</li>
+																		<li>
+																			<a class="" href="<?php echo make_url("Vehiculos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>
+																		</li>
+																		<li class="divider"></li>
+																		<li>
+																			<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","deletevehiculo",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- end product -->
+									</div>	
+								<?php }?>
+							
 							</div>
 						</div>
 					</div>

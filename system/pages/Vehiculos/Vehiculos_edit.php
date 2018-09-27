@@ -24,9 +24,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","modelo"));
+
+$obj = new Vehiculo();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","modelo"));
+}
 if(isPost()){
     $obj = new Vehiculo();
-    $id  = $obj->addAll(getPost());
+    $id = $obj->updateAll($id,getPost());
     //$id=240;
     
     if ($id > 0){
@@ -71,9 +81,9 @@ if(isPost()){
                     
             }
         }
-        informSuccess(true, make_url("Vehiculos","showorden",array('id'=>$id)));
+        informSuccess(true, make_url("Vehiculos","show",array('id'=>$id)));
     }else{
-        informError(true,make_url("Vehiculos","add"));
+        informError(true, make_url("Catalogos","modeloedit",array('id'=>$id)),"modeloedit");
     }
 }
 ?>
@@ -407,7 +417,7 @@ if(isPost()){
                                                     <div class="col-sm-3 col-md-3 col-lg-3">
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="Gasolina" id="Gasolina">
-                                                                <option value="">--Gasolina--</option>
+                                                                <option value="">Gasolina</option>
                                                                 <option value="0-1/4">0-1/4</option>
                                                                 <option value="1/4-1/2">1/4-1/2</option>
                                                                 <option value="1/2-3/4">1/2-3/4</option>

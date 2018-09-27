@@ -21,15 +21,21 @@ ex:
 )
 
 */
-$page_nav = array(
+
+  
+$page_nav =[];
+$menuClientes = array(
 	"Clientes" => array(
-		"title" => "Clientes",
-		"icon" => "fa-users",
-		"sub" => array(
-			'clientsindex' => array('title'  => 'Clientes','url' => APP_URL."/Clientes/index" ),
-			'clients' => array('title'  => 'Nuevo Cliente','url' => APP_URL."/Clientes/add" )
-		)
-	),
+			"title" => "Clientes",
+			"icon" => "fa-users",
+			"sub" => array(
+				'clientsindex' => array('title'  => 'Clientes','url' => APP_URL."/Clientes/index" ),
+				'clients' => array('title'  => 'Nuevo Cliente','url' => APP_URL."/Clientes/add" )
+			)
+	)
+);
+
+$menuVehiculos = array(
 	"Vehiculos" => array(
 		"title" => "Vehiculos",
 		"icon" => "fa-automobile",
@@ -37,7 +43,10 @@ $page_nav = array(
 			"vehiculos"  => array( "title" => "Vehiculos", "url" => APP_URL."/Vehiculos/index" ),
 			"altavehiculo" => array( "title" => "Orden de Reparacion", "url" => APP_URL."/Vehiculos/add" )
 		)
-	),
+	)
+);
+
+$menuSolicitudes = array(
 	"solicitudes" => array(
 		"title" => "Solicitudes",
 		"icon" => "fa-flag",
@@ -47,7 +56,10 @@ $page_nav = array(
 			'progress' => array( 'title' => 'Refaccion', 'url' => APP_URL."/solicitudes/add" ),
 			'progress' => array( 'title' => 'Incidencias', 'url' => APP_URL."/solicitudes/add" )
 		)
-	),
+	)
+);
+
+$menuAsignaciones = array(
 	"asignaciones" => array(
 		"title" => "Asignaciones",
 		"icon" => "fa-flag",
@@ -60,25 +72,55 @@ $page_nav = array(
 	)
 );
 
-$page_navadmin = array(
+$menuCatalogos = array(
 	"catalogos" => array(
 		"title" => "Catalogo Admin",
 		"icon"  => "fa-book",
 		"sub" => array(
+			"cattrabajo" 	 => array( "title" => "Trabajo",      "url" => APP_URL."/Catalogos/Trabajo" ),
 			"cattaller" 	 => array( "title" => "Taller",      "url" => APP_URL."/Catalogos/taller" ),
 			'users'     	 => array( 'title' => 'Usuarios',    'url' => APP_URL."/Users/index" ),
 			"catmodelo" 	 => array( "title" => "Modelo",      "url" => APP_URL."/Catalogos/modelo" ),
 			"catmarca"  	 => array( "title" => "Marca",       "url" => APP_URL."/Catalogos/marca" ),
 			"cataseguradora" => array( "title" => "Aseguradora", "url" => APP_URL."/Catalogos/aseguradora" )
 		)
-	),
+	)
+);
+
+$extras = array(
 	"examples" => array(
 		"title" => "SmartAdmin",
 		"icon" => "fa-fighter-jet",
 		"url" => APP_URL."/Examples/index"
 	)
 );
-$page_nav=array_merge($page_nav, $page_navadmin);
+if(isset($_SESSION['user_id'])){
+	$objperm = new PermisoUser();
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Clientes');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuClientes);
+	}
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Vehiculos');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuVehiculos);
+	}
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Solicitudes');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuSolicitudes);
+	}
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Asignaciones');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuAsignaciones);
+	}
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Catalogos');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuCatalogos);
+	}
+
+	$page_nav = array_merge($page_nav, $extras);
+
+}
+
 //echo json_encode($page_nav);
 
 /*

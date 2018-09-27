@@ -22,6 +22,7 @@ defined("SITE_HOST") ? null : define("SITE_HOST", ( isset($_SERVER['HTTPS']) && 
     $_SERVER['HTTP_HOST']);
 defined("ROOT_DIR") ? null : define("ROOT_DIR", str_replace(DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR.'config', "", $directory));
 defined("SYSTEM_DIR") ? null : define("SYSTEM_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "system");
+defined("EXPEDIENTE_DIR") ? null : define("EXPEDIENTE_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "expediente");
 defined("CONFIG_DIR") ? null : define("CONFIG_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "system" . DIRECTORY_SEPARATOR . "config");
 //Assets URL, location of your css, img, js, etc. files
 defined("ASSETS_URL") ? null : define("ASSETS_URL", APP_URL );
