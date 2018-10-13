@@ -75,49 +75,49 @@ if(isPost()){
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Nombre del Taller</label>
-                                                <input type="text" class="form-control" placeholder="Nombre Taller" id="nombre" name="nombre" value="<?php echo $data['nombre']; ?>">                                                    
+                                                <input type="text" class="form-control" placeholder="Nombre Taller" id="nombre" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">                                                    
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Calle</label>
-                                                <input type="text" class="form-control" placeholder="Calle" name="calle" value="<?php echo $data['calle']; ?>">                        
+                                                <input type="text" class="form-control" placeholder="Calle" name="calle" value="<?php echo htmlentities($data['calle']); ?>">                        
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Número Exterior</label>
-                                                <input type="text" class="form-control" placeholder="Número exterior" name="numext" value="<?php echo $data['numext']; ?>">                                               
+                                                <input type="text" class="form-control" placeholder="Número exterior" name="numext" value="<?php echo htmlentities($data['numext']); ?>">                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Número Interior</label>
-                                                <input type="text" class="form-control" placeholder="Número interior" name="numinte" value="<?php echo $data['numinte']; ?>">                                                                       
+                                                <input type="text" class="form-control" placeholder="Número interior" name="numinte" value="<?php echo htmlentities($data['numinte']); ?>">                                                                       
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Colonia</label>
-                                                <input type="text" class="form-control" placeholder="Colonia" name="colonia" value="<?php echo $data['colonia']; ?>">                                                           
+                                                <input type="text" class="form-control" placeholder="Colonia" name="colonia" value="<?php echo htmlentities($data['colonia']); ?>">                                                           
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Ciudad</label>
-                                                <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" value="<?php echo $data['ciudad']; ?>"> 
+                                                <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" value="<?php echo htmlentities($data['ciudad']); ?>"> 
                                             </div>
                                         </div>  
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Estado</label>
-                                                <input type="text" class="form-control" placeholder="Estado" name="estado" value="<?php echo $data['estado']; ?>">                                                                                               
+                                                <input type="text" class="form-control" placeholder="Estado" name="estado" value="<?php echo htmlentities($data['estado']); ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">CP</label>
-                                                <input type="text" maxlength="5" class="form-control" id="cp" placeholder="CP" name="cp" value="<?php echo $data['cp']; ?>">                                                                                                                                                       
+                                                <input type="text" maxlength="5" class="form-control" id="cp" placeholder="CP" name="cp" value="<?php echo htmlentities($data['cp']); ?>">                                                                                                                                                       
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">RFC</label>
-                                                <input type="text" class="form-control" placeholder="RFC" name="rfc" value="<?php echo $data['rfc']; ?>">                                                                                               
+                                                <input type="text" class="form-control" placeholder="RFC" name="rfc" value="<?php echo htmlentities(utf8_encode($data['rfc'])); ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Correo</label>
-                                                <input type="email" class="form-control" placeholder="example@email.com" name="correo" value="<?php echo $data['correo']; ?>">                                                                                               
+                                                <input type="email" class="form-control" placeholder="example@email.com" name="correo" value="<?php echo htmlentities($data['correo']); ?>">                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Teléfono</label>
-                                                <input type="text" class="form-control" placeholder="" name="telefono" value="<?php echo $data['telefono']; ?>">                                                                                                                     
+                                                <input type="text" class="form-control" placeholder="" name="telefono" value="<?php echo htmlentities($data['telefono']); ?>">                                                                                                                     
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Logotipo</label>

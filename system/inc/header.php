@@ -3,7 +3,7 @@
 			return $prop.'="'.$value.'"';
 		}, array_keys($page_html_prop), $page_html_prop)) ;?>>
 	<head>
-		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html"; charset="utf-8"/> 
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
 
 		<title> <?php echo $page_title != "" ? $page_title." - " : ""; ?>Taller - Hojalatería y pintura </title>

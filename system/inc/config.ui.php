@@ -40,7 +40,7 @@ $menuVehiculos = array(
 		"title" => "Vehiculos",
 		"icon" => "fa-automobile",
 		"sub" => array(
-			"vehiculos"  => array( "title" => "Vehiculos", "url" => APP_URL."/Vehiculos/index" ),
+			"vehiculos"    => array( "title" => "Vehiculos", "url" => APP_URL."/Vehiculos/index" ),
 			"altavehiculo" => array( "title" => "Orden de Reparacion", "url" => APP_URL."/Vehiculos/add" )
 		)
 	)
@@ -52,7 +52,7 @@ $menuSolicitudes = array(
 		"icon" => "fa-flag",
 		//"url" => APP_URL."/solicitudes/index",
 		"sub" => array(
-			"campaigns" => array( "title" => "Cotizacion", "url" => APP_URL."/solicitudes/index" ),
+			"campaigns"=> array( "title" => "Cotizacion", "url" => APP_URL."/solicitudes/index" ),
 			'progress' => array( 'title' => 'Refaccion', 'url' => APP_URL."/solicitudes/add" ),
 			'progress' => array( 'title' => 'Incidencias', 'url' => APP_URL."/solicitudes/add" )
 		)
@@ -77,15 +77,28 @@ $menuCatalogos = array(
 		"title" => "Catalogo Admin",
 		"icon"  => "fa-book",
 		"sub" => array(
-			"cattrabajo" 	 => array( "title" => "Trabajo",      "url" => APP_URL."/Catalogos/Trabajo" ),
+			"catservicio" 	 => array( "title" => "Servicios",      "url" => APP_URL."/Catalogos/Servicio" ),
 			"cattaller" 	 => array( "title" => "Taller",      "url" => APP_URL."/Catalogos/taller" ),
 			'users'     	 => array( 'title' => 'Usuarios',    'url' => APP_URL."/Users/index" ),
 			"catmodelo" 	 => array( "title" => "Modelo",      "url" => APP_URL."/Catalogos/modelo" ),
 			"catmarca"  	 => array( "title" => "Marca",       "url" => APP_URL."/Catalogos/marca" ),
-			"cataseguradora" => array( "title" => "Aseguradora", "url" => APP_URL."/Catalogos/aseguradora" )
+			"cataseguradora" => array( "title" => "Aseguradoras", "url" => APP_URL."/Catalogos/aseguradora" )
 		)
 	)
 );
+
+$menuUsuarios = array(
+	"usuarios" => array(
+		"title" => "Usuarios",
+		"icon"  => "fa-users",
+		"sub" => array(
+				'userindex' => array('title'  => 'Usuarios','url' => APP_URL."/Users/index" ),
+				'usertypeindex' => array('title'  => 'Usuarios Perfiles','url' => APP_URL."/Users/usertype" ),
+				'permisoindex' => array('title'  => 'Permisos','url' => APP_URL."/Permisos/index" )
+		)
+	)
+);
+
 
 $extras = array(
 	"examples" => array(
@@ -96,27 +109,38 @@ $extras = array(
 );
 if(isset($_SESSION['user_id'])){
 	$objperm = new PermisoUser();
+
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Clientes');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuClientes);
 	}
+
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Vehiculos');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuVehiculos);
 	}
+
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Solicitudes');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuSolicitudes);
 	}
+
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Asignaciones');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuAsignaciones);
 	}
+
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Catalogos');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuCatalogos);
 	}
 
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Users');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuUsuarios);
+	}
+
+	//default
 	$page_nav = array_merge($page_nav, $extras);
 
 }

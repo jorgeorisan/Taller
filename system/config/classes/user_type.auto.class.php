@@ -1,19 +1,14 @@
 <?php 
 
-	class AutoTrabajo {
+	class AutoUserType {
 
 	// Variables
 		protected $db;
 		
 		protected $id = 0;
-		protected $codigo = "";
 		protected $nombre = "";
-		protected $descripcion = "";
+		protected $comentarios = "";
 		protected $status = "";
-		protected $created_date = "";
-		protected $updated_date = "";
-		protected $deleted_date = "";
-		protected $id_user = "";
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -25,14 +20,14 @@
 			$this->db = $db;
 		}
 		public static function construct( $id ){
-			$trabajo = new Trabajo();
-			$trabajo->setId( $id );
-			return $trabajo;
+			$userType = new UserType();
+			$userType->setId( $id );
+			return $userType;
 		}
 		public static function constructWithValues( $values ){
-			$trabajo = new Trabajo();
-			$trabajo->setValues( $values );
-			return $trabajo;
+			$userType = new UserType();
+			$userType->setValues( $values );
+			return $userType;
 		}
 
 
@@ -42,42 +37,19 @@
  				$this->id = $value;
 		}
 		
-		public function setCodigo( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "CODIGO","s") ) 
- 				$this->codigo = $value;
-		}
-		
 		public function setNombre( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "NOMBRE","s") ) 
  				$this->nombre = $value;
 		}
 		
-		public function setDescripcion( $value ){ 				$this->descripcion = $value;
+		public function setComentarios( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "COMENTARIOS","s") ) 
+ 				$this->comentarios = $value;
 		}
 		
 		public function setStatus( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "STATUS","s") ) 
  				$this->status = $value;
-		}
-		
-		public function setCreatedDate( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "CREATEDDATE","s") ) 
- 				$this->created_date = $value;
-		}
-		
-		public function setUpdatedDate( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "UPDATEDDATE","s") ) 
- 				$this->updated_date = $value;
-		}
-		
-		public function setDeletedDate( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "DELETEDDATE","s") ) 
- 				$this->deleted_date = $value;
-		}
-		
-		public function setIdUser( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "IDUSER","s") ) 
- 				$this->id_user = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -105,14 +77,6 @@
  			}
 		}
 		
-		public function getCodigo($sanitize=true){ 
- 			if($sanitize){
- 				return htmlspecialchars($this->codigo) ;
- 			}else{
- 				return $this->codigo ;
- 			}
-		}
-		
 		public function getNombre($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->nombre) ;
@@ -121,11 +85,11 @@
  			}
 		}
 		
-		public function getDescripcion($sanitize=true){ 
+		public function getComentarios($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->descripcion) ;
+ 				return htmlspecialchars($this->comentarios) ;
  			}else{
- 				return $this->descripcion ;
+ 				return $this->comentarios ;
  			}
 		}
 		
@@ -134,38 +98,6 @@
  				return htmlspecialchars($this->status) ;
  			}else{
  				return $this->status ;
- 			}
-		}
-		
-		public function getCreatedDate($sanitize=true){ 
- 			if($sanitize){
- 				return htmlspecialchars($this->created_date) ;
- 			}else{
- 				return $this->created_date ;
- 			}
-		}
-		
-		public function getUpdatedDate($sanitize=true){ 
- 			if($sanitize){
- 				return htmlspecialchars($this->updated_date) ;
- 			}else{
- 				return $this->updated_date ;
- 			}
-		}
-		
-		public function getDeletedDate($sanitize=true){ 
- 			if($sanitize){
- 				return htmlspecialchars($this->deleted_date) ;
- 			}else{
- 				return $this->deleted_date ;
- 			}
-		}
-		
-		public function getIdUser($sanitize=true){ 
- 			if($sanitize){
- 				return htmlspecialchars($this->id_user) ;
- 			}else{
- 				return $this->id_user ;
  			}
 		}
 		
@@ -178,7 +110,7 @@
 
 	// Public Support Functions
 		public function load($id) {
-			$sql="SELECT * FROM trabajo WHERE id = ?";
+			$sql="SELECT * FROM user_type WHERE id = ?";
 
 			if ( $id == 0 )
 				return $this->killInvalidclass( "The ID not validclass." );
@@ -196,43 +128,28 @@
 			}
 
 			$this->setId( $res['id'] );
-			$this->setCodigo( $res['codigo'] );
 			$this->setNombre( $res['nombre'] );
-			$this->setDescripcion( $res['descripcion'] );
+			$this->setComentarios( $res['comentarios'] );
 			$this->setStatus( $res['status'] );
-			$this->setCreatedDate( $res['created_date'] );
-			$this->setUpdatedDate( $res['updated_date'] );
-			$this->setDeletedDate( $res['deleted_date'] );
-			$this->setIdUser( $res['id_user'] );
 			return true;
 		}
 		// end function load
 
 		public function save() {
 			if ($this->getId()==0){ // insert new
-				$sql = "INSERT INTO trabajo SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),"; 
+				$sql = "INSERT INTO user_type SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),"; 
 
-			$sql .= " `codigo` = ? ,";
 			$sql .= " `nombre` = ? ,";
-			$sql .= " `descripcion` = ? ,";
+			$sql .= " `comentarios` = ? ,";
 			$sql .= " `status` = ? ,";
-			$sql .= " `created_date` = ? ,";
-			$sql .= " `updated_date` = ? ,";
-			$sql .= " `deleted_date` = ? ,";
-			$sql .= " `id_user` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
-				$sql = "UPDATE trabajo SET modified=UTC_TIMESTAMP(),";	
+				$sql = "UPDATE user_type SET modified=UTC_TIMESTAMP(),";	
 
-			$sql .= " `codigo` = ? ,";
 			$sql .= " `nombre` = ? ,";
-			$sql .= " `descripcion` = ? ,";
+			$sql .= " `comentarios` = ? ,";
 			$sql .= " `status` = ? ,";
-			$sql .= " `created_date` = ? ,";
-			$sql .= " `updated_date` = ? ,";
-			$sql .= " `deleted_date` = ? ,";
-			$sql .= " `id_user` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -242,14 +159,9 @@
 			$stmt = $this->db->prepare( $sql );
 			//$stmt->mbind_param( 'i', $id );
 
-			$stmt->mbind_param( 's', $this->codigo );
 			$stmt->mbind_param( 's', $this->nombre );
-			$stmt->mbind_param( 's', $this->descripcion );
+			$stmt->mbind_param( 's', $this->comentarios );
 			$stmt->mbind_param( 's', $this->status );
-			$stmt->mbind_param( 's', $this->created_date );
-			$stmt->mbind_param( 's', $this->updated_date );
-			$stmt->mbind_param( 's', $this->deleted_date );
-			$stmt->mbind_param( 's', $this->id_user );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -266,31 +178,16 @@
 			if ($this->getId()==0){ // insert new
 				// only updates no save new here
 			} else { // updated existing
-				$sql = "UPDATE trabajo SET modified=UTC_TIMESTAMP(),";	
+				$sql = "UPDATE user_type SET modified=UTC_TIMESTAMP(),";	
 
-			if (in_array("codigo",$fieldstoupdate)){
-				$sql .= " `codigo` = ? ,";
-			}
 			if (in_array("nombre",$fieldstoupdate)){
 				$sql .= " `nombre` = ? ,";
 			}
-			if (in_array("descripcion",$fieldstoupdate)){
-				$sql .= " `descripcion` = ? ,";
+			if (in_array("comentarios",$fieldstoupdate)){
+				$sql .= " `comentarios` = ? ,";
 			}
 			if (in_array("status",$fieldstoupdate)){
 				$sql .= " `status` = ? ,";
-			}
-			if (in_array("created_date",$fieldstoupdate)){
-				$sql .= " `created_date` = ? ,";
-			}
-			if (in_array("updated_date",$fieldstoupdate)){
-				$sql .= " `updated_date` = ? ,";
-			}
-			if (in_array("deleted_date",$fieldstoupdate)){
-				$sql .= " `deleted_date` = ? ,";
-			}
-			if (in_array("id_user",$fieldstoupdate)){
-				$sql .= " `id_user` = ? ,";
 			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
@@ -301,29 +198,14 @@
 			$stmt = $this->db->prepare( $sql );
 			//$stmt->mbind_param( 'i', $id );
 
-			if (in_array("codigo",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->codigo  );
-			}
 			if (in_array("nombre",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->nombre  );
 			}
-			if (in_array("descripcion",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->descripcion  );
+			if (in_array("comentarios",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->comentarios  );
 			}
 			if (in_array("status",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->status  );
-			}
-			if (in_array("created_date",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->createdDate  );
-			}
-			if (in_array("updated_date",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->updatedDate  );
-			}
-			if (in_array("deleted_date",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->deletedDate  );
-			}
-			if (in_array("id_user",$fieldstoupdate)){
-				$stmt->mbind_param( 's', $this->idUser  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );
@@ -338,7 +220,7 @@
 		
 
 		public function getAll() {
-			$sql="SELECT id FROM trabajo WHERE 1 and status='active'";
+			$sql="SELECT id FROM user_type WHERE 1 and status='active'";
 			// Get data 
 			$stmt = $this->db->prepare( $sql );
 			$stmt->execute();
@@ -346,7 +228,7 @@
 			$res = $stmt->get_result();
 			$retval=array();
 			while($id = mysqli_fetch_row($res)){
-				$retval[$id[0]] = new Trabajo();
+				$retval[$id[0]] = new UserType();
 				$retval[$id[0]]->load($id[0]);
 			}
 			return $retval;

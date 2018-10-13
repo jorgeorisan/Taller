@@ -71,7 +71,7 @@ if(isPost()){
                                         <div class="col-sm-13">
                                             <div class="form-group">
                                                 <label for="name">Submodelo</label> 
-                                                <input type="text" required class="form-control" placeholder="Capture Submodelo" name="nombre" value="<?php echo $data['nombre']; ?>" >
+                                                <input type="text" required class="form-control" placeholder="Capture Submodelo" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>" >
                                             </div>                            
                                             <div class="form-group">
                                                 <label for="name">Modelo</label><br>
@@ -86,7 +86,7 @@ if(isPost()){
                                                                 if ($data['id_marca'] == $val['id'] ) {
                                                                     $selected = "selected";
                                                                 }
-                                                                echo "<option value='".$val['id']."' selected>".$val['nombre']."</option>";
+                                                                echo "<option value='".$val['id']."' selected>".htmlentities($val['nombre'])."</option>";
                                                             }
                                                         }
                                                     ?>

@@ -15,15 +15,15 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 					$data="<table border=1 style=' border-color: #CCC;'><tr  align='center'><td colspan='2'><h4>Datos del Cliente</h4></td></tr>";
 					echo $data.="<tr>
 									<td><strong>Nombre:</strong></td>
-									<td>" . $res["nombre"] ." ".$res["apellido_pat"] ." ".$res["apellido_mat"] . "</td>
+									<td>" . htmlentities($res["nombre"] ." ".$res["apellido_pat"] ." ".$res["apellido_mat"]) . "</td>
 								</tr>
 								<tr>
-									<td><strong>Email:</strong></td><td>"   .$res["email"]     . "</td>
+									<td><strong>Email:</strong></td><td>"   .htmlentities($res["email"])     . "</td>
 								</tr>
 								<tr>
-									<td><strong>Telefono:</strong></td><td>" .$res["telefono"] . "</td>
+									<td><strong>Telefono:</strong></td><td>" .htmlentities($res["telefono"]) . "</td>
 								</tr>
-								<tr><td><strong>Direccion:</strong></td><td>" .$res["ciudad"]." ".$res["estado"]. " Col." .$res["colonia"] ." Call." .$res["calle"]." ".$res["num_ext"]. " " .$res["num_int"]."</td>
+								<tr><td><strong>Direccion:</strong></td><td>" .htmlentities($res["ciudad"]." ".$res["estado"]). " Col." .htmlentities($res["colonia"]) ." Call." .htmlentities($res["calle"]." ".$res["num_ext"]. " " .$res["num_int"])."</td>
 								</tr>
 							</table>";
 				}else{
@@ -41,7 +41,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 								<option value="">Selecciona Modelo</option>';
                         if (is_array($list) || is_object($list)){
                             foreach($list as $val){
-                                $data.="<option value='".$val['id']."'>".$val['nombre']."</option>";
+                                $data.="<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                             }
                         }
                          

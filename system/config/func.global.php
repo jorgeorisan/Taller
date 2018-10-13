@@ -267,9 +267,16 @@ function delete($id,$module,$table){
       break;
     case 'user':        $obj = new User();  
       break;
+    case 'permiso':     $obj = new Permiso();  
+      break;
+    case 'vehiculo':    $obj = new Vehiculo();  
+      break;
+    case 'usertype':    $obj = new UserType();   $pagereturn=$table;  
+      break;
   
     default:
-      # code...
+      echo "no se encontro tabla";
+      exit;
       break;
   }
   

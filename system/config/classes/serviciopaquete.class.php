@@ -1,14 +1,15 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "aseguradora.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "servicio_paquete.auto.class.php");
 
-class Aseguradora extends AutoAseguradora { 
-	private $DB_TABLE = "aseguradora";
+class ServicioPaquete extends AutoServicioPaquete { 
+	private $DB_TABLE = "servicio_paquete";
 
+	
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM aseguradora where status='active';";
+		$sql = "SELECT * FROM servicio_paquete where status='active';";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -21,11 +22,14 @@ class Aseguradora extends AutoAseguradora {
 		//metodo que sirve para hacer obtener datos en el editar
 	public function getTable($id)
 	{
+		if(! intval( $id )){
+			return false;
+		}
 		$id=$this->db->real_escape_string($id);
-		$sql= "SELECT * FROM aseguradora WHERE id=$id;";
+		$sql= "SELECT * FROM servicio_paquete WHERE id=$id;";
 		$res=$this->db->query($sql);
 		if(!$res)
-			{die("Error getting result");}
+			{die("Error getting result servicio_paquete");}
 		$row = $res->fetch_assoc();
 		$res->close();
 		return $row;
@@ -34,8 +38,8 @@ class Aseguradora extends AutoAseguradora {
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$data=fromArray($_request,'aseguradora',$this->db,"add");
-		$sql= "INSERT INTO aseguradora (".$data[0].") VALUES(".$data[1]."); ";
+		$data=fromArray($_request,'servicio_paquete',$this->db,"add");
+		$sql= "INSERT INTO servicio_paquete (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
 		$sql= "SELECT LAST_INSERT_ID();";//. $num ;
 		$res=$this->db->query($sql);
@@ -48,12 +52,12 @@ class Aseguradora extends AutoAseguradora {
 		}
 		return $id["LAST_INSERT_ID()"];
 	}
-	   //metodo que sirve para hacer update
+		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)
 	{
 		$_request["updated_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'aseguradora',$this->db,"update");
-		$sql= "UPDATE aseguradora SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'servicio_paquete',$this->db,"update");
+		$sql= "UPDATE servicio_paquete SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -61,13 +65,13 @@ class Aseguradora extends AutoAseguradora {
 			return true;
 		}
 	}
-	   //metodo que sirve para hacer delete
+		//metodo que sirve para hacer delete
 	public function deleteAll($id,$_request)
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'aseguradora',$this->db,"update");	
-		$sql= "UPDATE aseguradora SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'servicio_paquete',$this->db,"update");	
+		$sql= "UPDATE servicio_paquete SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;

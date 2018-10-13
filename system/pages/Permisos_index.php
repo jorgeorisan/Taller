@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Trabajos";
+$page_title = "Permiso";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -17,10 +17,8 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-
-$obj = new Trabajo();
+$obj = new Permiso();
 $data = $obj->getAllArr();
-
 //print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -36,7 +34,7 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Catalogos","aseguradoraadd")?>" >Nuevo Trabajo</a></p>
+			 <p><a class="btn btn-success" href="<?php echo make_url("Permisos","add")?>" >Nuevo Permiso</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -52,16 +50,16 @@ $data = $obj->getAllArr();
 									<thead>
 										<tr>
 											<th class = "col-md-2" data-class="expand">
-												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> Codigo
+												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> Nombre
 											</th>
 											<th class = "col-md-4" data-hide="phone,tablet">
-												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Nombre
+												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Seccion
 											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Descripcion
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> pagina
 											</th>
-											</th>
-											<th class = "col-md-2" data-hide="">
+											
+											<th class = "col-md-2" >
 												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
 											</th>
 										</tr>
@@ -70,9 +68,11 @@ $data = $obj->getAllArr();
 										<?php foreach($data as $row){
 											?>
 											<tr>
-												<td><?php echo htmlentities($row['codigo'])?></td>
 												<td><?php echo htmlentities($row['nombre'])?></td>
-												<td><?php echo htmlentities($row['descripcion']) ?></td>											
+												<td><?php echo htmlentities($row['section'])?></td>
+												<td><?php echo htmlentities($row['page']) ?></td>
+												
+												
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -80,14 +80,11 @@ $data = $obj->getAllArr();
 														</button>
 														<ul class="dropdown-menu">
 															<li>
-																<a class="" href="<?php echo make_url("Catalogos","aseguradorashow",array('id'=>$row['id'])); ?>">Ver</a>
-															</li>
-															<li>
-																<a class="" href="<?php echo make_url("Catalogos","aseguradoraedit",array('id'=>$row['id'])); ?>">Editar</a>
+																<a class="" href="<?php echo make_url("Permisos","edit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Catalogos","aseguradoradelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Permisos","permisodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -104,7 +101,6 @@ $data = $obj->getAllArr();
 		</section>
 	</div>
 	<!-- END MAIN CONTENT -->
-
 </div>
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
@@ -159,57 +155,9 @@ $data = $obj->getAllArr();
 			}
 		});
 	
-		/* DO NOT REMOVE : GLOBAL FUNCTIONS!
-		 *
-		 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
-		 *
-		 * // activate tooltips
-		 * $("[rel=tooltip]").tooltip();
-		 *
-		 * // activate popovers
-		 * $("[rel=popover]").popover();
-		 *
-		 * // activate popovers with hover states
-		 * $("[rel=popover-hover]").popover({ trigger: "hover" });
-		 *
-		 * // activate inline charts
-		 * runAllCharts();
-		 *
-		 * // setup widgets
-		 * setup_widgets_desktop();
-		 *
-		 * // run form elements
-		 * runAllForms();
-		 *
-		 ********************************
-		 *
-		 * pageSetUp() is needed whenever you load a page.
-		 * It initializes and checks for all basic elements of the page
-		 * and makes rendering easier.
-		 *
-		 */
-
 		 pageSetUp();
-
-		/*
-		 * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
-		 * eg alert("my home function");
-		 *
-		 * var pagefunction = function() {
-		 *   ...
-		 * }
-		 * loadScript("js/plugin/_PLUGIN_NAME_.js", pagefunction);
-		 *
-		 * TO LOAD A SCRIPT:
-		 * var pagefunction = function (){
-		 *  loadScript(".../plugin.js", run_after_loaded);
-		 * }
-		 *
-		 * OR
-		 *
-		 * loadScript(".../plugin.js", run_after_loaded);
-		 */
-	})
+		
+	});
 
 </script>
 

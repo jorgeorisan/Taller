@@ -326,7 +326,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:20%;"><?php echo htmlentities($data['FarosNiebla'])  ?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
+                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: ">Comentarios: </td>
                                                                 <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosExt'])  ?></td>
                                                             </tr>
                                                         </table>
@@ -373,7 +373,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:20%;"><?php echo htmlentities($data['Guantera'])  ?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
+                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: ">Comentarios: </td>
                                                                 <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosInt'])  ?></td>
                                                             </tr>
                                                         </table>
@@ -423,7 +423,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:20%;"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
+                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: ">Comentarios: </td>
                                                                 <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosAcces'])   ?></td>
                                                             </tr>
                                                         </table>

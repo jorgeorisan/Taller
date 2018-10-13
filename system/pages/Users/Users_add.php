@@ -31,12 +31,12 @@ if(isPost()){
 		{
 		    $id=$obj->addAll(getPost());
 		    if($id>0){
-		        informSuccess(true, make_url("Users","users"));
+		        informSuccess(true,  make_url("Permisos","asignar",array('id'=>$id) ));
 		    }else{
-		        informError(true,make_url("Users","users"));
+		        informError(true,make_url("Users","index"));
 		    }
 		}else{
-			informError(true,make_url("Users","users"));
+			informError(true,make_url("Users","index"));
 		}
 	}
 }
@@ -95,6 +95,21 @@ if(isPost()){
 											<label class="input"> <i class="icon-append fa fa-list-alt"></i>
 												<input type="text" id="direccion" name="direccion" placeholder="Direccion">
 											</label>
+										</section>
+										<section>
+											<label class="label">Selecciona el Tipo de usuario</label>
+											<select style="width:100%" class="select2" name="id_usertype" id="id_usertype">
+												<option value="">Selecciona</option>
+												<?php 
+												$obj = new UserType();
+												$list=$obj->getAllArr();
+												if (is_array($list) || is_object($list)){
+													foreach($list as $val){
+														echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
+													}
+												}
+												 ?>
+											</select>
 										</section>
 										<section>
 											<label class="label">Selecciona el taller</label>
@@ -156,7 +171,7 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
-	function existadmin(email){
+	function existadmin(email, callback){
         if ( ! email ) return;
         if ( ! validateEmailStructure( email ) )
             return notify('warning', 'Email no es valido.');
@@ -167,7 +182,12 @@ if(isPost()){
 					notify('warning', 'Este email ya existe favor de intentar con otro');
 					return false;
 				}else{
-					return true;
+					if(callback){
+						try { callback(); }
+						catch(err) {
+                        	console.log(err.message);
+                    	}
+					}
 				}     
         });
 	}
@@ -178,33 +198,32 @@ if(isPost()){
 		var idtaller = $("#id_taller").val();
 		if (email == ""){ notify("info","Se necesita un email"); return false; }
 		if (idtaller == ""){ notify("info","Se necesita un taller"); return false; }
-
-		console.log(existadmin(email));
-
+			existadmin(email,function(){
+				var p1 = $("#password").val();
+			    var p2 = $("#confirmpassword").val();
+				var x = $("#password").val();
+				var espacios = false;
+				var cont = 0;
+				if (p1.length == 0 || p2.length == 0) {  notify('warning',"Se necesita un password"); return false;  }
+			        //ambas contraceñas coincidan
+			    if ( p1 != p2 ) { notify('warning',"El password no coincide"); return false; } 
+		    
+				var x = $("#nombre").val();
+				if (x == ""){ notify("warning","Se necesita un nombre"); return false; }
+					
+				var x = $("#apellido_pat").val();
+				if (x == ""){ notify("warning","Se necesita un apellido"); return false; }
+			
+			    $("#main-form").submit();		
+			});
 		
-			var p1 = $("#password").val();
-		    var p2 = $("#confirmpassword").val();
-			var x = $("#password").val();
-			var espacios = false;
-			var cont = 0;
-			if (p1.length == 0 || p2.length == 0) {  notify('warning',"Se necesita un password"); return false;  }
-		        //ambas contraceñas coincidan
-		    if ( p1 != p2 ) { notify('warning',"El password no coincide"); return false; } 
-	    
-			var x = $("#nombre").val();
-			if (x == ""){ notify("warning","Se necesita un nombre"); return false; }
-				
-			var x = $("#apellido_pat").val();
-			if (x == ""){ notify("warning","Se necesita un apellido"); return false; }
-		
-		    $("#main-form").submit();		
 	}
 	$(document).ready(function() {
 	 	
 	    $('body').on('change', '#email', function(){
 	            if( $(this).val() ){
 	                var email = $("#email").val().trim();
-	                console.log(existadmin(email));
+	               	existadmin(email,null);
 	            }
 	    });
 		

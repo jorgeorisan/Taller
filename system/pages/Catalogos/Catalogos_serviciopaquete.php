@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Usuarios";
+$page_title = "Servicios Paquetes";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -18,8 +18,8 @@ include(SYSTEM_DIR . "/inc/header.php");
 include(SYSTEM_DIR . "/inc/nav.php");
 
 
-$obj = new User();
-$data = $obj->getAllArr();
+$obj = new Servicio();
+$data = $obj->getAllArrPackage();
 
 //print_r($users);
 ?>
@@ -36,7 +36,7 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Users","add")?>" >Nuevo Usuario</a></p>
+			 <p><a class="btn btn-success" href="<?php echo make_url("Catalogos","servicioadd")?>" >Nuevo Servicio</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -51,59 +51,41 @@ $data = $obj->getAllArr();
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw  fa-envelope  text-muted hidden-md hidden-sm hidden-xs"></i> Email</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
-											<th class = "col-md-1" data-hide="phone tablet">
-												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Type</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Status</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Taller</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
+											<th class = "col-md-2" data-class="expand">
+												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> Codigo
+											</th>
+											<th class = "col-md-4" data-hide="phone,tablet">
+												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Nombre
+											</th>
+											<th class = "col-md-1" data-hide="">
+												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Descripcion
+											</th>
+											</th>
+											<th class = "col-md-2" data-hide="">
+												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
+											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php  foreach($data as $row) {
-											$nomtaller  = "";
-											$objtaller  = new Taller();
-											$datataller = $objtaller->getTable($row["id_taller"]);
-											if($datataller){ $nomtaller = $datataller["nombre"]; }
-											$nomusertype  ="";
-											$objusertype = new UserType();
-											$datausertype = $objusertype->getTable($row["id_usertype"]);
-											if($datataller){ $nomusertype = $datausertype["nombre"]; }
+										<?php foreach($data as $row){
 											?>
 											<tr>
-												<td><?php echo htmlentities($row['email'])?></td>
-												<td><?php echo htmlentities($row['nombre'].' '.$row['apellido_pat'])?></td>
-												<td><?php echo htmlentities($nomusertype) ?></td>
-												<?php if($row['status']=='active'){?>
-													<td><i class="fa fa-check-square    text-muted hidden-md hidden-sm hidden-xs"></td>
-												<?php }else{?>
-													<td><i class="fa f fa-square-o  text-muted hidden-md hidden-sm hidden-xs"></td>
-												<?php } ?>
-												<td><?php echo htmlentities($nomtaller) ?></td>
+												<td><?php echo htmlentities($row['codigo'])?></td>
+												<td><?php echo htmlentities($row['nombre'])?></td>
+												<td><?php echo htmlentities($row['descripcion']) ?></td>											
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 															Accion <span class="caret"></span>
 														</button>
 														<ul class="dropdown-menu">
+															
 															<li>
-																<a class="" href="<?php echo make_url("Users","edit",array('id'=>$row['id'])); ?>">Editar</a>
-															</li>
-															<li>
-																<a class="" href="<?php echo make_url("Permisos","asignar",array('id'=>$row['id'])); ?>">Permisos</a>
-															</li>
-															<li>
-																<a class="" href="<?php echo make_url("Users","cambiarpwd",array('id'=>$row['id'])); ?>">Cambiar password</a>
+																<a class="" href="<?php echo make_url("Catalogos","servicioedit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Users","userdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Catalogos","serviciodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -112,19 +94,15 @@ $data = $obj->getAllArr();
 										<?php }?>
 									</tbody>
 								</table>
-
 							</div>
-							<!-- end widget content -->
-
 						</div>
-						<!-- end widget div -->
-
 					</div>
 				</article>
 			</div>
 		</section>
 	</div>
 	<!-- END MAIN CONTENT -->
+
 </div>
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->

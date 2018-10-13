@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Editar Marca";
+$page_title = "Editar permiso";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,35 +24,37 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+
+
 if(isset($request['params']['id'])   && $request['params']['id']>0)
     $id=$request['params']['id'];
 else
-    informError(true,make_url("Catalogos","marca"));
+    informError(true,make_url("Permiso","index"));
 
-$obj = new Marca();
+$obj = new Permiso();
 $data = $obj->getTable($id);
 if ( !$data ) {
-    informError(true,make_url("Catalogos","marca"));
+    informError(true,make_url("Permisos","index"));
 }
 if(isPost()){
-    $obj = new Marca();
+    $obj = new Permiso();
     $id = $obj->updateAll($id,getPost());
     if( $id  ) {
-         informSuccess(true, make_url("Catalogos","marca"));
+         informSuccess(true, make_url("Permisos","index"));
     }else{
-        informError(true, make_url("Catalogos","marcaedit",array('id'=>$id)),"marcaedit");
+        informError(true, make_url("Permisos","edit",array('id'=>$id)),"edit");
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Marca"] = APP_URL."/Catalogos/marca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Permisos"] = APP_URL."/Permisos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
             <section id="widget-grid" class="">
-                 <article class="col-sm-12 col-md-6 col-lg-6"  id="">
+                <article class="col-sm-12 col-md-9 col-lg-6"  id="">
                     <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
                     data-widget-colorbutton="false" data-widget-editbutton="false" 
                     data-widget-deletebutton="false" data-widget-collapsed="false">
@@ -66,29 +68,36 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
-                                   <div class="tl-body">
-                                        <div class="col-sm-6">
+                                <form id="main-form" class="" role="form" method=post 
+                                action="<?php echo make_url("Permisos","edit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                    <input type="text" class="" name="idPermiso" hidden>
+                                    <fieldset>
+                                        <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="name">Marca</label>
-                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
+                                                <label for="name">Nombre del Permiso</label>
+                                                <input type="text" class="form-control" placeholder="Nombre Permiso" id="nombre" name="nombre" value="<?php echo $data['nombre']; ?>">                                                    
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Seccion</label>
+                                                <input type="text" class="form-control" placeholder="Seccion" name="section" value="<?php echo $data['section']; ?>">                        
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Pagina</label>
+                                                <input type="text" class="form-control" placeholder="Pagina" name="page" value="<?php echo $data['page']; ?>">                                               
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                           <div class="form-actions" style="text-align: center">
-                                                <div class="row">
-                                                   <div class="col-md-12">
-                                                        <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
-                                                            Cancelar
-                                                        </button>
-                                                        <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
-                                                            <i class="fa fa-save"></i>
-                                                            Guardar
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                            <div id="resultado"></div>
+                                    </fieldset>
+                                    <div class="form-actions" style="text-align: center">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
+                                                    Cancelar
+                                                </button>
+                                                <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
+                                                    <i class="fa fa-save"></i>
+                                                    Guardar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -120,6 +129,7 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
+    
     function validateForm()
     {
         var nombre = $("input[name=nombre]").val();

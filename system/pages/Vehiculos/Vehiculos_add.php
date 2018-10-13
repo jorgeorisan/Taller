@@ -132,7 +132,7 @@ if(isPost()){
                                                                         if ($_SESSION['user_id'] == $val['id'] )
                                                                             $selected = "selected";
                                                                         
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".$val['nombre']."</option>";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -156,7 +156,7 @@ if(isPost()){
                                                                         if ($_SESSION['user_info']['id_taller'] == $val['id'] )
                                                                             $selected = "selected";
 
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".$val['nombre']."</option>";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -176,7 +176,7 @@ if(isPost()){
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
                                                                         $selected = "";
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".$val['nombre']."</option>";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -206,7 +206,7 @@ if(isPost()){
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
+                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                                                                     }
                                                                 }
                                                                  ?>

@@ -1,15 +1,28 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "user.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "servicio.auto.class.php");
 
-class User extends AutoUser { 
-	private $DB_TABLE = "user";
+class Servicio extends AutoServicio { 
+	private $DB_TABLE = "servicio";
 
 	
 	//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM user where status='active';";
+		$sql = "SELECT * FROM servicio where status='active' and paquete=0;";
+		$res = $this->db->query($sql);
+		$set = array();
+		if(!$res){ die("Error getting result"); }
+		else{
+			while ($row = $res->fetch_assoc())
+				{ $set[] = $row; }
+		}
+		return $set;
+	}
+	//metodo que sirve para obtener todos los datos de la tabla de paquetes
+	public function getAllArrPackege()
+	{
+		$sql = "SELECT * FROM servicio where status='active' and paquete=1;";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -22,11 +35,14 @@ class User extends AutoUser {
 	//metodo que sirve para hacer obtener datos en el editar
 	public function getTable($id)
 	{
+		if(! intval( $id )){
+			return false;
+		}
 		$id=$this->db->real_escape_string($id);
-		$sql= "SELECT * FROM user WHERE id=$id;";
+		$sql= "SELECT * FROM servicio WHERE id=$id;";
 		$res=$this->db->query($sql);
 		if(!$res)
-			{die("Error getting result");}
+			{die("Error getting result servicio");}
 		$row = $res->fetch_assoc();
 		$res->close();
 		return $row;
@@ -35,9 +51,8 @@ class User extends AutoUser {
 	//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$_request["password"]=password_hash($_request["password"],PASSWORD_DEFAULT);
-		$data=fromArray($_request,'user',$this->db,"add");
-		$sql= "INSERT INTO user (".$data[0].") VALUES(".$data[1]."); ";
+		$data=fromArray($_request,'servicio',$this->db,"add");
+		$sql= "INSERT INTO servicio (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
 		$sql= "SELECT LAST_INSERT_ID();";//. $num ;
 		$res=$this->db->query($sql);
@@ -54,8 +69,8 @@ class User extends AutoUser {
 	public function updateAll($id,$_request)
 	{
 		$_request["updated_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'user',$this->db,"update");
-		$sql= "UPDATE user SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'servicio',$this->db,"update");
+		$sql= "UPDATE servicio SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -68,35 +83,14 @@ class User extends AutoUser {
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'user',$this->db,"update");	
-		$sql= "UPDATE user SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'servicio',$this->db,"update");	
+		$sql= "UPDATE servicio SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
 		}else{
 			return true;
 		}
-	}
-	//metodo comprueba que un usuario ya existe o no
-	public function userExists($email)
-	{
-
-		$email=$this->db->real_escape_string($email);
-		$sql= "SELECT * FROM user WHERE email='".$email."' and status='active';";
-		$res=$this->db->query($sql);
-		if(!$res)
-			{die('Error getting result');}
-		//echo $sql;
-		$row = $res->fetch_assoc();
-		//echo $this->db->error;
-		$res->close();
-		if(!$row)
-			{
-				return false;}
-		else
-			{
-				return true;}
-
 	}
 
 

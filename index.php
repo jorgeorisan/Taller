@@ -61,8 +61,8 @@ Routing section
         
         $datapermuser  = $objpermuser->getpermisouser($_SESSION['user_id'],$request['section'],$page2);
         if ( !$datapermuser ) {
-          echo $_SESSION['user_id']."------".$request['section']."-----".$page2;
-          exit; 
+          //echo $_SESSION['user_id']."------".$request['section']."-----".$page2;
+          //exit; 
           informPermiss(true,make_url("Home","index"));
         }
       }
@@ -77,9 +77,11 @@ Routing section
       if ( $request['section'] === 'Catalogos' ) {
         $page = "Catalogos_taller.php";
         $dir  = "Catalogos";//si esta en carpeta
-        if ($request['page'] === 'taller') { $page = "Catalogos_taller.php"; }
-        if ($request['page'] === 'modelo') { $page = "Catalogos_modelo.php"; }
-        if ($request['page'] === 'marca')  { $page = "Catalogos_marca.php";  }
+        if ($request['page'] === 'taller')      { $page = "Catalogos_taller.php"; }
+        if ($request['page'] === 'modelo')      { $page = "Catalogos_modelo.php"; }
+        if ($request['page'] === 'marca')       { $page = "Catalogos_marca.php";  }
+        if ($request['page'] === 'aseguradora') { $page = "Catalogos_aseguradora.php";  }
+        if ($request['page'] === 'servicio')    { $page = "Catalogos_servicio.php";  }
        
       }
       if ($request['section']==='Users'){
@@ -99,6 +101,14 @@ Routing section
         if ($request['page']==='edit'){$page="Vehiculos_edit.php"; }
         if ($request['page']==='show'){$page="Vehiculos_show.php"; }
         if ($request['page']==='ajax'){$page="Vehiculos_ajax.php"; }
+      }
+      if ($request['section']==='Permisos'){
+        $page="Permisos_index.php";
+        $dir="Permisos";//si esta en carpeta
+        if ($request['page']==='add'){$page="Permisos_add.php"; }
+        if ($request['page']==='edit'){$page="Permisos_edit.php"; }
+        if ($request['page']==='ajax'){$page="Permisos_ajax.php"; }
+        if ($request['page']==='asignar'){$page="Permisos_asignar.php"; }
       }
      //delete pages
       if(isset($request['params']['id'])){

@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Editar Trabajo";
+$page_title = "Agregar Servicio";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,30 +24,20 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
-if(isset($request['params']['id'])   && $request['params']['id']>0)
-    $id=$request['params']['id'];
-else
-    informError(true,make_url("Catalogos","trabajo"));
-
-$obj = new Trabajo();
-$data = $obj->getTable($id);
-if ( !$data ) {
-    informError(true,make_url("Catalogos","trabajo"));
-}
 if(isPost()){
-    $obj = new Trabajo();
-    $id = $obj->updateAll($id,getPost());
-    if( $id  ) {
-         informSuccess(true, make_url("Catalogos","trabajo"));
+    $obj = new Servicio();
+    $id=$obj->addAll(getPost());
+    if($id>0){
+        informSuccess(true, make_url("Catalogos","servicio"));
     }else{
-        informError(true, make_url("Catalogos","trabajoedit",array('id'=>$id)),"trabajoedit");
+        informError(true,make_url("Catalogos","servicio"));
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Trabajo"] = APP_URL."/Catalogos/trabajo"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Servicio"] = APP_URL."/Catalogos/servicio"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -66,27 +56,24 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","trabajoedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
-                                    <input type="text" class="" name="idTrabajo" hidden>   
-                                    <script type="text/javascript" src="js/jquery.js"></script>
-                                    <script type="text/javascript" src="js/catTrabajo.js"></script>      
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","servicioadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">     
                                     <fieldset>    
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Codigo</label>
-                                                <input type="text" class="form-control" placeholder="Codigo Trabajo" name="nombre" value="<?php echo $data['codigo']; ?>" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Codigo Servicio" name="codigo" >                                                                                             
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Trabajo</label>
-                                                <input type="text" class="form-control" placeholder="Nombre Trabajo" name="nombre" value="<?php echo $data['nombre']; ?>" >                                                                                               
+                                                <label for="name">Servicio</label>
+                                                <input type="text" class="form-control" placeholder="Nombre Servicio" name="nombre" >                                                                                             
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Descripcion</label>
-                                                <input type="text" class="form-control" placeholder="Descripcion" name="telefono" value="<?php echo $data['descripcion']; ?>" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Descripcion" name="descripcion" >                                                                                               
                                             </div>
                                            
                                         </div>
-                                           
+                                       
                                     </fieldset> 
                                     <div class="form-actions" style="text-align: center">
                                         <div class="row">

@@ -116,5 +116,6 @@ if($_SERVER["SERVER_NAME"]){
 	$db = new db('127.0.0.1', 'root', '', "systemmy_tallerhp",null,null);
    
 }
+$db->set_charset('utf8');
      
 //var_dump($db);

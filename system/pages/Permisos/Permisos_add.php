@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Trabajo";
+$page_title = "Agregar nuevo permiso";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -25,24 +25,24 @@ include(SYSTEM_DIR . "/inc/header.php");
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
 if(isPost()){
-    $obj = new Trabajo();
+    $obj = new Permiso();
     $id=$obj->addAll(getPost());
     if($id>0){
-        informSuccess(true, make_url("Catalogos","trabajo"));
+        informSuccess(true, make_url("Permisos","index"));
     }else{
-        informError(true,make_url("Catalogos","trabajo"));
+        informError(true,make_url("Permisos","index"));
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Trabajo"] = APP_URL."/Catalogos/trabajo"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Permisos"] = APP_URL."/Permisos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
             <section id="widget-grid" class="">
-                <article class="col-sm-12 col-md-12 col-lg-12"  id="">
+                <article class="col-sm-12 col-md-9 col-lg-6"  id="">
                     <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
                     data-widget-colorbutton="false" data-widget-editbutton="false" 
                     data-widget-deletebutton="false" data-widget-collapsed="false">
@@ -56,28 +56,28 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","trabajoadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">     
-                                    <fieldset>    
-                                        <div class="col-sm-6">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Permisos","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                    <fieldset>
+                                        <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="name">Codigo</label>
-                                                <input type="text" class="form-control" placeholder="Codigo Trabajo" name="codigo" >                                                                                             
+                                                <label for="name">Nombre del Permiso</label>
+                                                <input type="text" class="form-control" placeholder="Nombre Permiso" name="nombre">                                                    
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Trabajo</label>
-                                                <input type="text" class="form-control" placeholder="Nombre Trabajo" name="nombre" >                                                                                             
+                                                <label for="name">Seccion</label>
+                                                <input type="text" class="form-control" placeholder="Seccion" id="section" name="section" >                        
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Descripcion</label>
-                                                <input type="text" class="form-control" placeholder="Descripcion" name="descripcion" >                                                                                               
+                                                <label for="name">Pagina</label>
+                                                <input type="text" class="form-control" placeholder="Pagina" id="page" name="page" >                                               
                                             </div>
                                            
-                                        </div>
-                                       
-                                    </fieldset> 
+                                        </div>  
+                                      
+                                    </fieldset>
                                     <div class="form-actions" style="text-align: center">
                                         <div class="row">
-                                           <div class="col-md-12">
+                                            <div class="col-md-12">
                                                 <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
                                                     Cancelar
                                                 </button>
@@ -87,7 +87,7 @@ if(isPost()){
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>                              
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -97,6 +97,7 @@ if(isPost()){
         </div>
     </div>
 </div>
+
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
 
@@ -116,16 +117,38 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
-   
+    function existpermiss(section,page,callback){
+        if ( ! section ) return;
+        if ( ! page ) return;
+
+
+        $.get(config.base+"/Permisos/ajax/?action=get&object=existpermiss&section=" + section + "&page="+ page, null, function (response) {
+                if ( response == 1){
+                    $("#page").val('');
+                    notify('warning', 'Este permiso ya existe favor de intentar con otro');
+                    return false;
+                }else{
+                    try { callback(); }
+                    catch(err) {
+                        console.log(err.message);
+                    }
+                }     
+        });
+      return ;
+    }
     function validateForm()
     {
-       var nombre = $("input[name=nombre]").val();
-        if ( ! nombre )  return notify("info","El nombre es requerido");
+        var section = $("input[name=section]").val();
+        if ( ! section )  return notify("info","El nombre de la seccion es requerido");
+        var page = $("input[name=page]").val();
+        if ( ! page )  return notify("info","El nombre de la pagina es requerido");
 
-        $("#main-form").submit(); 
+        existpermiss(section,page,function(){
+             $("#main-form").submit();       
+        })
     }
     $(document).ready(function() {
-     
+    
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.
          * It initializes and checks for all basic elements of the page

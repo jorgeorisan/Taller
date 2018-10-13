@@ -30,18 +30,18 @@ include(SYSTEM_DIR . "/inc/nav.php");
 if(isset($request['params']['id'])   && $request['params']['id']>0)
     $id=$request['params']['id'];
 else
-    informError(true,make_url("Users","User"));
+    informError(true,make_url("Users","index"));
 
 $obj = new User();
 $data = $obj->getTable($id);
 if ( !$data ) {
-    informError(true,make_url("Users","User"));
+    informError(true,make_url("Users","index"));
 }
 if(isPost()){
     $obj = new User();
     $id = $obj->updateAll($id,getPost());
     if ( $id ) {
-        informSuccess(true, make_url("Users","users"));
+        informSuccess(true, make_url("Users","index"));
     }else{
         informError(true, make_url("Users","edit",array('id'=>$data['id']) ) );
     }
@@ -70,28 +70,46 @@ if(isPost()){
 										
 											<section>
 												<label class="input"> <i class="icon-append fa fa-envelope"></i>
-													<?php echo $data['email']; ?>
+													<?php echo htmlentities($data['email']); ?>
 												</label>
 											</section>
 											<section>
 												<label class="input"> <i class="icon-append fa fa-user"></i>
-													<input type="text" id="nombre" name="nombre" placeholder="Nombre" value="<?php echo $data['nombre']; ?>">
+													<input type="text" id="nombre" name="nombre" placeholder="Nombre" value="<?php echo htmlentities($data['nombre']); ?>">
 												</label>
 											</section>
 											<section>
 												<label class="input"> <i class="icon-append fa fa-user"></i>
-													<input type="text" id="apellido_pat" name="apellido_pat" placeholder="Apellido Paterno" value="<?php echo $data['apellido_pat']; ?>">
+													<input type="text" id="apellido_pat" name="apellido_pat" placeholder="Apellido Paterno" value="<?php echo htmlentities($data['apellido_pat']); ?>">
 												</label>
 											</section>
 											<section>
 												<label class="input"> <i class="icon-append fa fa-user"></i>
-													<input type="text" id="apellido_mat" name="apellido_mat" placeholder="Apellido Materno" value="<?php echo $data['apellido_mat']; ?>">
+													<input type="text" id="apellido_mat" name="apellido_mat" placeholder="Apellido Materno" value="<?php echo htmlentities($data['apellido_mat']); ?>">
 												</label>
 											</section>
 											<section>
 												<label class="input"> <i class="icon-append fa fa-list-alt"></i>
-													<input type="text" id="direccion" name="direccion" placeholder="Direccion" value="<?php echo $data['direccion']; ?>">
+													<input type="text" id="direccion" name="direccion" placeholder="Direccion" value="<?php echo htmlentities($data['direccion']); ?>">
 												</label>
+											</section>
+											<section>
+												<label class="label">Selecciona el Tipo de usuario</label>
+												<select style="width:100%" class="select2" name="id_usertype" id="id_usertype">
+													<option value="">Selecciona</option>
+													<?php 
+													$obj = new UserType();
+													$list=$obj->getAllArr();
+													if (is_array($list) || is_object($list)){
+														foreach($list as $val){
+																$selected = "";
+															if ($data['id_usertype'] == $val['id'] )  $selected = "selected";
+															
+															echo "<option ".$selected ." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+														}
+													}
+													 ?>
+												</select>
 											</section>
 											<section>
 												<label class="label">Selecciona el taller</label>
@@ -106,7 +124,7 @@ if(isPost()){
 															if ($data['id_taller'] == $val['id'] ) {
 																$selected = "selected";
 															}
-															echo "<option value='".$val['id']."' $selected >".$val['nombre']."</option>";
+															echo "<option value='".$val['id']."' $selected >".htmlentities($val['nombre'])."</option>";
 														}
 													}
 													 ?>
