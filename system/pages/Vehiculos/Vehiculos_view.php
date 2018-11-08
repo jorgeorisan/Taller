@@ -8,10 +8,10 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Taller";
+$page_title = "Ver Vehiculo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
-$page_css[] = "your_style.css";
+$page_css[] = "vehiculo_style.css";
 include(SYSTEM_DIR . "/inc/header.php");
 
 //include left panel (navigation)
@@ -76,21 +76,9 @@ $dataimagenes = $objimg->getAllArr($id);
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-	<?php
-		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-		//$breadcrumbs["New Crumb"] => "http://url.com"
-		//$breadcrumbs["Add client"] = APP_URL."/Clients/add";
-		include(SYSTEM_DIR . "/inc/ribbon.php");
-	?>
-
+	<?php $breadcrumbs["Vehiculos"] = APP_URL."/Vehiculos"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
 	<!-- MAIN CONTENT -->
 	<div id="content">
-			<!--
-			The ID "widget-grid" will start to initialize all widgets below 
-			You do not need to use widgets if you dont want to. Simply remove 
-			the <section></section> and you can use wells or panels instead 
-			-->
-
 		<!-- widget grid -->
 		<section id="widget-grid" class="">
 
@@ -102,35 +90,42 @@ $dataimagenes = $objimg->getAllArr($id);
 					<!-- product -->
 					<div class="product-content product-wrap clearfix product-deatil">
 						<div class="row">
-								<div class="col-md-5 col-sm-12 col-xs-12 ">
-									<div class="product-image"> 
-										<div id="myCarousel-2" class="carousel slide">
-										<ol class="carousel-indicators">
-											<li data-target="#myCarousel-2" data-slide-to="0" class=""></li>
-											<li data-target="#myCarousel-2" data-slide-to="1" class="active"></li>
-											<li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
-										</ol>
-										<div class="carousel-inner">
-											<?php 
-			                                    foreach($dataimagenes as $key => $row) {
-			                                    	$active = ($key==1) ? 'active' : '';
-
-			                                        echo "<div class='item ".$active."'>
-			                                                <img src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
-			                                                alt='".$row['nombre']."' title='".$row['nombre']."'
-			                                               max-width='430px'
-			                                                >
-			                                            </div>";
-			                                    }
-			                                ?>   
-										</div>
-										<a class="left carousel-control" href="#myCarousel-2" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a>
-										<a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a>
-										</div>
+							<div class="col-md-5 col-sm-12 col-xs-12 ">
+								<div class="product-image"> 
+									<div id="myCarousel-2" class="carousel slide">
+									<ol class="carousel-indicators">
+										<li data-target="#myCarousel-2" data-slide-to="0" class=""></li>
+										<li data-target="#myCarousel-2" data-slide-to="1" class="active"></li>
+										<li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
+									</ol>
+									<div class="carousel-inner">
+										<?php 
+										$image= "";
+											foreach($dataimagenes as $key => $row) {
+												$active = ($key==1) ? 'active' : '';
+												$image.= "<div class='item ".$active."'>
+														<img src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
+														alt='".$row['nombre']."' title='".$row['nombre']."'
+														max-width='430px'
+														>
+													</div>";
+											}
+											if(!$image) {
+												$image = "
+													<div class='item active '>
+														<img src='".ASSETS_URL.'/expediente/base_auto.png'."' max-width='430px'
+														alt='base_auto.png' title='base_auto.png' >
+													</div>";
+											}
+											echo $image;
+										?>   
+									</div>
+									<a class="left carousel-control" href="#myCarousel-2" data-slide="prev">  <span class="glyphicon glyphicon-chevron-left"></span> </a>
+									<a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a>
 									</div>
 								</div>
-								<div class="col-md-7 col-sm-12 col-xs-12">
-							
+							</div>
+							<div class="col-md-7 col-sm-12 col-xs-12">
 								<h2 class="name">
 									<?php echo $nommarca." ".$nomsubmarca." - ". $data['modelo'] ?>
 									<small><strong>Cliente:</strong> <a class="" href="<?php echo make_url("Clientes","show",array('id'=>$data['id_cliente'])); ?>"><?php echo $nomcliente ?></a></small>
@@ -145,11 +140,9 @@ $dataimagenes = $objimg->getAllArr($id);
 									<span class="fa fa-2x"><h5>80 %</h5></span>	
 									
 									<a href="javascript:void(0);">Status Completed</a>
-		 
+		
 								</h2>
 								<hr>
-								
-							
 								<div class="certified">
 									<ul>
 										<li><a href="javascript:void(0);">Fecha de Alta<span><?php echo $fechaalta?></span></a></li>
@@ -161,30 +154,132 @@ $dataimagenes = $objimg->getAllArr($id);
 
 
 									<ul id="myTab" class="nav nav-pills">
-										<li class="active"><a href="#more-information" data-toggle="tab" class="no-margin">Trabajos a realizar </a></li>
-										<li class=""><a href="#pendientes" data-toggle="tab">Pendientes</a></li>
+										<li class="active"><a href="#more-information" data-toggle="tab" class="no-margin">Servicios </a></li>
+										<li class=""><a href="#refacciones" data-toggle="tab">Refacciones</a></li>
 										<li class=""><a href="#terminados" data-toggle="tab">Terminados</a></li>
 										<li class=""><a href="#reviews" data-toggle="tab">Blog</a></li>
 									</ul>
 									<div id="myTabContent" class="tab-content">
 										<div class="tab-pane fade active in" id="more-information">
-											<br>
-											<strong>Trabajos a realizar</strong>
-											<p> </p>
+											<table style="height: 100%">
+											
+												<tr>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Estatus</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Servicio.</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total.</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Acciones</td>
+												</tr>
+												<?php 
+												$objser = new VehiculoServicio();
+												$dataser = $objser->getAllArr($id);
+												$totalservicio = 0 ;
+												foreach($dataser as $row) {
+													$totalservicio+= $row['total'];  
+													$status = $class  = '';
+													switch ($row['status']) {
+														case 'active':
+															$status = 'Pendiente';
+															$class  = 'label label-danger';
+															break;
+														case 'realizado':
+															$status = 'Realizado';
+															$class  = 'label label-success';
+															break;
+														case 'stand-by':
+															$status = 'Stand-By';
+															$class  = 'label label-warning';
+															break;
+														default:
+															# code...
+															break;
+													} 
+													
+												?>
+												<tr>
+													<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
+													<td><?php echo $row['codigo']; ?></td>
+													<td><?php echo $row['nombre']; ?></td>
+													<td><?php echo $row['total'];  ?></td>
+													<td>
+														<div class="btn-group">
+															<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+																Accion <span class="caret"></span>
+															</button>
+															<ul class="dropdown-menu">
+																
+																<li>
+																	<a class="" href="<?php echo make_url("Vehiculos","editservice",array('id'=>$row['id'])); ?>"><i class="fal fa-check"></i>&nbsp;Realizado</a>
+																</li>
+																<li>
+																	<a class="" href="<?php echo make_url("Vehiculos","editservice",array('id'=>$row['id'])); ?>"><i class="fal fa-pause"></i>&nbsp;Stand By</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","deletevehiculo",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);"><i class="fal fa-minus-circle"></i>&nbsp;Eliminar</a>
+																</li>
+															</ul>
+														</div>
+													</td>
+												<tr>
+												<?php
+												} 
+												?>
+												<tr>
+													<td></td>
+													<td></td>
+													<td>Total:</td>
+													<td><strong><?php echo $totalservicio; ?></strong></td>
+												</tr>
+											</table>
+											<div class="col-sm-12 col-md-6 col-lg-6">
+												<div class="btn-group">
+												<a href="<?php echo make_url("Vehiculos","showorden",array('id'=>$data['id'])); ?>" 
+												class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Servicio</a>
+												
+												</div>
+											</div>
 										</div>
-										<div class="tab-pane fade" id="pendientes">
-											<br>
-											<dl class="">
-												<dt>Trabajos pendientes</dt>
-		                                       	<p> </p> 
-		                                    </dl>
+										<div class="tab-pane fade" id="refacciones">
+											<table style="height: 100%">
+												<tr>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant.</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion.</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Costo Aprox.</td>
+													<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total Aprox.</td>
+												</tr>
+												<?php 
+												$objref = new VehiculoRefaccion();
+												$dataref = $objref->getAllArr($id);
+												$totalrefaccion = 0 ;
+												foreach($dataref as $row) {
+													$totalrefaccion+= $row['total_aprox'];   
+													
+												?>
+												<tr>
+													<td><?php echo $row['cantidad']; ?></td>
+													<td><?php echo $row['nombre']; ?></td>
+													<td><?php echo $row['costo_aprox']; ?></td>
+													<td><?php echo $row['total_aprox']; ?></td>
+												</tr>
+
+												<?php
+												} 
+												?>
+													<tr>
+													<td></td>
+													<td></td>
+													<td>Total:</td>
+													<td><strong><?php echo $totalrefaccion; ?></strong></td>
+												</tr>
+											</table>
 										</div>
 										<div class="tab-pane fade" id="terminados">
 											<br>
 											<dl class="">
 												<dt>Trabajos terminados</dt>
-		                                       	<p> </p> 
-		                                    </dl>
+												<p> </p> 
+											</dl>
 										</div>
 										<div class="tab-pane fade" id="reviews">
 											<br>
@@ -264,17 +359,17 @@ $dataimagenes = $objimg->getAllArr($id);
 								<hr>
 								<div class="row">
 									<div class="col-sm-12 col-md-6 col-lg-6">
-											<a href="<?php echo make_url("Vehiculos","showorden",array('id'=>$data['id'])); ?>" class="btn btn-success btn-lg"><i class="fa fa-th-list"></i>Orden de Trabajo</a>
+											
 										
 									</div>
 									<div class="col-sm-12 col-md-6 col-lg-6">
 										<div class="btn-group pull-right">
-				                            <button class="btn btn-white btn-default"><i class="fa fa-star"></i> Add to wishlist </button>
-				                            <button class="btn btn-white btn-default"><i class="fa fa-envelope"></i> Contact Seller</button>
-				                        </div>
+										<a href="<?php echo make_url("Vehiculos","showorden",array('id'=>$data['id'])); ?>" 
+										class="btn btn-success"><i class="fa fa-th-list"></i>&nbsp;Ver Orden</a>
+										
+										</div>
 									</div>
 								</div>
-								
 							</div>
 						</div>
 					</div>

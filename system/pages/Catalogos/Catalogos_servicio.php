@@ -27,16 +27,19 @@ $data = $obj->getAllArr();
 <!-- MAIN PANEL -->
 <div id="main" role="main">
 	<?php
-		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-		//$breadcrumbs["New Crumb"] => "http://url.com"
-		//$breadcrumbs["Add client"] = APP_URL."/Clients/add";
 		include(SYSTEM_DIR . "/inc/ribbon.php");
+		
 	?>
 
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Catalogos","servicioadd")?>" >Nuevo Servicio</a></p>
+			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
+				<p><a class="btn btn-success" href="<?php echo make_url("Catalogos","servicioadd")?>" >Nuevo Servicio</a></p>
+			</div>
+			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
+				  <p><a class="btn btn-info" href="<?php echo make_url("Catalogos","paquete")?>" >Paquetes</a></p>
+			</div>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -52,14 +55,15 @@ $data = $obj->getAllArr();
 									<thead>
 										<tr>
 											<th class = "col-md-2" data-class="expand">
+												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> No.
+											</th>
+											<th class = "col-md-2" data-class="">
 												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i> Codigo
 											</th>
-											<th class = "col-md-4" data-hide="phone,tablet">
+											<th class = "col-md-4" data-hide="">
 												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Nombre
 											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Descripcion
-											</th>
+											
 											</th>
 											<th class = "col-md-2" data-hide="">
 												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
@@ -67,12 +71,14 @@ $data = $obj->getAllArr();
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach($data as $row){
+									<?php 
+										foreach($data as $key => $row){
+											$key++;
 											?>
 											<tr>
+												<td><?php echo htmlentities($key); ?></td>
 												<td><?php echo htmlentities($row['codigo'])?></td>
 												<td><?php echo htmlentities($row['nombre'])?></td>
-												<td><?php echo htmlentities($row['descripcion']) ?></td>											
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">

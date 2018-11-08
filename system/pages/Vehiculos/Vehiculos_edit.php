@@ -10,14 +10,14 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Orden de Reparacion";
+$page_title = "Editar Orden de Reparacion";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
 //you can add your custom css in $page_css array.
 //Note: all css files are inside css/ folder
-$page_css[] = "your_style.css";
+$page_css[] = "vehiculo_style.css";
 include(SYSTEM_DIR . "/inc/header.php");
 
 //include left panel (navigation)
@@ -81,22 +81,12 @@ if(isPost()){
                     
             }
         }
-        informSuccess(true, make_url("Vehiculos","show",array('id'=>$id)));
+        informSuccess(true, make_url("Vehiculos","view",array('id'=>$id)));
     }else{
-        informError(true, make_url("Catalogos","modeloedit",array('id'=>$id)),"modeloedit");
+        informError(true, make_url("Vehiculos","edit",array('id'=>$id)),"edit");
     }
 }
 ?>
-<style type="text/css">
-    .jarviswidget{
-        margin: 0 0 10px;
-    }
-   .control-label 
-   {
-       font-weight: bold;
-    }
-
-</style>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 
 <!-- MAIN PANEL -->
@@ -111,7 +101,7 @@ if(isPost()){
                             <h2><i class="fa fa-automobile"></i>&nbsp;<?php echo $page_title ?></h2>
                     </header>
                     <fieldset>          
-                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
+                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","edit");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
 
                             <section id="widget-grid" class="">
                                 <article class="col-sm-12 col-md-12 col-lg-12"  id="article-1">
@@ -438,7 +428,24 @@ if(isPost()){
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12" id="contfilevehiculo">
-                                                 
+                                                <?php 
+                                                    $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
+                                                    $objimg = new ImagenesVehiculo();
+                                                    $dataimagenes = $objimg->getAllArr($id);
+                                                    $key = 0;
+                                                    foreach($dataimagenes as $key => $row) {
+                                                        
+                                                        echo "<div class='superbox-list'  id='image_".$key."'>
+                                                                <img title='click para eliminar' onclick='deleteimage(".$key.");  return false;' 
+                                                                src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."' 
+                                                                data-img='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
+                                                                alt='".$row['nombre']."' title='".$row['nombre']."'
+                                                                nameimage='".$row['nombre']."'
+                                                                width='150px'  height='150px' >
+                                                                <input type='hidden'  name='filelastvehiculo[]' value='".$row['nombre']."'>
+                                                            </div>";
+                                                    }
+                                                ?>    
                                                 </div>
                                             </div>
                                         </div>

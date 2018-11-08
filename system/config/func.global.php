@@ -106,7 +106,7 @@ function informSuccess( $redirect = true, $redirectUrl = null, $page = 'index'){
      
       break;
   }
-      redirect($redirectUrl.$page);
+    redirect($redirectUrl.$page);
 }
 function informError( $redirect = true, $redirectUrl = null, $page = 'index'){
         $page="/".$page;
@@ -117,8 +117,7 @@ function informPermiss( $redirect = true, $redirectUrl = null, $page = 'index'){
       redirect($redirectUrl.$page."?m=3");
 }
 /*****/////**********/
-/** CATALOGOS GENERALES
-/////////////*/
+/** CATALOGOS GENERALES/////////////*/
 function catModelo()
 {
   $array= array();
@@ -239,6 +238,13 @@ function getPost($key = null, $default = null)
   return (isset($_POST[$key])) ? $_POST[$key] : $default;
 }
 
+function dias_transcurridos($fecha_i,$fecha_f)
+{
+    $dias	= (strtotime($fecha_i)-strtotime($fecha_f))/86400;
+    $dias 	= abs($dias); $dias = floor($dias);
+    return $dias;
+}
+
 function isPost()
 {
     if ('POST' == getMethod()) {
@@ -248,6 +254,7 @@ function isPost()
     return false;
 }
 function delete($id,$module,$table){
+  
   $obj = "";
   $pagereturn='index';
   switch ($table) {
@@ -273,9 +280,13 @@ function delete($id,$module,$table){
       break;
     case 'usertype':    $obj = new UserType();   $pagereturn=$table;  
       break;
+    case 'servicio':    $obj = new Servicio();   $pagereturn=$table;  
+      break;
+    case 'refaccion':   $obj = new Refaccion();  $pagereturn=$table;  
+      break;
   
     default:
-      echo "no se encontro tabla";
+      echo "no se encontro tabla en func.global";
       exit;
       break;
   }
@@ -297,6 +308,15 @@ function CSRFToken($len=8){
       echo $token.=$chars[rand(0,strlen($chars)-1)];
     }
     return $token;
+ }
+ ////para dar formato de 2 numeros float sin redondeo
+ function truncateFloat($number=0, $digitos)
+ {
+     $raiz = 10;
+     $multiplicador = pow ($raiz,$digitos);
+     $resultado = ((int)($number * $multiplicador)) / $multiplicador;
+     return number_format($resultado, $digitos);
+
  }
 
 /*** href url get variables routing functions ***/

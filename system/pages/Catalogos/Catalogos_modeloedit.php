@@ -86,7 +86,7 @@ if(isPost()){
                                                                 if ($data['id_marca'] == $val['id'] ) {
                                                                     $selected = "selected";
                                                                 }
-                                                                echo "<option value='".$val['id']."' selected>".htmlentities($val['nombre'])."</option>";
+                                                                echo "<option value='".$val['id']."' $selected >".htmlentities($val['nombre'])."</option>";
                                                             }
                                                         }
                                                     ?>

@@ -28,7 +28,12 @@ if(isPost()){
     $obj = new Servicio();
     $id=$obj->addAll(getPost());
     if($id>0){
-        informSuccess(true, make_url("Catalogos","servicio"));
+        if ($_POST['paquete']) {
+            informSuccess(true, make_url("Catalogos","serviciopaquete",array('id'=>$id)),"serviciopaquete");
+        }else{
+            informSuccess(true, make_url("Catalogos","servicio"));
+        }
+        
     }else{
         informError(true,make_url("Catalogos","servicio"));
     }
@@ -37,7 +42,7 @@ if(isPost()){
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Servicio"] = APP_URL."/Catalogos/servicio"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["servicio"] = APP_URL."/Catalogos/servicio"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -70,6 +75,21 @@ if(isPost()){
                                             <div class="form-group">
                                                 <label for="name">Descripcion</label>
                                                 <input type="text" class="form-control" placeholder="Descripcion" name="descripcion" >                                                                                               
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Paquete</label><br>
+                                                <select style="width:100%" class="select2" name="paquete">
+                                                    <option value="0">No</option>
+                                                    <option value="1">Si</option>
+                                                </select>                                
+                                            </div>
+                                            <div class="form-group" id="">
+                                                <label for="name">Poder agregar mas detalles</label>
+                                                <select style="width:100%" class="select2" name="detalles" id="detalles">
+                                                    <option value="0">NO</option>
+                                                    <option value="1">SI</option>
+                                                  
+                                                </select>
                                             </div>
                                            
                                         </div>

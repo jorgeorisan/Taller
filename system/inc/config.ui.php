@@ -38,7 +38,7 @@ $menuClientes = array(
 $menuVehiculos = array(
 	"Vehiculos" => array(
 		"title" => "Vehiculos",
-		"icon" => "fa-automobile",
+		"icon" => "far fa-car-crash",
 		"sub" => array(
 			"vehiculos"    => array( "title" => "Vehiculos", "url" => APP_URL."/Vehiculos/index" ),
 			"altavehiculo" => array( "title" => "Orden de Reparacion", "url" => APP_URL."/Vehiculos/add" )
@@ -77,7 +77,8 @@ $menuCatalogos = array(
 		"title" => "Catalogo Admin",
 		"icon"  => "fa-book",
 		"sub" => array(
-			"catservicio" 	 => array( "title" => "Servicios",      "url" => APP_URL."/Catalogos/Servicio" ),
+			"catrefaccion" 	 => array( "title" => "Refacciones", "url" => APP_URL."/Catalogos/refaccion" ),
+			"catservicio" 	 => array( "title" => "Servicios",   "url" => APP_URL."/Catalogos/servicio" ),
 			"cattaller" 	 => array( "title" => "Taller",      "url" => APP_URL."/Catalogos/taller" ),
 			'users'     	 => array( 'title' => 'Usuarios',    'url' => APP_URL."/Users/index" ),
 			"catmodelo" 	 => array( "title" => "Modelo",      "url" => APP_URL."/Catalogos/modelo" ),

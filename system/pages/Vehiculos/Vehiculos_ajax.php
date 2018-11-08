@@ -9,7 +9,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 
 	switch ($_GET["object"]) {
 		case 'getcliente':
-			if( isset($_GET["id"]) ){
+			if( isset($_GET["id"]) && intval($_GET["id"]) ){
 				$u = new Cliente();
 				if($res=$u->getTable($_GET['id'])){
 					$data="<table border=1 style=' border-color: #CCC;'><tr  align='center'><td colspan='2'><h4>Datos del Cliente</h4></td></tr>";
@@ -34,10 +34,30 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			}
 			break;
 		case 'getsubmarca':
-			if( isset($_GET["id"]) ){
+			if( isset($_GET["id"]) && intval($_GET["id"]) ){
 				$obj = new SubMarca();
 				if($list=$obj->getAllbyid($_GET["id"])){
 					$data='<select style="width:100%" class="select2" name="id_submarca" id="id_submarca">
+								<option value="">Selecciona Modelo</option>';
+                        if (is_array($list) || is_object($list)){
+                            foreach($list as $val){
+                                $data.="<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                            }
+                        }
+                         
+                    echo $data.='</select>';
+				}else{
+					echo 'No se han encontrado resultados';
+				}
+			}else{
+				echo 0;
+			}
+			break;
+		case 'getsubmarcapopup':
+			if( isset($_GET["id"]) && intval($_GET["id"]) ){
+				$obj = new SubMarca();
+				if($list=$obj->getAllbyid($_GET["id"])){
+					$data='<select style="width:100%" class="select2" name="id_submarca_refaccion" id="id_submarca_refaccion">
 								<option value="">Selecciona Modelo</option>';
                         if (is_array($list) || is_object($list)){
                             foreach($list as $val){

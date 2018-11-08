@@ -299,29 +299,32 @@
 				pageSetUp();
 			});
 
+			/**  Para mostrar los mensajes */
+
 			var notifysessiontype=<?php echo (isset($_GET["m"])) ? $_GET["m"]: 0 ;?>;
 			if(notifysessiontype==1){
 				notify('success',"El registro se ha guardado correctamente");
 			 	var url = window.location.href;
-    			var res = url.split("&");
+    			var res = url.split("&m=1");
     			history.pushState(null, "", res[0]);
-    			var res = url.split("?");
+				
+    			var res = url.split("?m=1");
 			 	history.pushState(null, "", res[0]);
 			}
 			if(notifysessiontype==2){
 				notify('error');
 			 	var url = window.location.href;
-    			var res = url.split("&");
+    			var res = url.split("&m=2");
     			history.pushState(null, "", res[0]);
-    			var res = url.split("?");
+    			var res = url.split("?m=2");
 			 	history.pushState(null, "", res[0]);
 			}
 			if(notifysessiontype==3){
 				notify('error','No tienes permiso para acceder a esta seccion');
 			 	var url = window.location.href;
-    			var res = url.split("&");
+    			var res = url.split("&m=3");
     			history.pushState(null, "", res[0]);
-    			var res = url.split("?");
+    			var res = url.split("?m=3");
 			 	history.pushState(null, "", res[0]);
 			}
 		</script>

@@ -38,6 +38,8 @@ class Vehiculo extends AutoVehiculo {
 	//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
+		
+
 		$data = fromArray($_request,'vehiculo',$this->db,"add");
 		$sql  = "INSERT INTO vehiculo (".$data[0].") VALUES(".$data[1]."); ";
 		$res  = $this->db->query($sql);
@@ -50,7 +52,34 @@ class Vehiculo extends AutoVehiculo {
 			while ($row = $res->fetch_assoc())
 				$id= $row;
 		}
-		return $id["LAST_INSERT_ID()"];
+		$id = $id["LAST_INSERT_ID()"];
+		$servicios      = $_request["id_servicio"];
+		$serviciostotal = $_request["total_servicio"];
+		$detallesserv   = $_request["detalles_servicio"];
+		foreach ($servicios as $key => $value) {
+			$total       = $serviciostotal[$key];
+			$detalle     = $detallesserv[$key];
+			$id_servicio = $value;
+			$sql  = "INSERT INTO vehiculo_servicio (id_vehiculo,id_servicio,detalles,total) VALUES(".$id. "," .$id_servicio. ",'". $detalle. "' ,"  .$total. "); ";
+			$res  = $this->db->query($sql);
+			if(!$res){ die("Error al dar de alta el servicio vehiculo:".$sql); }
+		}
+		$refacciones      = $_request["id_refaccion"];
+		$refaccionestotal = $_request["costorefaccion"];
+		$cantidad		  = $_request["cantidad_refaccion"];
+		$detallesref	  = $_request["detalles_refaccion"];
+		
+		
+		foreach ($refacciones as $key => $value) {
+			$total        = $refaccionestotal[$key];
+			$cant         = $cantidad[$key];
+			$detalle      = $detallesref[$key];
+			$id_refaccion = $value;
+			$sql  = "INSERT INTO vehiculo_refaccion (id_vehiculo,id_refaccion,detalles,cantidad,costo_aprox) VALUES(".$id. "," .$id_refaccion. ",'". $detalle. "'," .$cant. "," .$total. "); ";
+			$res  = $this->db->query($sql);
+			if(!$res){ die("Error al dar de alta la refaccion vehiculo".$sql); }
+		}
+		return $id;
 	}
 	//metodo que sirve para hacer update
 	public function updateAll($id,$_request)

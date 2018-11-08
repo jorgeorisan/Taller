@@ -45,23 +45,23 @@ Routing section
 //$_SESSION['user_id']=1;
 // Authorized user routing
     //if ( isset ($_SESSION['user_id']) && $_SESSION['user_id'] * 1 > 0 ){
+    $dir="";//si esta en carpeta
     if (isset($_SESSION['user_id']) && $_SESSION['user_id'] > 0 ){
      // echo  "sesion=".$_SESSION['user_id'];
 
       //default page to load
       $page="Home_index.php";
-      $dir="";//si esta en carpeta
       $page_num=0;
 
 
-    //*****permisos de usuario  */***///
-      if($request['section']!='Home' && $request['section']!='Examples' && $request['page']!="" && $request['page']!="ajax" ){
+      //*****permisos de usuario  */***///
+      if($request['section']!='Home' && $request['section']!='Examples' && $request['page']!="" && $request['page']!="ajax" && $request['page']!="print" ){
         $page2=($request['page'])? $request['page'] : 'index';
         $objpermuser = new PermisoUser();
         
         $datapermuser  = $objpermuser->getpermisouser($_SESSION['user_id'],$request['section'],$page2);
         if ( !$datapermuser ) {
-          //echo $_SESSION['user_id']."------".$request['section']."-----".$page2;
+          echo $_SESSION['user_id']."------".$request['section']."-----".$page2;
           //exit; 
           informPermiss(true,make_url("Home","index"));
         }
@@ -77,21 +77,23 @@ Routing section
       if ( $request['section'] === 'Catalogos' ) {
         $page = "Catalogos_taller.php";
         $dir  = "Catalogos";//si esta en carpeta
-        if ($request['page'] === 'taller')      { $page = "Catalogos_taller.php"; }
-        if ($request['page'] === 'modelo')      { $page = "Catalogos_modelo.php"; }
-        if ($request['page'] === 'marca')       { $page = "Catalogos_marca.php";  }
-        if ($request['page'] === 'aseguradora') { $page = "Catalogos_aseguradora.php";  }
-        if ($request['page'] === 'servicio')    { $page = "Catalogos_servicio.php";  }
-       
+        if ($request['page'] === 'taller')      {    $page = "Catalogos_taller.php"; }
+        if ($request['page'] === 'modelo')      {    $page = "Catalogos_modelo.php"; }
+        if ($request['page'] === 'marca')       {    $page = "Catalogos_marca.php";  }
+        if ($request['page'] === 'aseguradora') {    $page = "Catalogos_aseguradora.php";  }
+        if ($request['page'] === 'servicio')    {    $page = "Catalogos_servicio.php";  }
+        if ($request['page'] === 'paquete')     {    $page = "Catalogos_paquete.php";  }
+        if ($request['page'] === 'serviciopaquete'){ $page = "Catalogos_serviciopaquete.php";  }
+        if ($request['page'] === 'refaccion')    {   $page = "Catalogos_refaccion.php";  }
       }
       if ($request['section']==='Users'){
        $page = "Users_index.php";
        $dir  = "Users";//si esta en carpeta
 
-        if ($request['page']==='show'){$page="Users_show.php"; }
-        if ($request['page']==='add'){$page="Users_add.php"; }
-        if ($request['page']==='edit'){$page="Users_edit.php"; }
-        if ($request['page']==='ajax'){$page="Users_ajax.php"; }
+        if ($request['page']==='show') { $page = "Users_show.php"; }
+        if ($request['page']==='add')  { $page = "Users_add.php" ; }
+        if ($request['page']==='edit') { $page = "Users_edit.php"; }
+        if ($request['page']==='ajax') { $page = "Users_ajax.php"; }
        
       }
       if ($request['section']==='Vehiculos'){
@@ -99,7 +101,7 @@ Routing section
         $dir="Vehiculos";//si esta en carpeta
         if ($request['page']==='add'){$page="Vehiculos_add.php"; }
         if ($request['page']==='edit'){$page="Vehiculos_edit.php"; }
-        if ($request['page']==='show'){$page="Vehiculos_show.php"; }
+        if ($request['page']==='view'){$page="Vehiculos_view.php"; }
         if ($request['page']==='ajax'){$page="Vehiculos_ajax.php"; }
       }
       if ($request['section']==='Permisos'){
@@ -110,10 +112,11 @@ Routing section
         if ($request['page']==='ajax'){$page="Permisos_ajax.php"; }
         if ($request['page']==='asignar'){$page="Permisos_asignar.php"; }
       }
-     //delete pages
+      //delete pages
       if(isset($request['params']['id'])){
         if( $id = $request['params']['id'] ) {
           $table = explode("delete", $request['page']);
+         
           if(count($table)>1){
             delete($id,$request['section'],$table[0]);
           }
@@ -122,18 +125,27 @@ Routing section
       
       //end delete
            /******  DEV ROUTING  ******/
-     if (file_exists("system/pages/".$dir."/".$request['section']."_".$request['page'].".php")){
-      $page = $dir."/".$request['section']."_".$request['page'].".php";
-     }elseif(file_exists("system/pages/".$request['section']."_index.php")){
-      $page = $request['section']."_index.php";
-     }
-/***/
+      $request['page']=($request['page'])? $request['page']: 'index';
+      
+      if (file_exists("system/pages/".$dir."/".$request['section']."_".$request['page'].".php")){
+        $page = $dir."/".$request['section']."_".$request['page'].".php";
+        
+      }elseif(file_exists($dir."/system/pages/".$request['section']."_index.php")){
+        $page = $dir."/".$request['section']."_index.php";
+        
+      }elseif(file_exists("system/pages/".$request['section']."_index.php")){
+        $page = $request['section']."_index.php";
+        
+      }else{}
+
+      
+    /***/
 
 
     }else{
-// Unauthenticated user
-        // go to login page
-
+      // Unauthenticated user
+      // go to login page
+      
         $page="Login_index.php";
         if ($request['section']==='Login' ){
             $page="Login_index.php";
@@ -152,10 +164,14 @@ Routing section
           $dir  = "Clientes";//si esta en carpeta
           if ($request['page']==='addpopup')      { $page = "Clientes_adpopup.php";      }
         }
+        if ($request['section']==='Vehiculos'){
+          $dir  = "Vehiculos";//si esta en carpeta
+          if ($request['page']==='print')      { $page = "Vehiculos_print.php";      }
+        }
         #die;
+        if($dir)  $page = $dir."/".$page;
     }
-
-
+   
 // Public user
 //echo "========session=".$_SESSION['user_id']."<pre>".print_r(unmake_url())."</pre>";
 if( isset($request['path']) && preg_match("/\.php$/",$request['path']) && file_exists(  ROOT_DIR . "/1_example_pages/" . $request['path'])){
@@ -163,6 +179,7 @@ if( isset($request['path']) && preg_match("/\.php$/",$request['path']) && file_e
 
   include_once(ROOT_DIR . "/1_example_pages/" . $request['path']);
 }elseif (file_exists("system/pages/".$page)){
+ 
   include_once("system/pages/".$page);
 }else{}
 

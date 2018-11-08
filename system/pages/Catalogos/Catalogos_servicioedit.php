@@ -82,7 +82,14 @@ if(isPost()){
                                                 <label for="name">Descripcion</label>
                                                 <input type="text" class="form-control" placeholder="Descripcion" name="telefono" value="<?php echo htmlentities($data['descripcion']); ?>" >                                                                                               
                                             </div>
-                                           
+                                            <div class="form-group" id="">
+                                                <label for="name">Poder agregar mas detalles</label>
+                                                <select style="width:100%" class="select2" name="detalles" id="detalles">
+                                                    <option <?php if(!$data['detalles']) echo 'selected'; ?> value="0">NO</option>
+                                                    <option <?php if($data['detalles']) echo 'selected'; ?> value="1">SI</option>
+                                                  
+                                                </select>
+                                            </div>
                                         </div>
                                            
                                     </fieldset> 

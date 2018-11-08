@@ -2,7 +2,9 @@
 	<div id="ribbon">
 
 		<span class="ribbon-button-alignment"> 
-			<span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! Actualizar" data-html="true"><i class="fa fa-refresh"></i></span> 
+			<span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" 
+			data-original-title="<i class='text-warning fa fa-warning'></i> Warning! Actualizar" 
+			data-html="true"><i class="fas fa-sync fa-spin"></i></span> 
 		</span>
 
 		<!-- breadcrumb -->

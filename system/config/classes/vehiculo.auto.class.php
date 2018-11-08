@@ -74,7 +74,11 @@
 		protected $Claxon = "";
 		protected $ComentariosComp = "";
 		protected $TarjetaCirc = "";
+		protected $PolizaNum = "";
 		protected $PolizaSeg = "";
+		protected $ReporteNum = "";
+		protected $siniestro = "";
+		protected $deducible = "";
 		protected $ManualProp = "";
 		protected $TalonVerif = "";
 		protected $ComentariosDoc = "";
@@ -442,9 +446,29 @@
  				$this->TarjetaCirc = $value;
 		}
 		
+		public function setPolizaNum( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "POLIZANUM","s") ) 
+ 				$this->PolizaNum = $value;
+		}
+		
 		public function setPolizaSeg( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "POLIZASEG","s") ) 
  				$this->PolizaSeg = $value;
+		}
+		
+		public function setReporteNum( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "REPORTENUM","s") ) 
+ 				$this->ReporteNum = $value;
+		}
+		
+		public function setSiniestro( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "SINIESTRO","s") ) 
+ 				$this->siniestro = $value;
+		}
+		
+		public function setDeducible( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "DEDUCIBLE","s") ) 
+ 				$this->deducible = $value;
 		}
 		
 		public function setManualProp( $value ){			
@@ -1049,11 +1073,43 @@
  			}
 		}
 		
+		public function getPolizaNum($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->PolizaNum) ;
+ 			}else{
+ 				return $this->PolizaNum ;
+ 			}
+		}
+		
 		public function getPolizaSeg($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->PolizaSeg) ;
  			}else{
  				return $this->PolizaSeg ;
+ 			}
+		}
+		
+		public function getReporteNum($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->ReporteNum) ;
+ 			}else{
+ 				return $this->ReporteNum ;
+ 			}
+		}
+		
+		public function getSiniestro($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->siniestro) ;
+ 			}else{
+ 				return $this->siniestro ;
+ 			}
+		}
+		
+		public function getDeducible($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->deducible) ;
+ 			}else{
+ 				return $this->deducible ;
  			}
 		}
 		
@@ -1208,7 +1264,11 @@
 			$this->setClaxon( $res['Claxon'] );
 			$this->setComentariosComp( $res['ComentariosComp'] );
 			$this->setTarjetaCirc( $res['TarjetaCirc'] );
+			$this->setPolizaNum( $res['PolizaNum'] );
 			$this->setPolizaSeg( $res['PolizaSeg'] );
+			$this->setReporteNum( $res['ReporteNum'] );
+			$this->setSiniestro( $res['siniestro'] );
+			$this->setDeducible( $res['deducible'] );
 			$this->setManualProp( $res['ManualProp'] );
 			$this->setTalonVerif( $res['TalonVerif'] );
 			$this->setComentariosDoc( $res['ComentariosDoc'] );
@@ -1292,7 +1352,11 @@
 			$sql .= " `Claxon` = ? ,";
 			$sql .= " `ComentariosComp` = ? ,";
 			$sql .= " `TarjetaCirc` = ? ,";
+			$sql .= " `PolizaNum` = ? ,";
 			$sql .= " `PolizaSeg` = ? ,";
+			$sql .= " `ReporteNum` = ? ,";
+			$sql .= " `siniestro` = ? ,";
+			$sql .= " `deducible` = ? ,";
 			$sql .= " `ManualProp` = ? ,";
 			$sql .= " `TalonVerif` = ? ,";
 			$sql .= " `ComentariosDoc` = ? ,";
@@ -1373,7 +1437,11 @@
 			$sql .= " `Claxon` = ? ,";
 			$sql .= " `ComentariosComp` = ? ,";
 			$sql .= " `TarjetaCirc` = ? ,";
+			$sql .= " `PolizaNum` = ? ,";
 			$sql .= " `PolizaSeg` = ? ,";
+			$sql .= " `ReporteNum` = ? ,";
+			$sql .= " `siniestro` = ? ,";
+			$sql .= " `deducible` = ? ,";
 			$sql .= " `ManualProp` = ? ,";
 			$sql .= " `TalonVerif` = ? ,";
 			$sql .= " `ComentariosDoc` = ? ,";
@@ -1458,7 +1526,11 @@
 			$stmt->mbind_param( 's', $this->Claxon );
 			$stmt->mbind_param( 's', $this->ComentariosComp );
 			$stmt->mbind_param( 's', $this->TarjetaCirc );
+			$stmt->mbind_param( 's', $this->PolizaNum );
 			$stmt->mbind_param( 's', $this->PolizaSeg );
+			$stmt->mbind_param( 's', $this->ReporteNum );
+			$stmt->mbind_param( 's', $this->siniestro );
+			$stmt->mbind_param( 's', $this->deducible );
 			$stmt->mbind_param( 's', $this->ManualProp );
 			$stmt->mbind_param( 's', $this->TalonVerif );
 			$stmt->mbind_param( 's', $this->ComentariosDoc );
@@ -1688,8 +1760,20 @@
 			if (in_array("TarjetaCirc",$fieldstoupdate)){
 				$sql .= " `TarjetaCirc` = ? ,";
 			}
+			if (in_array("PolizaNum",$fieldstoupdate)){
+				$sql .= " `PolizaNum` = ? ,";
+			}
 			if (in_array("PolizaSeg",$fieldstoupdate)){
 				$sql .= " `PolizaSeg` = ? ,";
+			}
+			if (in_array("ReporteNum",$fieldstoupdate)){
+				$sql .= " `ReporteNum` = ? ,";
+			}
+			if (in_array("siniestro",$fieldstoupdate)){
+				$sql .= " `siniestro` = ? ,";
+			}
+			if (in_array("deducible",$fieldstoupdate)){
+				$sql .= " `deducible` = ? ,";
 			}
 			if (in_array("ManualProp",$fieldstoupdate)){
 				$sql .= " `ManualProp` = ? ,";
@@ -1925,8 +2009,20 @@
 			if (in_array("TarjetaCirc",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->tarjetaCirc  );
 			}
+			if (in_array("PolizaNum",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->polizaNum  );
+			}
 			if (in_array("PolizaSeg",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->polizaSeg  );
+			}
+			if (in_array("ReporteNum",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->reporteNum  );
+			}
+			if (in_array("siniestro",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->siniestro  );
+			}
+			if (in_array("deducible",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->deducible  );
 			}
 			if (in_array("ManualProp",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->manualProp  );

@@ -34,11 +34,11 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			<div class="col-sm-6 col-md-6 col-lg-2">
-				<p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" >Orden de Reparacion</a></p>
+			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
+				<p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" ><i class="fas fa-wrench"></i>&nbsp;Orden de Reparacion</a></p>
 			</div>
-			<div class="col-sm-6 col-md-6 col-lg-2">
-				  <p><a class="btn btn-info" href="<?php echo make_url("Vehiculos","index")?>" >Modo Vista</a></p>
+			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
+				  <p><a class="btn btn-info" href="<?php echo make_url("Vehiculos","index")?>" ><i class="fas fa-clipboard-list"></i>&nbsp;Modo Vista</a></p>
 			</div>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -125,9 +125,7 @@ $data = $obj->getAllArr();
 															Accion <span class="caret"></span>
 														</button>
 														<ul class="dropdown-menu">
-															<li>
-																<a class="" href="<?php echo make_url("Vehiculos","show",array('id'=>$row['id'])); ?>"><i class="fa fa-plus"></i>Add Inf. Adic.</a>
-															</li>
+															
 															<li>
 																<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Detalles</a>
 															</li>

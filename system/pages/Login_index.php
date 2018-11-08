@@ -15,7 +15,7 @@ if ( isset($_POST['email']) && trim(strtolower($_POST['password'])) ) {
 	
 	if ($id>0){
 		// is authorized
-//		load user / start session
+		// load user / start session
 		$u = new User();
 		$u->load($id);
 		$_SESSION['user_id']=$id;
@@ -35,7 +35,7 @@ if ( isset($_POST['email']) && trim(strtolower($_POST['password'])) ) {
 		redirect(make_url());
 	}else{
 		$showloginerror=1;
-        echo ('Error to validate');
+        notify('error','Error to validate');
 	}
 } elseif ( isset($_POST['email'])){
   $showloginerror=1;
