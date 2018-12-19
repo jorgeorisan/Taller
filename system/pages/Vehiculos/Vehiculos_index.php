@@ -118,14 +118,16 @@ $data = $obj->getAllArr();
 													</div>
 													<div class="col-md-7 col-sm-12 col-xs-12">
 														<div class="product-deatil">
-																<h5 class="name">
+																<h6 class="name">
 																	<?php echo $nommarca." ".$nomsubmarca." - ". $row['modelo'] ?>
+																</h6>
+																<h5 class="name">
 																	<small><strong>Cliente:</strong> <?php echo $nomcliente ?></small>
 																	<small><strong>Fecha Alta:</strong> <?php echo htmlentities($fechaalta) ?></small>
 																	<small><strong>Fecha Prom:</strong> <?php echo htmlentities($fechaprom) ?></small>
 																	<?php
 																	if ($row["id_aseguradora"]>1) { ?>
-																		<small><strong>Aseguradora:</strong> <?php echo htmlentities($nomaseguradora) ?></small>
+																		<!--<small><strong>Aseguradora:</strong> <?php echo htmlentities($nomaseguradora) ?></small> -->
 																	<?php
 																	}
 																	?>

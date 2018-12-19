@@ -224,13 +224,15 @@ if($data["id_cliente"]){
                         <td>
                             <table style="height: 100%">
                                 <tr>
-                                    <td colspan="4" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Refacciones </td>
+                                    <td colspan="6" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Refacciones </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Costo Aprox.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total Aprox.</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Status</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Costo</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Fecha</td>
                                 </tr>
                                 <?php 
                                 $objref = new VehiculoRefaccion();
@@ -242,22 +244,42 @@ if($data["id_cliente"]){
                                     if($row['detalles']){
                                         $nombre=$row['detalles'];
                                     } 
+                                    $status = htmlentities($row['status']);
+                                    switch ($row['status']) {
+                                        case 'active':
+                                            $status = 'Pendiente';
+                                            $class  = 'label label-danger';
+                                            break;
+                                        case 'Realizado':
+                                            $class  = 'label label-success';
+                                            break;
+                                        case 'Stand-By':
+                                            $class  = 'label label-warning';
+                                            break;
+                                        default:
+                                            $class  = '';
+                                            break;
+                                    } 
                                 ?>
                                 <tr>
-                                    <td><?php echo $row['cantidad']; ?></td>
-                                    <td><?php echo $nombre; ?></td>
-                                    <td><?php echo $row['costo_aprox']; ?></td>
-                                    <td><?php echo $row['total_aprox']; ?></td>
+                                    <td><?php echo $status; ?></td>
+                                    <td><?php echo htmlentities($row['cantidad']); ?></td>
+                                    <td><?php echo htmlentities($nombre); ?></td>
+                                    <td><?php echo truncateFloat(htmlentities($row['costo_aprox']),2); ?></td>
+                                    <td><?php echo truncateFloat(htmlentities($row['total_aprox']),2); ?></td>
+                                    <td><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
                                 </tr>
 
                                 <?php
                                 } 
                                 ?>
-                                    <tr>
+                                <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td style='font-weight:bold;'>Total:</td>
-                                    <td><strong><?php echo $totalrefaccion; ?></strong></td>
+                                    <td><strong><?php echo truncateFloat($totalrefaccion,2); ?></strong></td>
+                                    <td></td>
                                 </tr>
                                
                             </table>
@@ -265,12 +287,14 @@ if($data["id_cliente"]){
                         <td>
                             <table style="height: 100%">
                                 <tr>
-                                    <td colspan="3" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Servicios </td>
+                                    <td colspan="5" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Servicios </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Servicio.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total.</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Status</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Servicio</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total</td>
+                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Fecha</td>
                                 </tr>
                                 <?php 
                                 $objser = new VehiculoServicio();
@@ -282,11 +306,29 @@ if($data["id_cliente"]){
                                     if($row['detalles']){
                                         $nombre=$row['detalles'];
                                     }
+                                    $status = htmlentities($row['status']);
+                                    switch ($row['status']) {
+                                        case 'active':
+                                            $status = 'Pendiente';
+                                            $class  = 'label label-danger';
+                                            break;
+                                        case 'Realizado':
+                                            $class  = 'label label-success';
+                                            break;
+                                        case 'Stand-By':
+                                            $class  = 'label label-warning';
+                                            break;
+                                        default:
+                                            $class  = '';
+                                            break;
+                                    } 
                                 ?>
                                 <tr>
-                                    <td><?php echo $row['codigo']; ?></td>
-                                    <td><?php echo $nombre; ?></td>
-                                    <td><?php echo $row['total']; ?></td>
+                                    <td><?php echo $status; ?></td>
+                                    <td><?php echo htmlentities($row['codigo']); ?></td>
+                                    <td><?php echo htmlentities($nombre); ?></td>
+                                    <td><?php echo truncateFloat(htmlentities($row['total']),2); ?></td>
+                                    <td><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
                                 </tr>
 
                                 <?php
@@ -294,8 +336,10 @@ if($data["id_cliente"]){
                                 ?>
                                 <tr>
                                     <td></td>
+                                    <td></td>
                                     <td style='font-weight:bold;'>Total:</td>
-                                    <td><strong><?php echo $totalservicio; ?></strong></td>
+                                    <td><strong><?php echo truncateFloat($totalservicio,2); ?></strong></td>
+                                    <td></td>
                                 </tr>
                             </table>
                         </td>

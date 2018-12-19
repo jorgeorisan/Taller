@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Orden de Reparacion";
+$page_title = "Editar Orden de Reparacion";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,9 +24,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","modelo"));
+
+$obj = new Vehiculo();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","modelo"));
+}
 if(isPost()){
     $obj = new Vehiculo();
-    $id  = $obj->addAll(getPost());
+    $id = $obj->updateAll($id,getPost());
     //$id=240;
     
     if ($id > 0){
@@ -71,9 +81,9 @@ if(isPost()){
                     
             }
         }
-        informSuccess(true, make_url("Vehiculos","showorden",array('id'=>$id)));
+        informSuccess(true, make_url("Vehiculos","view",array('id'=>$id)));
     }else{
-        informError(true,make_url("Vehiculos","add"));
+        informError(true, make_url("Vehiculos","edit",array('id'=>$id)),"edit");
     }
 }
 ?>
@@ -81,7 +91,7 @@ if(isPost()){
 
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-    <?php $breadcrumbs["Vehiculos"] = APP_URL."/Vehiculos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Vehiculos"] = APP_URL."/Vehiculos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row"> 
@@ -91,14 +101,14 @@ if(isPost()){
                             <h2><i class="fa fa-automobile"></i>&nbsp;<?php echo $page_title ?></h2>
                     </header>
                     <fieldset>          
-                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
+                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","edit");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
 
                             <section id="widget-grid" class="">
                                 <article class="col-sm-12 col-md-12 col-lg-12"  id="article-1">
                                     <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-recepcion" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showrecepcion').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-building"></i> </span><h2>Recepcion</h2>
+                                            <i class="fa fa-file-text"></i> </span><h2>Recepcion</h2>
                                         </header>
                                         <div class="showrecepcion" style="display: ;">
                                             <!-- widget edit box -->
@@ -107,12 +117,12 @@ if(isPost()){
                                                 <div class="col-sm-12">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de orden" name="fecha_alta" >
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="false" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de orden" name="fecha_alta" >
                                                             
                                                         </div>
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="id_user" id="id_user">
-                                                                <option value="" selected disabled>Selecciona Asesor</option>
+                                                                <option value="">Selecciona Asessor</option>
                                                                 <?php 
                                                                 $obj = new User();
                                                                 $list=$obj->getAllArr();
@@ -122,7 +132,7 @@ if(isPost()){
                                                                         if ($_SESSION['user_id'] == $val['id'] )
                                                                             $selected = "selected";
                                                                         
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".$val['nombre']."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -131,11 +141,12 @@ if(isPost()){
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" placeholder="Fecha promesa de entrega" name="fecha_promesa" >
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="false" placeholder="Fecha promesa de entrega" name="fecha_promesa" >
+                                                            
                                                         </div>
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="id_taller" id="id_taller">
-                                                                <option value="" disabled>Selecciona Taller</option>
+                                                                <option value="">Selecciona Taller</option>
                                                                 <?php 
                                                                 $obj = new Taller();
                                                                 $list=$obj->getAllArr();
@@ -145,24 +156,27 @@ if(isPost()){
                                                                         if ($_SESSION['user_info']['id_taller'] == $val['id'] )
                                                                             $selected = "selected";
 
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".$val['nombre']."</option>";
                                                                     }
                                                                 }
                                                                  ?>
                                                             </select>
                                                         </div>
+                                                        <div class="form-group">
+                                                                                                                                                         
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-4">    
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="id_aseguradora" id="id_aseguradora">
-                                                                <option value="1" selected disabled>Selecciona Aseguradora</option>
+                                                                <option value="1">Selecciona Aseguradora</option>
                                                                 <?php 
                                                                 $obj = new Aseguradora();
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
                                                                         $selected = "";
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".$val['nombre']."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -170,17 +184,29 @@ if(isPost()){
                                                         </div>                                                 
                                                     </div> 
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-cliente" 
+                                    data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
+                                        <header onclick="$('.showcliente').toggle()"> <span class="widget-icon"> 
+                                            <i class="fa fa-child"></i> </span><h2>Cliente</h2>
+                                        </header>
+                                        <div class="showcliente" style="display: ;">
+                                            <!-- widget edit box -->
+                                            <div class="jarviswidget-editbox" style=""></div>
+                                            <div class="widget-body">
                                                 <div class="col-sm-12">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="id_cliente" id="id_cliente">
-                                                                <option value="" selected disabled>Selecciona Cliente</option>
+                                                                <option value="">Selecciona Cliente</option>
                                                                 <?php 
                                                                 $obj = new Cliente();
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -188,7 +214,7 @@ if(isPost()){
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
-                                                         <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupclientes()" > <i class="fa fa-plus"></i></a>
+                                                         <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopup()" > <i class="fa fa-plus"></i>Nuevo </a>
                                                     </div>
                                                     <div class="col-sm-6" id="contcliente">
                                                     
@@ -197,14 +223,12 @@ if(isPost()){
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
                                     <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-vehiculo" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false">
                                         <header  onclick="$('.showvehiculo').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-car-crash"></i> </span><h2>Vehiculo</h2>
+                                            <i class="fa fa-automobile"></i> </span><h2>Vehiculo</h2>
                                         </header>
-                                        <div class="showvehiculo" style="display:none ;">
+                                        <div class="showvehiculo" style="display: ;">
                                             <!-- widget edit box -->
                                             <div class="jarviswidget-editbox" style=""></div>
                                             <div class="widget-body">
@@ -212,41 +236,41 @@ if(isPost()){
                                                     <div class="col-sm-3 col-md-3 col-lg-3">
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="id_marca" id="id_marca">
-                                                                <option value="" selected disabled>Selecciona Marca</option>
+                                                                <option value="">Selecciona Marca</option>
                                                                 <?php 
                                                                 $obj = new Marca();
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
                                                                     }
                                                                 }
-                                                                ?>
+                                                                 ?>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group" id="contsubmarca">
+                                                         <div class="form-group" id="contsubmarca">
                                                             <select style="width:100%" class="select2" name="id_submarca" id="id_submarca">
-                                                                <option value="" selected disabled>Selecciona Modelo</option>
+                                                                <option value="">Selecciona Modelo</option>
                                                                 <?php 
                                                                 $obj = new SubMarca();
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
                                                                     }
                                                                 }
-                                                                ?>
+                                                                 ?>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2 col-md-2 col-lg-2">
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="modelo" id="modelo">
-                                                                <option value="" selected disabled>Año</option>
+                                                                <option value="">Año</option>
                                                                 <?php 
                                                                 $objcat=catModelo();
                                                                 for ($i=0; $i < count($objcat) ; $i++) { 
-                                                                    echo "<option value='".$objcat[$i]."'>".htmlentities($objcat[$i])."</option>";
+                                                                    echo "<option value='".$objcat[$i]."'>".$objcat[$i]."</option>";
                                                                 }  
                                                                 ?>
                                                             </select>
@@ -383,145 +407,56 @@ if(isPost()){
                                                     <div class="col-sm-3 col-md-3 col-lg-3">
                                                         <div class="form-group">
                                                             <select style="width:100%" class="select2" name="Gasolina" id="Gasolina">
-                                                                <option value="" selected disabled>--Gasolina--</option>
+                                                                <option value="">Gasolina</option>
                                                                 <option value="0-1/4">0-1/4</option>
                                                                 <option value="1/4-1/2">1/4-1/2</option>
                                                                 <option value="1/2-3/4">1/2-3/4</option>
                                                                 <option value="3/4-1">3/4-1</option>
+                                                                
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3" style="text-align: center;">
                                                         <h2 class="lvh-label">Fotos de vehículo <span id="contfotosauto">0</span> Fotografías</h2>
+                                                       
                                                             <button type="button" title='Agregar fotografía de vehículo en tránsito' class="btn btn-primary btn-circle btn-xl" onclick="getFoto('filevehiculo'); return false;">
                                                                 <i class="fa fa-camera"></i>
                                                             </button>
                                                             <input type="file" id="filevehiculo"  name="filevehiculo[]" accept="image/*" style="display:none"  multiple>
                                                             <input type="text" id="deletefilevehiculo"  name="deletefilevehiculo" style="display:none">
+                                                        
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12" id="contfilevehiculo">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-servicios" 
-                                    data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
-                                        <header onclick="$('.showservicios').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-people-carry"></i> </span><h2>Servicios</h2>
-                                        </header>
-                                        <div class="showservicios" style="display:none ;">
-                                            <!-- widget edit box -->
-                                            <div class="jarviswidget-editbox" style=""></div>
-                                            <div class="widget-body">
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="idservicio" id="idservicio">
-                                                                <option value="0" selected disabled>Selecciona Servicio</option>
-                                                                <?php 
-                                                                $obj  = new Servicio();
-                                                                $list = $obj->getAllArr();
-                                                                if (is_array($list) || is_object($list))
-                                                                    foreach($list as $val)
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['codigo'].'||'.$val['nombre'])."</option>";
-                                                                
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                         <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupservicio()" > <i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="idserviciopqte" id="idserviciopqte">
-                                                                <option value="0" selected disabled>Selecciona Paquete</option>
-                                                                <?php 
-                                                                $obj = new Servicio();
-                                                                $list=$obj->getAllArrPackege();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['codigo'].'||'.$val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-1"></div>
-                                                    <div class="col-sm-2 text-right">
-                                                        <h6><strong >Total=<span id="total-num"></span></strong></h6>
-                                                        <input type="hidden" name="total-global" id="total-global" value="0"/>
-                                                    </div>
-                                                </div>
-                                                <div class='col-sm-12 col-md-12'>
-                                                    <table style='width:100%' class='full-width' id="contservicios">
-                                                        <tr>
-                                                            <th>Codigo</th>
-                                                            <th>Servicio</th>
-                                                            <th>Total</th>
-                                                            <th class="borrar-td"></th>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-refacciones" 
-                                    data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
-                                        <header onclick="$('.showrefacciones').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-box-full"></i> </span><h2>Refacciones</h2>
-                                        </header>
-                                        <div class="showrefacciones" style="display:none ;">
-                                            <!-- widget edit box -->
-                                            <div class="jarviswidget-editbox" style=""></div>
-                                            <div class="widget-body">
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-1"> <input style='' type='number' class="form-control" id='selectcantidad_refaccion' value='1'> </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group" id='contrefaccion'>
-                                                            Selecciona primero el modelo del vehiculo
-                                                        </div>
+                                                <?php 
+                                                    $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
+                                                    $objimg = new ImagenesVehiculo();
+                                                    $dataimagenes = $objimg->getAllArr($id);
+                                                    $key = 0;
+                                                    foreach($dataimagenes as $key => $row) {
                                                         
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                         <a data-toggle="modal" title="Nueva Refaccion"  class="btn btn-success" href="#myModal" onclick="showpopuprefaccion()" > <i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                         <a data-toggle="modal" title="Buscar Refaccion" class="btn btn-info" href="#myModal" onclick="showpopuprefaccionbuscar()" > <i class="fa fa-search"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        
-                                                    </div>
-                                                    <div class="col-sm-1"></div>
-                                                    <div class="col-sm-2 text-right">
-                                                        <h6><strong >Total=<span id="total-numrefaccion"></span></strong></h6>
-                                                        <input type="hidden" name="total-globalrefaccion" id="total-globalrefaccion" value="0"/>
-                                                    </div>
-                                                </div>
-                                                <div class='col-sm-12 col-md-12'>
-                                                    <table style='width:100%' class='full-width' id="contrefacciones">
-                                                        <tr>
-                                                            <th>Cant.</th>
-                                                            <th>Codigo</th>
-                                                            <th>Refaccion</th>
-                                                            <th>Costo </th>
-                                                            <th>Total </th>
-                                                            <th class="borrar-td"></th>
-                                                        </tr>
-                                                    </table>
+                                                        echo "<div class='superbox-list'  id='image_".$key."'>
+                                                                <img title='click para eliminar' onclick='deleteimage(".$key.");  return false;' 
+                                                                src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."' 
+                                                                data-img='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
+                                                                alt='".$row['nombre']."' title='".$row['nombre']."'
+                                                                nameimage='".$row['nombre']."'
+                                                                width='150px'  height='150px' >
+                                                                <input type='hidden'  name='filelastvehiculo[]' value='".$row['nombre']."'>
+                                                            </div>";
+                                                    }
+                                                ?>    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </article> 
                                 <h3>Inventario </h3>
-                                <article class="col-sm-12 col-md-12 col-lg-12"  id="article-2">
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-1" 
+                                <article class="col-sm-12 col-md-12 col-lg-12"  id="article-4">
+                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-2" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showexterior').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-long-arrow-left"></i> </span>
+                                            <i class="fa fa-long-arrow-left"></i> </span>
                                             <h2>Exteriores</h2>
                                         </header>
                                         <div class="showexterior" style="display: none;">
@@ -753,7 +688,7 @@ if(isPost()){
                                     <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-2" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showinterior').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-long-arrow-right"></i> </span>
+                                            <i class="fa fa-long-arrow-right"></i> </span>
                                             <h2>Interiores</h2>
                                         </header>
                                         <div class="showinterior" style="display: none;">
@@ -983,10 +918,10 @@ if(isPost()){
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-3" 
+                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-2" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showaccesorios').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-list-alt"></i> </span>
+                                            <i class="fa fa-list-alt"></i> </span>
                                             <h2>Accesorios</h2>
                                         </header>
                                         <div class="showaccesorios" style="display: none;">
@@ -1034,6 +969,9 @@ if(isPost()){
                                                                 <label class="radio ">
                                                                     <input type="radio" class="radiobox" value="No"  name="optLlavedeLlantas"><span>No</span> 
                                                                 </label>
+                                                                <label class="radio ">
+                                                                    <input type="radio" class="radiobox" value="C/Daño" name="optLlavedeLlantas"><span>C/Daño</span> 
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1048,7 +986,9 @@ if(isPost()){
                                                                 <label class="radio ">
                                                                     <input type="radio" class="radiobox" value="No"  name="optHerramientas"><span>No</span> 
                                                                 </label>
-                                                                
+                                                                <label class="radio ">
+                                                                    <input type="radio" class="radiobox" value="C/Daño" name="optHerramientas"><span>C/Daño</span> 
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1171,10 +1111,10 @@ if(isPost()){
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-4" 
+                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-2" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showcompmec').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-wrench"></i> </span>
+                                            <i class="fa fa-wrench"></i> </span>
                                             <h2>Componentes Mecanicos</h2>
                                         </header>
                                         <div class="showcompmec" style="display: none;">
@@ -1287,10 +1227,10 @@ if(isPost()){
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-5" 
+                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-id-2" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showdocumentos').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-folder-open"></i> </span>
+                                            <i class="fa fa-folder-open"></i> </span>
                                             <h2>Documentos</h2>
                                         </header>
                                         <div class="showdocumentos" style="display: none;">
@@ -1312,14 +1252,6 @@ if(isPost()){
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group documentos-aseguradora" hidden>
-                                                            <br>
-                                                            <label class="col-md-12 control-label">No. de Reporte</label>
-                                                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                                                <input type="text" class="form-control" placeholder='Numero de reporte' name="ReporteNum" style="width: 100%">
-                                                            </div>
-                                                        </div>
-                                                       
                                                     </div>
                                                     <div class="col-sm-3 col-md-3 col-lg-3">
                                                         <div class="form-group">
@@ -1332,13 +1264,6 @@ if(isPost()){
                                                                 <label class="radio ">
                                                                     <input type="radio" class="radiobox" value="No"  name="optPolizaSeg"><span>No</span> 
                                                                 </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group documentos-aseguradora" hidden>
-                                                            <br>
-                                                            <label class="col-md-12 control-label">No. de Póliza</label>
-                                                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                                                <input type="text" class="form-control" placeholder='Numero de Poliza' name="PolizaNum" style="width: 100%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1355,13 +1280,6 @@ if(isPost()){
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group documentos-aseguradora" hidden>
-                                                            <br>
-                                                            <label class="col-md-12 control-label">No. de Siniestro</label>
-                                                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                                                <input type="text" class="form-control" placeholder='Numero siniestro' name="siniestro" style="width: 100%">
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     <div class="col-sm-3 col-md-3 col-lg-3">
                                                         <div class="form-group">
@@ -1376,13 +1294,6 @@ if(isPost()){
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group documentos-aseguradora" hidden>
-                                                            <br>
-                                                            <label class="col-md-12 control-label">Deducible</label>
-                                                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                                                <input type="text" class="form-control" placeholder='Monto deducible' name="siniestro" style="width: 100%">
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-12 col-lg-12">
@@ -1391,7 +1302,7 @@ if(isPost()){
                                                             <br>
                                                             <label class="col-md-12 control-label">Comentarios Documentacion</label>
                                                             <div class="col-md-12 col-sm-12 col-lg-12">
-                                                                <input type="text" class="form-control" placeholder='Comentarios documentacion' name="ComentariosDoc" style="width: 100%">
+                                                                <input type="text" class="form-control" name="ComentariosDoc" style="width: 100%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1436,10 +1347,10 @@ if(isPost()){
                 </button>
                 <h4 class="modal-title">
                     <img src="<?php echo ASSETS_URL; ?>/img/logo.png" width="50" alt="SmartAdmin">
-                    <div id='titlemodal' style="float:right; margin-right: 20px;">
-                        <span class="widget-icon"><i class="fa fa-plus"></i> Nuevo</span>
-                    </div>
-                    
+                     <span class="widget-icon"> 
+                        <i class="fa fa-plus"></i>
+                    </span>
+                    Nuevo Cliente
                 </h4>
             </div>
             <div class="modal-body no-padding" >
@@ -1472,7 +1383,7 @@ if(isPost()){
 <script>
 
 
-        /*************FOTOS**************/
+    /*************FOTOS**************/
     function getFoto(id, e)
     {
         var fileElem = document.getElementById(id);
@@ -1546,52 +1457,57 @@ if(isPost()){
         } 
     }
 
-       //*************END FOTOS************* /
+    //*************END FOTOS************* /
    
+    function showpopup(){
+        $.get(config.base+"/Clientes/ajax/?action=get&object=showpopup", null, function (response) {
+                if ( response ){
+                    $("#contentpopup").html(response);
+                }else{
+                    return notify('error', 'Error al obtener los datos del Formulario');
+                    
+                }     
+        });
+    }
+    function getcliente(id){
+        if ( ! id ) return;
+
+        $.get(config.base+"/Vehiculos/ajax/?action=get&object=getcliente&id=" + id, null, function (response) {
+                if ( response ){
+                    $("#contcliente").html(response);
+                }else{
+                    notify('error', 'Error al obtener los datos del cliente');
+                    return false;
+                }     
+        });
+    }
+    function getsubmarca(id){
+        if ( ! id ) return;
+
+        $.get(config.base+"/Vehiculos/ajax/?action=get&object=getsubmarca&id=" + id, null, function (response) {
+                if ( response ){
+                    $("#contsubmarca").html(response);
+                    $('#id_submarca').select2();
+                }else{
+                    notify('error', 'Error al obtener los datos del cliente');
+                    return false;
+                }     
+        });
+    }
+    function validateForm()
+    {
+        var nombre = $("input[name=nombre]").val();
+       // if ( ! nombre )  return notify("info","El nombre es requerido");
+        
+        $("#main-form").submit();       
+    }
+
+
+  
     $(document).ready(function() {
         document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
 
-        /*GENERALES*/
-        getsubmarca= function(id){
-            if ( ! id ) return;
-            $("#contsubmarca").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
-            $.get(config.base+"/Vehiculos/ajax/?action=get&object=getsubmarca&id=" + id, null, function (response) {
-                    if ( response ){
-                        $("#contsubmarca").html(response);
-                        $('#id_submarca').select2();
-                    }else{
-                        notify('error', 'Error al obtener los datos del cliente');
-                        return false;
-                    }     
-            });
-        }
-        validateForm =function(){
-            var fecha_alta    = $("input[name=fecha_alta]").val();
-            var fecha_promesa = $("input[name=fecha_promesa]").val();
-            var id_user       = $("#id_user").val();
-            var id_taller     = $("#id_taller").val();
-            var id_cliente    = $("#id_cliente").val();
-            var id_marca      = $("#id_marca").val();
-            var id_submarca   = $("#id_submarca").val();
-            var modelo        = $("#modelo").val();
-            console.log
-            if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
-            if ( ! fecha_promesa ) return notify("info","La fecha de promesa es requerida");
-            if ( ! id_user )       return notify("info","El asesor es requerido");
-            if ( ! id_taller )     return notify("info","El taller es requerido");
-            if ( ! id_cliente )    return notify("info","El cliente es requerido");
-            if ( ! id_marca )      return notify("info","La marca es requerida");
-            if ( ! id_submarca )   return notify("info","El modelo es requerido");
-            if ( ! modelo )        return notify("info","El año es requerido");
-            
-            $("#main-form").submit();       
-        }
-        $(document).keydown(function(event) {
-            if (event.ctrlKey==true && (event.which == '106' || event.which == '74')) {
-                // alert('thou. shalt. not. PASTE!');
-                event.preventDefault();
-            }
-        });
+        /*radiobutton*/
         $('body').on('click', '.radiobox', function(){
             var namecolumn = $(this).attr("name");
             namecolumn     = namecolumn.split("opt");
@@ -1602,58 +1518,21 @@ if(isPost()){
             }else{
                 notify("error","Error al registrar dato");
             }
+            
+
         });
-        $('body').on('change', '#id_marca', function(){
-            if( $(this).val() ){
-                var id = $("#id_marca").val();
-                getsubmarca(id);
-            }
-        });
-        $('body').on('change', '#id_submarca', function(){
-            if( $(this).val() ){
-                var id = $("#id_submarca").val();
-                getselectrefaccion(id);
-            }
-        });
-        $('body').on('change', '#id_aseguradora', function(){
-            if( $(this).val()>1 ){
-                $(".documentos-aseguradora").show();
-            }else{
-                $(".documentos-aseguradora").hide();
+        $("input[type='button']"). click(function(){
+            var radioValue = $("input[name='gender']:checked"). val();
+            if(radioValue){
+            alert("Your are a - " + radioValue);
             }
         });
 
-        //**********Clients*************/
-        showpopupclientes = function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nuevo Cliente</span>');
-            $.get(config.base+"/Clientes/ajax/?action=get&object=showpopup", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        getcliente =function(id){
-            if ( ! id ) return;
-            $("#contcliente").html("<div align='center'><i class='far fa-cog fa-spin fa-5x'></i></div>");
-            $.get(config.base+"/Vehiculos/ajax/?action=get&object=getcliente&id=" + id, null, function (response) {
-                    if ( response ){
-                        $("#contcliente").html(response);
-                    }else{
-                        notify('error', 'Error al obtener los datos del cliente');
-                        return false;
-                    }     
-            });
-        }
         $('body').on('click', '#savenewclient', function(){
-            var nombre       = $("input[name=nombre]", $(this).parents('form:first')).val();
-            var apellido_pat = $("input[name=apellido_pat]", $(this).parents('form:first')).val();
-            var apellido_mat = $("input[name=apellido_mat]", $(this).parents('form:first')).val();
-            var telefono     = $("input[name=telefono]", $(this).parents('form:first')).val();
-            
-            if(!nombre) {  notify('error',"Se necesita el nombre del cliente."); return false; }
+            var nombre=$("input[name=nombre]", $(this).parents('form:first')).val();
+            var apellido_pat=$("input[name=apellido_pat]", $(this).parents('form:first')).val();
+            var apellido_mat=$("input[name=apellido_mat]", $(this).parents('form:first')).val();
+            var telefono=$("input[name=telefono]", $(this).parents('form:first')).val();
             var url = config.base+"/Clientes/ajax/?action=get&object=savenewclient"; // El script a dónde se realizará la petición.
             $.ajax({
                 type: "POST",
@@ -1683,263 +1562,19 @@ if(isPost()){
              });
             return false; // Evitar ejecutar el submit del formulario.
         });
+
         $('body').on('change', '#id_cliente', function(){
-            if( $(this).val() ){
-                var id = $("#id_cliente").val();
-                getcliente(id);
-            }
-        });
-        //**********Refaccion*************/
-        getrefaccion = function(id) {
-            if(id){
-                var text = $('select[name="idrefaccion"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getrefaccion"; // El script a dónde se realizará la petición.
-                var aseg     = $("#id_aseguradora").val();
-                var cantidad = $("#selectcantidad_refaccion").val();
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    data: "id="+id+ "&aseguradora=" + aseg + "&cantidad=" + cantidad, // Adjuntar los campos del formula=rio enviado.
-                    success: function(response){
-                        if(response){
-                            $('#contrefacciones').append(response);  
-                            $('#idrefaccion').val('').trigger('change.select2');
-                            $('#selectcantidad_refaccion').val(1)
-                            calcTotalrefaccion();
-                        }else{
-                            notify('error',"Oopss error al agregar refaccion"+response);
-                        }
-                    }
-                });
-                return false; // Evitar ejecutar el submit del formulario.
-            }
-        }
-        calcTotalrefaccion = function() {
-            var costos     = $(".costorefaccion");
-            var totales    = $(".totalesrefaccion");
-            var cantidades = $(".cantidadesrefaccion");
-            var total = 0;
-            if($("#id_aseguradora").val()==null || $("#id_aseguradora").val()==1 ){
-                for (var i = 0, len = costos.length; i < len; i++) {
-                    var valor=$(costos[i]).val();
-                    if (! isNaN( valor )  && valor > 0 ){
-                        total += parseFloat(valor*$(cantidades[i]).val());
-                        $(totales[i]).val(valor*$(cantidades[i]).val());
-                        //console.log(total);    
-                    }
+                if( $(this).val() ){
+                    var id = $("#id_cliente").val();
+                    console.log(getcliente(id));
                 }
-            }
-            
-
-            $("#total-numrefaccion").html(total);
-            $("#total-globalrefaccion").val(total);
-        }
-        getselectrefaccion= function(id){
-            if ( ! id ) return;
-        
-            $("#contrefaccion").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=getselectrefaccion&id=" + id , null, function (response) {
-                    if ( response ){
-                        $("#contrefaccion").html(response);
-                        $('#idrefaccion').select2();
-                    }else{
-                        notify('error', 'Error al obtener los datos de la refaccion');
-                        return false;
-                    }     
-            });
-        }
-        showpopuprefaccion= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nueva Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccion", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        showpopuprefaccionbuscar= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-search"></i> Buscar Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccionbuscar", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        $("body").on('click', '.borrar-refaccion', function (e) {
-            e.preventDefault();
-
-            var id = $(this).attr("lineidrefaccion");
-            $("[lineidrefaccion=" + id + "]").remove();
-            calcTotalrefaccion();
         });
-        $('body').on('click', '#savenewrefaccion', function(){
-            
-            var code        = $("input[name=codigo_refaccion]", $(this).parents('form:first')).val();
-            var nombre      = $("input[name=nombre_refaccion]", $(this).parents('form:first')).val();
-            var descripcion = $("input[name=descripcion_refaccion]", $(this).parents('form:first')).val();
-            var id_marca    = $("#id_marca_refaccion").val();
-            var id_submarca = $("#id_submarca_refaccion").val();
-            var modelo      = $("#modelo_refaccion").val();
-            var costoaprox  = $("#costo_aprox_refaccion").val();
-            var costoreal   = $("#costo_real_refaccion").val();
-          
-            var url = config.base+"/Catalogos/ajax/?action=get&object=savenewrefaccion"; // El script a dónde se realizará la petición.
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: "codigo="+code+"&nombre="+nombre+"&descripcion="+descripcion+"&id_marca="+id_marca+"&id_submarca="+id_submarca+"&modelo="+modelo+"&costo_aprox="+costoaprox+"&costo_real="+costoreal, // Adjuntar los campos del formulario enviado.
-                success: function(response){
-                    if(response>0){
-                        //alert("Group successfully added");
-                        $('#idrefaccion').append($('<option>', {
-                            value: response,
-                            text: code+"||"+nombre,
-                            selected:true
-                        }));  
-                        $("#idrefaccion").select2({
-                            multiple: false,
-                            header: "Selecciona una opcion",
-                            noneSelectedText: "Seleccionar",
-                            selectedList: 1
-                        });
-                        $('#myModal').modal('hide');
-                        $("#idrefaccion"). change();
-                        notify('success',"Refaccion agregada correctamente:"+response);
-                    }else{
-                        notify('error',"Oopss error al agregar refaccion"+response);
-                    }
+        $('body').on('change', '#id_marca', function(){
+                if( $(this).val() ){
+                    var id = $("#id_marca").val();
+                    console.log(getsubmarca(id));
                 }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
         });
-        $('body').on('blur', '.costorefaccion', function(){
-            calcTotalrefaccion();
-        });
-        $('body').on('change', '#idrefaccion', function(){
-            if( $(this).val() ){
-                var id = $("#idrefaccion").val();
-                getrefaccion(id);
-            }
-        });
-        //**********Servicio*************/
-        calcTotal = function () {
-            var totales = $(".totales");
-            var total = 0;
-            for (var i = 0, len = totales.length; i < len; i++) {
-                var valor=$(totales[i]).val();
-                if (valor>0) {
-                    total += parseFloat(valor);
-                }                
-            }
-
-            $("#total-num").html(total);
-            $("#total-global").val(total);
-        }
-        showpopupservicio= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nuevo Servicio</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupservicio", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        $("#idservicio"). change(function(){
-            var id = $("#idservicio"). val();
-            if(id){
-                var text = $('select[name="idservicio"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getservicio"; // El script a dónde se realizará la petición.
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: "id="+id, // Adjuntar los campos del formula=rio enviado.
-                success: function(response){
-                    if(response){
-                        $('#contservicios').append(response);  
-                        $('#idservicio').val('0').trigger('change.select2');
-                    }else{
-                        notify('error',"Oopss error al agregar servicio"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-            }
-        });
-        $("#idserviciopqte"). change(function(){
-            var idserv = $("#idserviciopqte"). val();
-            if(idserv){
-                var text = $('select[name="idserviciopqte"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getservicio"; // El script a dónde se realizará la petición.
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: "id="+idserv, // Adjuntar los campos del formula=rio enviado.
-                success: function(response){
-                    if(response){
-                        $('#contservicios').append(response);  
-                        $('#idserviciopqte').val('0').trigger('change.select2');
-                    }else{
-                        notify('error',"Oopss error al agregar servicio"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-            }
-        });
-       
-        $("body").on('click', '.borrar-servicio', function (e) {
-            e.preventDefault();
-
-            var id = $(this).attr("lineid");
-            $("[lineid=" + id + "]").remove();
-            calcTotal();
-        });
-        $('body').on('click', '#savenewservice', function(){
-            
-            var code        = $("input[name=codigo]", $(this).parents('form:first')).val();
-            var nombre      = $("input[name=nombre]", $(this).parents('form:first')).val();
-            var descripcion = $("input[name=descripcion]", $(this).parents('form:first')).val();
-          
-            var url = config.base+"/Catalogos/ajax/?action=get&object=savenewservice"; // El script a dónde se realizará la petición.
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $(this).parents('form:first').serialize(), // Adjuntar los campos del formulario enviado.
-                success: function(response){
-                    if(response>0){
-                        //alert("Group successfully added");
-                        $('#idservicio').append($('<option>', {
-                            value: response,
-                            text: code+"||"+nombre,
-                            selected:true
-                        }));  
-                        $("#idservicio").select2({
-                            multiple: false,
-                            header: "Selecciona una opcion",
-                            noneSelectedText: "Seleccionar",
-                            selectedList: 1
-                        });
-                        $('#myModal').modal('hide');
-                        $("#idservicio"). change();
-                        notify('success',"Servicio agregado correctamente:"+response);
-                    }else{
-                        notify('error',"Oopss error al agregar servicio"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-        });
-        $('body').on('blur', '.totales', function(){
-            if( $(this).val()>0 ) calcTotal();
-        });
-        
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.
          * It initializes and checks for all basic elements of the page

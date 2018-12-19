@@ -139,7 +139,7 @@ Routing section
       }else{}
 
       
-    /***/
+      /***/
 
 
     }else{
@@ -147,29 +147,40 @@ Routing section
       // go to login page
       
         $page="Login_index.php";
-        if ($request['section']==='Login' ){
-            $page="Login_index.php";
+        switch ($request['section']) {
+          case 'Login':
             $dir="";//si esta en carpeta
             if ($request['page']==='ResetPassword' ){$page="Login_ResetPassword.php";}
             if ($request['page']==='ChangePassword' ){$page="Login_ChangePassword.php";}
+            break;
+          case 'Register':
+            $page="Register_index.php";
+            if ($request['section']==='Register' ){
+                $page="Register_index.php";
+                $dir="";//si esta en carpeta
+            }
+            break;
+          case 'Clientes':
+            if ($request['page']==='addpopup'){
+              $dir  = "Clientes";//si esta en carpeta
+              $page = "Clientes_adpopup.php";      
+            }
+            break;
+          case 'Vehiculos':            
+            if ($request['page']==='print'){ 
+              $dir  = "Vehiculos";//si esta en carpeta 
+              $page = "Vehiculos_print.php";      
+            }
+            break;
+          default:
+            
+            break;
         }
-        if ($request['section']==='Register' ){
-          $page="Register_index.php";
-          if ($request['section']==='Register' ){
-              $page="Register_index.php";
-              $dir="";//si esta en carpeta
-          }
-        }
-        if ($request['section']==='Clientes'){
-          $dir  = "Clientes";//si esta en carpeta
-          if ($request['page']==='addpopup')      { $page = "Clientes_adpopup.php";      }
-        }
-        if ($request['section']==='Vehiculos'){
-          $dir  = "Vehiculos";//si esta en carpeta
-          if ($request['page']==='print')      { $page = "Vehiculos_print.php";      }
-        }
+       
         #die;
         if($dir)  $page = $dir."/".$page;
+
+        
     }
    
 // Public user

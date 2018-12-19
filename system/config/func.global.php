@@ -128,6 +128,25 @@ function catModelo()
   }
     return $array;
 }
+function getStatusServicio(){
+  $arrayStatus = array();
+  $arrayStatus["En Proceso"] = "En Proceso";
+  $arrayStatus["active"]     = "Pendiente";
+  $arrayStatus["Realizado"]  = "Realizado";
+  $arrayStatus["Stand-By"]   = "Stand-By";
+  return $arrayStatus;
+}
+function getStatusRefaccion(){
+  $arrayStatus = array();
+  $arrayStatus["active"]     = "Solicitada";
+  $arrayStatus["Recibida"]   = "Recibida";
+  $arrayStatus["Rechazada"]  = "Rechazada";
+  $arrayStatus["Entregada"]  = "Entregada";
+  $arrayStatus["Reenvio"]    = "Reenvio";
+  $arrayStatus["Instalado"]  = "Instalado";
+  $arrayStatus["Proporcionado-Cliente"]  = "Proporcionado-Cliente";
+  return $arrayStatus;
+}
 
 
 
@@ -255,49 +274,55 @@ function isPost()
 }
 function delete($id,$module,$table){
   
-  $obj = "";
-  $pagereturn='index';
-  switch ($table) {
-    case 'taller':      $obj = new Taller();      $pagereturn=$table;  
-      break;
-    case 'marca':       $obj = new Marca();       $pagereturn=$table; 
-      break;
-   case 'submarca':     $obj = new SubMarca();    $pagereturn=$table; 
-      break;
-    case 'aseguradora': $obj = new Aseguradora(); $pagereturn=$table; 
-      break;
-    case 'modelo':      $obj = new SubMarca();    $pagereturn=$table; 
-      break;
-    case 'trabajo':     $obj = new Trabajo();     $pagereturn=$table;  
-      break;
-    case 'cliente':     $obj = new Cliente();  
-      break;
-    case 'user':        $obj = new User();  
-      break;
-    case 'permiso':     $obj = new Permiso();  
-      break;
-    case 'vehiculo':    $obj = new Vehiculo();  
-      break;
-    case 'usertype':    $obj = new UserType();   $pagereturn=$table;  
-      break;
-    case 'servicio':    $obj = new Servicio();   $pagereturn=$table;  
-      break;
-    case 'refaccion':   $obj = new Refaccion();  $pagereturn=$table;  
-      break;
+  $obj        = "";
+  $pagereturn = 'index';
   
+  switch ($table) {
+    case 'taller':             $obj = new Taller();               $pagereturn = $table; break;
+    case 'marca':              $obj = new Marca();                $pagereturn = $table; break;
+    case 'submarca':           $obj = new SubMarca();             $pagereturn = $table; break;
+    case 'aseguradora':        $obj = new Aseguradora();          $pagereturn = $table; break;
+    case 'modelo':             $obj = new SubMarca();             $pagereturn = $table; break;
+    case 'trabajo':            $obj = new Trabajo();              $pagereturn = $table; break;
+    case 'cliente':            $obj = new Cliente();                                    break;
+    case 'user':               $obj = new User();                                       break;
+    case 'permiso':            $obj = new Permiso();                                    break;
+    case 'vehiculo':           $obj = new Vehiculo();                                   break;
+    case 'usertype':           $obj = new UserType();            $pagereturn = $table;  break;
+    case 'servicio':           $obj = new Servicio();            $pagereturn = $table;  break;
+    case 'refaccion':          $obj = new Refaccion();           $pagereturn = $table;  break;
+    case 'vehiculoservicio':   $obj = new VehiculoServicio();    $pagereturn = 'view';  break;
+    case 'vehiculorefaccion':  $obj = new VehiculoRefaccion();   $pagereturn = 'view';  break;
     default:
-      echo "no se encontro tabla en func.global";
+      echo "no se encontro tabla en func.global ".$table;
       exit;
       break;
   }
-  
   $data = $obj->getTable($id);
-  if ( !$data ) {
+  
+
+  echo $pagereturn;
+  exit;
+  if ( !$data ) 
       informError(true,make_url($module,$pagereturn));
-  }else{
-    if ( $obj->deleteAll($id) ) { informSuccess( true, make_url($module,$pagereturn) ); }
-    else { informError(true,make_url($module,$pagereturn) ); }
+
+  $array      = [];
+  switch ($table) {
+    case 'vehiculoservicio':
+      $array  = array('id'=>$data['id_vehiculo']); 
+      break;
+    case 'vehiculorefaccion':
+      $array  = array('id'=>$data['id_vehiculo']); 
+      break;
+    
+    default:
+      # code...
+      break;
   }
+
+  if ( $obj->deleteAll($id) ) { informSuccess( true, make_url($module,$pagereturn,$array) ); }
+  else { informError(true,make_url($module,$pagereturn) ); }
+  
 }
 /** CSRF Token **/
 function CSRFToken($len=8){

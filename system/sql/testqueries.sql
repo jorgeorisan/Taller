@@ -1,101 +1,27 @@
-/***13102018****/
-ALTER TABLE `systemmy_tallerhp`.`servicio` 
-ADD COLUMN `paquete` INT NULL DEFAULT 0 AFTER `id_user`;
+SELECT * FROM user;
+SELECT id FROM user WHERE 1;
+SELECT * FROM user WHERE email='ernesto3d@illumant.com';
+SELECT * FROM client;
+SELECT name FROM project WHERE status='ACTIVE';
+SELECT * from campaign_type;
+SELECT * FROM campaign;
 
-CREATE TABLE `systemmy_tallerhp`.`servicio_paquete` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_servicio` INT NULL,
-  `status` VARCHAR(45) NULL DEFAULT 'active',
-  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
-  `deleted_date` TIMESTAMP NULL,
-  PRIMARY KEY (`id`));
+SELECT campaign.id as id,campaign.name as name,campaign.description as description,campaign_type.name as type,campaign.status as status,campaign.created as created,client.name as clientname,project.name as projectname
+FROM campaign,campaign_type,client,project
+WHERE campaign.campaign_type_id=campaign_type.id ORDER BY created DESC;
 
-  
-ALTER TABLE `systemmy_tallerhp`.`servicio_paquete` 
-ADD CONSTRAINT `id_servicioserviciopaquete_dx`
-  FOREIGN KEY (`id_servicio`)
-  REFERENCES `systemmy_tallerhp`.`servicio` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+SELECT STR_TO_DATE('01,5,2013','%d,%m,%Y');
+
+SELECT DATE_FORMAT(STR_TO_DATE('06/28/2017','%m/%d/%Y'),'%Y-%m-%d');
 
 
-ALTER TABLE `systemmy_tallerhp`.`servicio_paquete` 
-ADD COLUMN `id_serviciopaquete` INT NULL AFTER `id`;
+
+UPDATE project SET end_date=DATE_FORMAT(STR_TO_DATE('07/28/2017','%m/%d/%Y'),'%Y-%m-%d') WHERE id=13;
 
 
-ALTER TABLE `systemmy_tallerhp`.`servicio_paquete` 
-ADD CONSTRAINT `id_servpaquete`
-  FOREIGN KEY (`id_serviciopaquete`)
-  REFERENCES `systemmy_tallerhp`.`servicio` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+UPDATE user SET first_name='Mark',last_name='Snodgrass' WHERE id=1;
 
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Servicio Paquete', 'Catalogos', 'serviciopaquete');
+SELECT id,name,description,created_at,status FROM client WHERE status="ACTIVE";
 
-UPDATE `systemmy_tallerhp`.`permiso` SET `page` = 'paquete' WHERE (`id` = '47');
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Asignar Servicios Paquete', 'Catalogos', 'serviciopaquete');
-/****22 10 2018 ****/
-
-ALTER TABLE `systemmy_tallerhp`.`solicitud_refaccion` 
-DROP FOREIGN KEY `id_refaccioncotizacionr_dx`;
-ALTER TABLE `systemmy_tallerhp`.`solicitud_refaccion` 
-DROP INDEX `id_refaccioncotizacion_dx_idx` ;
-;
-
-ALTER TABLE `systemmy_tallerhp`.`refaccion` 
-CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
-
-CREATE TABLE `systemmy_tallerhp`.`imagenes_refaccion` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_refaccion` INT NULL,
-  `nombre` TEXT NULL,
-  `descripcion` TEXT NULL,
-  `url` TEXT NULL,
-  `status` VARCHAR(45) NULL DEFAULT 'active',
-  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
-  PRIMARY KEY (`id`));
-
-ALTER TABLE `systemmy_tallerhp`.`imagenes_refaccion` 
-ADD CONSTRAINT `id_refaccion_imagenesrefaccion_dx`
-  FOREIGN KEY (`id_refaccion`)
-  REFERENCES `systemmy_tallerhp`.`refaccion` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-
-  ALTER TABLE `systemmy_tallerhp`.`refaccion` 
-ADD COLUMN `costo_aprox` VARCHAR(45) NULL AFTER `imagen_url`,
-ADD COLUMN `costo_real` DOUBLE NULL AFTER `costo_aprox`;
-
-ALTER TABLE `systemmy_tallerhp`.`imagenes_refaccion` 
-ADD CONSTRAINT `id_refaccion_imagenesrefacc_dx`
-  FOREIGN KEY (`id_refaccion`)
-  REFERENCES `systemmy_tallerhp`.`refaccion` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-
-  ALTER TABLE `systemmy_tallerhp`.`imagenes_refaccion` 
-ADD COLUMN `deleted_date` TIMESTAMP NULL AFTER `created_date`;
-
-
--- 30 10 2018  listo
-
-ALTER TABLE `systemmy_tallerhp`.`vehiculo` 
-ADD COLUMN `PolizaNum` VARCHAR(200) NULL AFTER `TarjetaCirc`,
-ADD COLUMN `ReporteNum` VARCHAR(45) NULL AFTER `PolizaSeg`,
-ADD COLUMN `siniestro` VARCHAR(150) NULL AFTER `ReporteNum`,
-ADD COLUMN `deducible` VARCHAR(45) NULL AFTER `siniestro`;
-
-
--- 3 nov 2018
-  ALTER TABLE `systemmy_tallerhp`.`vehiculo_servicio` 
-ADD COLUMN `detalles` TEXT NULL AFTER `id_servicio`;
-
-  ALTER TABLE `systemmy_tallerhp`.`vehiculo_refaccion` 
-ADD COLUMN `detalles` TEXT NULL AFTER `id_refaccion`;
-
-ALTER TABLE `systemmy_tallerhp`.`refaccion` 
-ADD COLUMN `detalles` INT NULL DEFAULT 0 AFTER `costo_real`;
-
-ALTER TABLE `systemmy_tallerhp`.`servicio` 
-ADD COLUMN `detalles` INT NULL DEFAULT 0  AFTER `status`;
-
+SELECT id,name,start_date,end_date,status FROM project WHERE client_id=1;
+SELECT id,name,DATE_FORMAT(start_date, "%M %d, %Y at %h:%i %p") as start_date,DATE_FORMAT(end_date, "%M %d, %Y at %h:%i %p") as end_date,status FROM project WHERE client_id=1;

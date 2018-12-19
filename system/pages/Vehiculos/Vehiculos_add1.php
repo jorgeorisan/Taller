@@ -420,12 +420,13 @@ if(isPost()){
                                                             <select style="width:100%" class="select2" name="idservicio" id="idservicio">
                                                                 <option value="0" selected disabled>Selecciona Servicio</option>
                                                                 <?php 
-                                                                $obj  = new Servicio();
-                                                                $list = $obj->getAllArr();
-                                                                if (is_array($list) || is_object($list))
-                                                                    foreach($list as $val)
+                                                                $obj = new Servicio();
+                                                                $list=$obj->getAllArr();
+                                                                if (is_array($list) || is_object($list)){
+                                                                    foreach($list as $val){
                                                                         echo "<option value='".$val['id']."'>".htmlentities($val['codigo'].'||'.$val['nombre'])."</option>";
-                                                                
+                                                                    }
+                                                                }
                                                                 ?>
                                                             </select>
                                                         </div>
@@ -506,8 +507,8 @@ if(isPost()){
                                                             <th>Cant.</th>
                                                             <th>Codigo</th>
                                                             <th>Refaccion</th>
-                                                            <th>Costo </th>
-                                                            <th>Total </th>
+                                                            <th>Costo Aprox</th>
+                                                            <th>Total Aprox</th>
                                                             <th class="borrar-td"></th>
                                                         </tr>
                                                     </table>
@@ -1472,7 +1473,7 @@ if(isPost()){
 <script>
 
 
-        /*************FOTOS**************/
+    /*************FOTOS**************/
     function getFoto(id, e)
     {
         var fileElem = document.getElementById(id);
@@ -1546,52 +1547,163 @@ if(isPost()){
         } 
     }
 
-       //*************END FOTOS************* /
+    //*************END FOTOS************* /
    
+    function showpopupclientes(){
+        $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nuevo Cliente</span>');
+        $.get(config.base+"/Clientes/ajax/?action=get&object=showpopup", null, function (response) {
+                if ( response ){
+                    $("#contentpopup").html(response);
+                }else{
+                    return notify('error', 'Error al obtener los datos del Formulario');
+                    
+                }     
+        });
+    }
+    function showpopupservicio(){
+        $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nuevo Servicio</span>');
+        $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupservicio", null, function (response) {
+                if ( response ){
+                    $("#contentpopup").html(response);
+                }else{
+                    return notify('error', 'Error al obtener los datos del Formulario');
+                    
+                }     
+        });
+    }
+    function showpopuprefaccion(){
+        $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nueva Refaccion</span>');
+        $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccion", null, function (response) {
+                if ( response ){
+                    $("#contentpopup").html(response);
+                }else{
+                    return notify('error', 'Error al obtener los datos del Formulario');
+                    
+                }     
+        });
+    }
+    function showpopuprefaccionbuscar(){
+        $('#titlemodal').html('<span class="widget-icon"><i class="far fa-search"></i> Buscar Refaccion</span>');
+        $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccionbuscar", null, function (response) {
+                if ( response ){
+                    $("#contentpopup").html(response);
+                }else{
+                    return notify('error', 'Error al obtener los datos del Formulario');
+                    
+                }     
+        });
+    }
+    
+    function getsubmarca(id){
+        if ( ! id ) return;
+        $("#contsubmarca").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
+        $.get(config.base+"/Vehiculos/ajax/?action=get&object=getsubmarca&id=" + id, null, function (response) {
+                if ( response ){
+                    $("#contsubmarca").html(response);
+                    $('#id_submarca').select2();
+                }else{
+                    notify('error', 'Error al obtener los datos del cliente');
+                    return false;
+                }     
+        });
+    }
+    function getselectrefaccion(id){
+        if ( ! id ) return;
+       
+        $("#contrefaccion").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
+        $.get(config.base+"/Catalogos/ajax/?action=get&object=getselectrefaccion&id=" + id , null, function (response) {
+                if ( response ){
+                    $("#contrefaccion").html(response);
+                    $('#idrefaccion').select2();
+                }else{
+                    notify('error', 'Error al obtener los datos de la refaccion');
+                    return false;
+                }     
+        });
+    }
+    function getcliente(id){
+        if ( ! id ) return;
+        $("#contcliente").html("<div align='center'><i class='far fa-cog fa-spin fa-5x'></i></div>");
+        $.get(config.base+"/Vehiculos/ajax/?action=get&object=getcliente&id=" + id, null, function (response) {
+                if ( response ){
+                    $("#contcliente").html(response);
+                }else{
+                    notify('error', 'Error al obtener los datos del cliente');
+                    return false;
+                }     
+        });
+    }
+    
+    function validateForm()
+    {
+        var fecha_alta    = $("input[name=fecha_alta]").val();
+        var fecha_promesa = $("input[name=fecha_promesa]").val();
+        var id_user       = $("#id_user").val();
+        var id_taller     = $("#id_taller").val();
+        var id_cliente    = $("#id_cliente").val();
+        var id_marca      = $("#id_marca").val();
+        var id_submarca   = $("#id_submarca").val();
+        var modelo        = $("#modelo").val();
+        console.log
+        if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
+        if ( ! fecha_promesa ) return notify("info","La fecha de promesa es requerida");
+        if ( ! id_user )       return notify("info","El asesor es requerido");
+        if ( ! id_taller )     return notify("info","El taller es requerido");
+        if ( ! id_cliente )    return notify("info","El cliente es requerido");
+        if ( ! id_marca )      return notify("info","La marca es requerida");
+        if ( ! id_submarca )   return notify("info","El modelo es requerido");
+        if ( ! modelo )        return notify("info","El año es requerido");
+        
+        $("#main-form").submit();       
+    }
+    function getrefaccion(id) {
+        if(id){
+            var text = $('select[name="idrefaccion"] option:selected').text();
+            var url = config.base+"/Catalogos/ajax/?action=get&object=getrefaccion"; // El script a dónde se realizará la petición.
+            var aseg     = $("#id_aseguradora").val();
+            var cantidad = $("#selectcantidad_refaccion").val();
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: "id="+id+ "&aseguradora=" + aseg + "&cantidad=" + cantidad, // Adjuntar los campos del formula=rio enviado.
+                success: function(response){
+                    if(response){
+                        $('#contrefacciones').append(response);  
+                        $('#idrefaccion').val('').trigger('change.select2');
+                        $('#selectcantidad_refaccion').val(1)
+                        calcTotalrefaccion();
+                    }else{
+                        notify('error',"Oopss error al agregar refaccion"+response);
+                    }
+                }
+            });
+            return false; // Evitar ejecutar el submit del formulario.
+        }
+    }
+    function calcTotalrefaccion () {
+        var costos     = $(".costorefaccion");
+        var totales    = $(".totalesrefaccion");
+        var cantidades = $(".cantidadesrefaccion");
+        var total = 0;
+        if($("#id_aseguradora").val()==null || $("#id_aseguradora").val()==1 ){
+            for (var i = 0, len = costos.length; i < len; i++) {
+                var valor=$(costos[i]).val();
+                if (! isNaN( valor )  && valor > 0 ){
+                    total += parseFloat(valor*$(cantidades[i]).val());
+                    $(totales[i]).val(valor*$(cantidades[i]).val());
+                    //console.log(total);    
+                }
+            }
+        }
+        
+
+        $("#total-numrefaccion").html(total);
+        $("#total-globalrefaccion").val(total);
+    }
     $(document).ready(function() {
         document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
 
-        /*GENERALES*/
-        getsubmarca= function(id){
-            if ( ! id ) return;
-            $("#contsubmarca").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
-            $.get(config.base+"/Vehiculos/ajax/?action=get&object=getsubmarca&id=" + id, null, function (response) {
-                    if ( response ){
-                        $("#contsubmarca").html(response);
-                        $('#id_submarca').select2();
-                    }else{
-                        notify('error', 'Error al obtener los datos del cliente');
-                        return false;
-                    }     
-            });
-        }
-        validateForm =function(){
-            var fecha_alta    = $("input[name=fecha_alta]").val();
-            var fecha_promesa = $("input[name=fecha_promesa]").val();
-            var id_user       = $("#id_user").val();
-            var id_taller     = $("#id_taller").val();
-            var id_cliente    = $("#id_cliente").val();
-            var id_marca      = $("#id_marca").val();
-            var id_submarca   = $("#id_submarca").val();
-            var modelo        = $("#modelo").val();
-            console.log
-            if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
-            if ( ! fecha_promesa ) return notify("info","La fecha de promesa es requerida");
-            if ( ! id_user )       return notify("info","El asesor es requerido");
-            if ( ! id_taller )     return notify("info","El taller es requerido");
-            if ( ! id_cliente )    return notify("info","El cliente es requerido");
-            if ( ! id_marca )      return notify("info","La marca es requerida");
-            if ( ! id_submarca )   return notify("info","El modelo es requerido");
-            if ( ! modelo )        return notify("info","El año es requerido");
-            
-            $("#main-form").submit();       
-        }
-        $(document).keydown(function(event) {
-            if (event.ctrlKey==true && (event.which == '106' || event.which == '74')) {
-                // alert('thou. shalt. not. PASTE!');
-                event.preventDefault();
-            }
-        });
+        /*radiobutton*/
         $('body').on('click', '.radiobox', function(){
             var namecolumn = $(this).attr("name");
             namecolumn     = namecolumn.split("opt");
@@ -1603,230 +1715,6 @@ if(isPost()){
                 notify("error","Error al registrar dato");
             }
         });
-        $('body').on('change', '#id_marca', function(){
-            if( $(this).val() ){
-                var id = $("#id_marca").val();
-                getsubmarca(id);
-            }
-        });
-        $('body').on('change', '#id_submarca', function(){
-            if( $(this).val() ){
-                var id = $("#id_submarca").val();
-                getselectrefaccion(id);
-            }
-        });
-        $('body').on('change', '#id_aseguradora', function(){
-            if( $(this).val()>1 ){
-                $(".documentos-aseguradora").show();
-            }else{
-                $(".documentos-aseguradora").hide();
-            }
-        });
-
-        //**********Clients*************/
-        showpopupclientes = function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nuevo Cliente</span>');
-            $.get(config.base+"/Clientes/ajax/?action=get&object=showpopup", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        getcliente =function(id){
-            if ( ! id ) return;
-            $("#contcliente").html("<div align='center'><i class='far fa-cog fa-spin fa-5x'></i></div>");
-            $.get(config.base+"/Vehiculos/ajax/?action=get&object=getcliente&id=" + id, null, function (response) {
-                    if ( response ){
-                        $("#contcliente").html(response);
-                    }else{
-                        notify('error', 'Error al obtener los datos del cliente');
-                        return false;
-                    }     
-            });
-        }
-        $('body').on('click', '#savenewclient', function(){
-            var nombre       = $("input[name=nombre]", $(this).parents('form:first')).val();
-            var apellido_pat = $("input[name=apellido_pat]", $(this).parents('form:first')).val();
-            var apellido_mat = $("input[name=apellido_mat]", $(this).parents('form:first')).val();
-            var telefono     = $("input[name=telefono]", $(this).parents('form:first')).val();
-            
-            if(!nombre) {  notify('error',"Se necesita el nombre del cliente."); return false; }
-            var url = config.base+"/Clientes/ajax/?action=get&object=savenewclient"; // El script a dónde se realizará la petición.
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $(this).parents('form:first').serialize(), // Adjuntar los campos del formulario enviado.
-                success: function(response){
-                    if(response>0){
-                        //alert("Group successfully added");
-                        $('#id_cliente').append($('<option>', {
-                            value: response,
-                            text: nombre+" "+apellido_pat+" "+apellido_mat,
-                            selected:true
-                        }));  
-                        $("#id_cliente").select2({
-                            multiple: false,
-                            header: "Selecciona una opcion",
-                            noneSelectedText: "Seleccionar",
-                            selectedList: 1
-                        });
-                        $('#myModal').modal('hide');
-                        notify('success',"Cliente agregado correctamente:"+response);
-                        getcliente(response);
-                    }else{
-                        notify('error',"Oopss error al agregar cliente"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-        });
-        $('body').on('change', '#id_cliente', function(){
-            if( $(this).val() ){
-                var id = $("#id_cliente").val();
-                getcliente(id);
-            }
-        });
-        //**********Refaccion*************/
-        getrefaccion = function(id) {
-            if(id){
-                var text = $('select[name="idrefaccion"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getrefaccion"; // El script a dónde se realizará la petición.
-                var aseg     = $("#id_aseguradora").val();
-                var cantidad = $("#selectcantidad_refaccion").val();
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    data: "id="+id+ "&aseguradora=" + aseg + "&cantidad=" + cantidad, // Adjuntar los campos del formula=rio enviado.
-                    success: function(response){
-                        if(response){
-                            $('#contrefacciones').append(response);  
-                            $('#idrefaccion').val('').trigger('change.select2');
-                            $('#selectcantidad_refaccion').val(1)
-                            calcTotalrefaccion();
-                        }else{
-                            notify('error',"Oopss error al agregar refaccion"+response);
-                        }
-                    }
-                });
-                return false; // Evitar ejecutar el submit del formulario.
-            }
-        }
-        calcTotalrefaccion = function() {
-            var costos     = $(".costorefaccion");
-            var totales    = $(".totalesrefaccion");
-            var cantidades = $(".cantidadesrefaccion");
-            var total = 0;
-            if($("#id_aseguradora").val()==null || $("#id_aseguradora").val()==1 ){
-                for (var i = 0, len = costos.length; i < len; i++) {
-                    var valor=$(costos[i]).val();
-                    if (! isNaN( valor )  && valor > 0 ){
-                        total += parseFloat(valor*$(cantidades[i]).val());
-                        $(totales[i]).val(valor*$(cantidades[i]).val());
-                        //console.log(total);    
-                    }
-                }
-            }
-            
-
-            $("#total-numrefaccion").html(total);
-            $("#total-globalrefaccion").val(total);
-        }
-        getselectrefaccion= function(id){
-            if ( ! id ) return;
-        
-            $("#contrefaccion").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=getselectrefaccion&id=" + id , null, function (response) {
-                    if ( response ){
-                        $("#contrefaccion").html(response);
-                        $('#idrefaccion').select2();
-                    }else{
-                        notify('error', 'Error al obtener los datos de la refaccion');
-                        return false;
-                    }     
-            });
-        }
-        showpopuprefaccion= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nueva Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccion", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        showpopuprefaccionbuscar= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-search"></i> Buscar Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccionbuscar", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        $("body").on('click', '.borrar-refaccion', function (e) {
-            e.preventDefault();
-
-            var id = $(this).attr("lineidrefaccion");
-            $("[lineidrefaccion=" + id + "]").remove();
-            calcTotalrefaccion();
-        });
-        $('body').on('click', '#savenewrefaccion', function(){
-            
-            var code        = $("input[name=codigo_refaccion]", $(this).parents('form:first')).val();
-            var nombre      = $("input[name=nombre_refaccion]", $(this).parents('form:first')).val();
-            var descripcion = $("input[name=descripcion_refaccion]", $(this).parents('form:first')).val();
-            var id_marca    = $("#id_marca_refaccion").val();
-            var id_submarca = $("#id_submarca_refaccion").val();
-            var modelo      = $("#modelo_refaccion").val();
-            var costoaprox  = $("#costo_aprox_refaccion").val();
-            var costoreal   = $("#costo_real_refaccion").val();
-          
-            var url = config.base+"/Catalogos/ajax/?action=get&object=savenewrefaccion"; // El script a dónde se realizará la petición.
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: "codigo="+code+"&nombre="+nombre+"&descripcion="+descripcion+"&id_marca="+id_marca+"&id_submarca="+id_submarca+"&modelo="+modelo+"&costo_aprox="+costoaprox+"&costo_real="+costoreal, // Adjuntar los campos del formulario enviado.
-                success: function(response){
-                    if(response>0){
-                        //alert("Group successfully added");
-                        $('#idrefaccion').append($('<option>', {
-                            value: response,
-                            text: code+"||"+nombre,
-                            selected:true
-                        }));  
-                        $("#idrefaccion").select2({
-                            multiple: false,
-                            header: "Selecciona una opcion",
-                            noneSelectedText: "Seleccionar",
-                            selectedList: 1
-                        });
-                        $('#myModal').modal('hide');
-                        $("#idrefaccion"). change();
-                        notify('success',"Refaccion agregada correctamente:"+response);
-                    }else{
-                        notify('error',"Oopss error al agregar refaccion"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-        });
-        $('body').on('blur', '.costorefaccion', function(){
-            calcTotalrefaccion();
-        });
-        $('body').on('change', '#idrefaccion', function(){
-            if( $(this).val() ){
-                var id = $("#idrefaccion").val();
-                getrefaccion(id);
-            }
-        });
-        //**********Servicio*************/
         calcTotal = function () {
             var totales = $(".totales");
             var total = 0;
@@ -1840,17 +1728,17 @@ if(isPost()){
             $("#total-num").html(total);
             $("#total-global").val(total);
         }
-        showpopupservicio= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nuevo Servicio</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupservicio", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
+        
+       
+
+        $(document).keydown(function(event) {
+            if (event.ctrlKey==true && (event.which == '106' || event.which == '74')) {
+                // alert('thou. shalt. not. PASTE!');
+                event.preventDefault();
+            }
+        });
+
+        
         $("#idservicio"). change(function(){
             var id = $("#idservicio"). val();
             if(id){
@@ -1901,6 +1789,50 @@ if(isPost()){
             $("[lineid=" + id + "]").remove();
             calcTotal();
         });
+        $("body").on('click', '.borrar-refaccion', function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("lineidrefaccion");
+            $("[lineidrefaccion=" + id + "]").remove();
+            calcTotalrefaccion();
+        });
+
+        $('body').on('click', '#savenewclient', function(){
+            var nombre       = $("input[name=nombre]", $(this).parents('form:first')).val();
+            var apellido_pat = $("input[name=apellido_pat]", $(this).parents('form:first')).val();
+            var apellido_mat = $("input[name=apellido_mat]", $(this).parents('form:first')).val();
+            var telefono     = $("input[name=telefono]", $(this).parents('form:first')).val();
+            
+            if(!nombre) {  notify('error',"Se necesita el nombre del cliente."); return false; }
+            var url = config.base+"/Clientes/ajax/?action=get&object=savenewclient"; // El script a dónde se realizará la petición.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $(this).parents('form:first').serialize(), // Adjuntar los campos del formulario enviado.
+                success: function(response){
+                    if(response>0){
+                        //alert("Group successfully added");
+                        $('#id_cliente').append($('<option>', {
+                            value: response,
+                            text: nombre+" "+apellido_pat+" "+apellido_mat,
+                            selected:true
+                        }));  
+                        $("#id_cliente").select2({
+                            multiple: false,
+                            header: "Selecciona una opcion",
+                            noneSelectedText: "Seleccionar",
+                            selectedList: 1
+                        });
+                        $('#myModal').modal('hide');
+                        notify('success',"Cliente agregado correctamente:"+response);
+                        getcliente(response);
+                    }else{
+                        notify('error',"Oopss error al agregar cliente"+response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
+        });
         $('body').on('click', '#savenewservice', function(){
             
             var code        = $("input[name=codigo]", $(this).parents('form:first')).val();
@@ -1936,9 +1868,84 @@ if(isPost()){
              });
             return false; // Evitar ejecutar el submit del formulario.
         });
+        $('body').on('click', '#savenewrefaccion', function(){
+            
+            var code        = $("input[name=codigo_refaccion]", $(this).parents('form:first')).val();
+            var nombre      = $("input[name=nombre_refaccion]", $(this).parents('form:first')).val();
+            var descripcion = $("input[name=descripcion_refaccion]", $(this).parents('form:first')).val();
+            var id_marca    = $("#id_marca_refaccion").val();
+            var id_submarca = $("#id_submarca_refaccion").val();
+            var modelo      = $("#modelo_refaccion").val();
+            var costoaprox  = $("#costo_aprox_refaccion").val();
+            var costoreal   = $("#costo_real_refaccion").val();
+          
+            var url = config.base+"/Catalogos/ajax/?action=get&object=savenewrefaccion"; // El script a dónde se realizará la petición.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: "codigo="+code+"&nombre="+nombre+"&descripcion="+descripcion+"&id_marca="+id_marca+"&id_submarca="+id_submarca+"&modelo="+modelo+"&costo_aprox="+costoaprox+"&costo_real="+costoreal, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+                    if(response>0){
+                        //alert("Group successfully added");
+                        $('#idrefaccion').append($('<option>', {
+                            value: response,
+                            text: code+"||"+nombre,
+                            selected:true
+                        }));  
+                        $("#idrefaccion").select2({
+                            multiple: false,
+                            header: "Selecciona una opcion",
+                            noneSelectedText: "Seleccionar",
+                            selectedList: 1
+                        });
+                        $('#myModal').modal('hide');
+                        $("#idrefaccion"). change();
+                        notify('success',"Refaccion agregada correctamente:"+response);
+                    }else{
+                        notify('error',"Oopss error al agregar refaccion"+response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
+        });
         $('body').on('blur', '.totales', function(){
             if( $(this).val()>0 ) calcTotal();
         });
+        $('body').on('blur', '.costorefaccion', function(){
+            calcTotalrefaccion();
+        });
+        $('body').on('change', '#idrefaccion', function(){
+            if( $(this).val() ){
+                var id = $("#idrefaccion").val();
+                getrefaccion(id);
+            }
+        });
+        $('body').on('change', '#id_cliente', function(){
+            if( $(this).val() ){
+                var id = $("#id_cliente").val();
+                getcliente(id);
+            }
+        });
+        $('body').on('change', '#id_marca', function(){
+            if( $(this).val() ){
+                var id = $("#id_marca").val();
+                getsubmarca(id);
+            }
+        });
+        $('body').on('change', '#id_submarca', function(){
+            if( $(this).val() ){
+                var id = $("#id_submarca").val();
+                getselectrefaccion(id);
+            }
+        });
+        $('body').on('change', '#id_aseguradora', function(){
+            if( $(this).val()>1 ){
+                $(".documentos-aseguradora").show();
+            }else{
+                $(".documentos-aseguradora").hide();
+            }
+        });
+      
         
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.

@@ -7,10 +7,10 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Orden de Reparacion";
+$page_title = "Ver Auto";
 
 /* ---------------- END PHP Custom Scripts ------------- */
-$page_css[] = "vehiculo_style.css";
+$page_css[] = "your_style.css";
 include(SYSTEM_DIR . "/inc/header.php");
 
 //include left panel (navigation)
@@ -69,11 +69,78 @@ if($data["id_cliente"]){
         $email = $datacliente["email"];
     }
 }
-$fechaalta = ($data['fecha_alta']) ?    date('Y-m-d',strtotime($data['fecha_alta'])) : "";
-$fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_promesa'])) : "";
 ?>
 
-   
+    <style>
+        body { font-family:"Arial",sans-serif; font-size:11px;color:#666;}
+        table td table td{ padding:4px 6px;border:1px solid #d0d0cf; line-height:1em; height:1em;}
+        th {background-color:#d0d0cf; font-weight:bold;padding:4px 6px;border:1px solid #d0d0cf; line-height:1.5em; height:1em;}
+        p { margin:0;}
+        img{
+            padding: 2.5px;
+        }
+       
+
+
+.superbox {
+    font-size: 0
+}
+
+.superbox-list {
+    display: inline-block;
+    width: 12.5%;
+    margin: 0;
+    position: relative
+}
+
+.superbox-list.active:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    border: 10px solid transparent;
+    border-bottom-color: #2d353c;
+    margin-left: -10px
+}
+
+.superbox-show {
+    text-align: center;
+    position: relative;
+    background: #2d353c;
+    width: 100%;
+    float: left;
+    padding: 25px;
+    display: none
+}
+
+.superbox-img {
+    max-width: 100%;
+    width: 100%;
+    cursor: pointer
+}
+
+.superbox-current-img {
+    -webkit-box-shadow: 0 5px 35px rgba(0, 0, 0, .65);
+    box-shadow: 0 5px 35px rgba(0, 0, 0, .65);
+    max-width: 100%
+}
+
+.superbox-img:hover {
+    opacity: .8
+}
+
+.superbox-close {
+    opacity: .7;
+    cursor: pointer;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: url(assets/plugins/superbox/img/close.gif) center center no-repeat;
+    width: 35px;
+    height: 35px
+}
+        
+    </style>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
@@ -82,19 +149,9 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
     <!-- MAIN CONTENT -->
     <div id="content">
         <section id="widget-grid" class="">
-            <div class="row">   
-                <div class="widget-body" style='padding-left: 15px;'>
-                    <a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'orden'))?>" ><i class="fa fa-print"></i>&nbsp;Imprimir</a>
-                    <a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'presupuesto'))?>" ><i class="fa fa-print"></i>&nbsp;Imprimir Presupuesto</a>
-                    <a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'cotizaciontrabajo'))?>" ><i class="fa fa-print"></i>&nbsp;Imprimir Cotizacion</a>
-               
-                    <a class="btn btn-info" href="<?php echo make_url("Vehiculos","view",array('id'=>$id)); ?>"> <i class="fa fa-eye"></i>&nbsp;Detalles</a>
-             
-                    <a class="btn btn-info" target='_blank' href="<?php echo make_url("Vehiculos","pdf",array('id'=>$id,'page'=>'orden')); ?>"> <i class="fa fa-eye"></i>&nbsp;PDF</a>
-                </div>
-            </div>
-            <div class="row" style="padding-top:20px">
-                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 content-view">
+             <p><a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id))?>" ><i class="fa fa-print"></i>Imprimir</a></p>
+            <div class="row">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
                         <header>
                             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
@@ -130,7 +187,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                            
                                                             <tr>
                                                                 <td style="background-color:#d0d0cf; font-weight:bold; text-align:left; width:30%;">Fecha</td>
-                                                                <td colspan="2" style=""><?php echo $fechaalta; ?></td>
+                                                                <td colspan="2" style=""><?php echo date("Y-m-d",strtotime($data["fecha_alta"])); ?></td>
                                                             </tr>
                                                            <tr>
                                                                 <td style="background-color:#d0d0cf; font-weight:bold; text-align:left; width:30%;"> Acesor </td><td colspan="2"><?php echo htmlentities($nombreasesor); ?></td>
@@ -139,14 +196,6 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                             <tr>
                                                                 <td style="background-color:#d0d0cf; font-weight:bold; text-align:left; width:30%;"> Torre </td><td colspan="2"><?php echo htmlentities($nomtaller); ?></td>
                                                             </tr>
-                                                            <?php 
-                                                            if($nomaseguradora){
-                                                                ?>
-                                                                <tr>
-                                                                    <td style="background-color:#d0d0cf; font-weight:bold; text-align:left; width:30%;"> Aseguradora </td><td colspan="2"><?php echo htmlentities($nomaseguradora); ?></td>
-                                                                </tr>
-                                                            <?php
-                                                            }?>
                                                         </table>
                                                     </td>
                                                 </tr>
@@ -161,7 +210,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                     <td colspan="8" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">DATOS DEL CLIENTE </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Nombre: </td><td colspan="2" style="width:30%;"><?php echo htmlentities($nomcliente); ?></td><td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Fecha Promesa: </td><td colspan="2"><?php echo $fechaprom; ?></td>
+                                                    <td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Nombre: </td><td colspan="2" style="width:30%;"><?php echo htmlentities($nomcliente); ?></td><td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Fecha Promesa: </td><td colspan="2"><?php echo htmlentities($data['fecha_promesa']); ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Domicilio: </td><td colspan="6"><?php echo htmlentities($domicilio) ; ?></td>
@@ -270,7 +319,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:20%;"><?php echo htmlentities($data['FarosNiebla'])  ?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: ">Comentarios: </td>
+                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
                                                                 <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosExt'])  ?></td>
                                                             </tr>
                                                         </table>
@@ -317,7 +366,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:20%;"><?php echo htmlentities($data['Guantera'])  ?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: ">Comentarios: </td>
+                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
                                                                 <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosInt'])  ?></td>
                                                             </tr>
                                                         </table>
@@ -367,7 +416,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:20%;"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: ">Comentarios: </td>
+                                                                <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
                                                                 <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosAcces'])   ?></td>
                                                             </tr>
                                                         </table>
@@ -388,7 +437,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                                 <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tapon Dir. HD: </td>
                                                                 <td colspan="" style="width:10%;"><?php  echo htmlentities($data['TaponDirHD'])  ?></td>
                                                                 <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Poliza seguro: </td>
-                                                                <td colspan="" style="width:10%;"><?php echo htmlentities($data['PolizaSeg']) ."<br>".htmlentities($data['PolizaNum'])   ?></td>
+                                                                <td colspan="" style="width:10%;"><?php echo htmlentities($data['PolizaSeg'])   ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tapon Dep. Frenos: </td>
@@ -405,149 +454,19 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                             <tr>
                                                                 <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Bateria : </td>
                                                                 <td colspan="" style="width:20%;"><?php echo htmlentities($data['Bateria'])."<br>".htmlentities($data['MarcaBateria'])  ?></td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">No. de Reporte  </td>
-                                                                <td colspan="" style="width:20%;"><?php echo htmlentities($data['ReporteNum'])  ?></td>
+                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">  </td>
+                                                                <td colspan="" style="width:20%;"><?php  ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Claxon : </td>
                                                                 <td colspan="" style="width:20%;"><?php echo htmlentities($data['Claxon'])   ?></td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">No. de Siniestro  </td>
-                                                                <td colspan="" style="width:20%;"><?php echo htmlentities($data['siniestro'])  ?></td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;"> </td>
-                                                                <td colspan="" style="width:20%;"></td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Deducible  </td>
-                                                                <td colspan="" style="width:20%;"><?php echo htmlentities($data['deducible'])  ?></td>
+                                                                <td colspan="" style="width:20%;"><?php ?></td>
                                                             </tr>
                                                             <tr>
                                                              
                                                                 <td colspan="2" style="width:20%;"><?php echo htmlentities($data['ComentariosComp'])   ?></td>
                                                                 <td colspan="2" style="width:20%;"><?php echo htmlentities($data['ComentariosDoc'])   ?></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table style="height: 100%">
-                                                            <tr>
-                                                                <td colspan="6" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Refacciones </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Status</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Costo</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Fecha</td>
-                                                            </tr>
-                                                            <?php 
-                                                            $objref = new VehiculoRefaccion();
-                                                            $dataref = $objref->getAllArr($id);
-                                                            $totalrefaccion = 0 ;
-                                                            foreach($dataref as $row) {
-                                                                $totalrefaccion+= $row['total_aprox'];  
-                                                                $nombre = $row['nombre'] ;
-                                                                if($row['detalles']){
-                                                                    $nombre=$row['detalles'];
-                                                                } 
-                                                                $status = htmlentities($row['status']);
-                                                                switch ($row['status']) {
-                                                                    case 'active':
-                                                                        $status = 'Pendiente';
-                                                                        $class  = 'label label-danger';
-                                                                        break;
-                                                                    case 'Realizado':
-                                                                        $class  = 'label label-success';
-                                                                        break;
-                                                                    case 'Stand-By':
-                                                                        $class  = 'label label-warning';
-                                                                        break;
-                                                                    default:
-                                                                        $class  = '';
-                                                                        break;
-                                                                } 
-                                                            ?>
-                                                            <tr>
-                                                                <td><?php echo $status; ?></td>
-                                                                <td><?php echo htmlentities($row['cantidad']); ?></td>
-                                                                <td><?php echo htmlentities($nombre); ?></td>
-                                                                <td><?php echo htmlentities($row['costo_aprox']); ?></td>
-                                                                <td><?php echo htmlentities($row['total_aprox']); ?></td>
-                                                                <td><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
-                                                            </tr>
-
-                                                            <?php
-                                                            } 
-                                                            ?>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td style='font-weight:bold;'>Total:</td>
-                                                                <td><strong><?php echo $totalrefaccion; ?></strong></td>
-                                                                <td></td>
-                                                            </tr>
-                                                           
-                                                        </table>
-                                                    </td>
-                                                    <td>
-                                                        <table style="height: 100%">
-                                                            <tr>
-                                                                <td colspan="5" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Servicios </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Status</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Servicio</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total</td>
-                                                                <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Fecha</td>
-                                                            </tr>
-                                                            <?php 
-                                                            $objser = new VehiculoServicio();
-                                                            $dataser = $objser->getAllArr($id);
-                                                            $totalservicio = 0 ;
-                                                            foreach($dataser as $row) {
-                                                                $totalservicio+= $row['total'];   
-                                                                $nombre = $row['nombre'] ;
-                                                                if($row['detalles']){
-                                                                    $nombre=$row['detalles'];
-                                                                }
-                                                                $status = htmlentities($row['status']);
-                                                                switch ($row['status']) {
-                                                                    case 'active':
-                                                                        $status = 'Pendiente';
-                                                                        $class  = 'label label-danger';
-                                                                        break;
-                                                                    case 'Realizado':
-                                                                        $class  = 'label label-success';
-                                                                        break;
-                                                                    case 'Stand-By':
-                                                                        $class  = 'label label-warning';
-                                                                        break;
-                                                                    default:
-                                                                        $class  = '';
-                                                                        break;
-                                                                } 
-                                                            ?>
-                                                            <tr>
-                                                                <td><?php echo $status; ?></td>
-                                                                <td><?php echo htmlentities($row['codigo']); ?></td>
-                                                                <td><?php echo htmlentities($nombre); ?></td>
-                                                                <td><?php echo htmlentities($row['total']); ?></td>
-                                                                <td><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
-                                                            </tr>
-
-                                                            <?php
-                                                            } 
-                                                            ?>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td style='font-weight:bold;'>Total:</td>
-                                                                <td><strong><?php echo $totalservicio; ?></strong></td>
-                                                                <td></td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -561,14 +480,14 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                     <?php 
                                     $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
                                     $objimg = new ImagenesVehiculo();
-                                    $dataimagenes = $objimg->getAllArr($id);
+                                    $dataimagenes = $objimg->getAllArr();
 
                                     foreach($dataimagenes as $row) {
                                         echo "<div class='superbox-list'>
                                                 <img src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."' 
                                                 data-img='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
                                                 alt='".$row['nombre']."' title='".$row['nombre']."'
-                                                max-width='150px'  max-height='150px'
+                                                width='150px'  height='150px'
                                                 class='superbox-img'
                                                 >
                                             </div>";

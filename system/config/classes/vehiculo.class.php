@@ -71,7 +71,7 @@ class Vehiculo extends AutoVehiculo {
 		
 		
 		foreach ($refacciones as $key => $value) {
-			$total        = $refaccionestotal[$key];
+			$total        = ($refaccionestotal[$key]) ? $refaccionestotal[$key] : 0 ;
 			$cant         = $cantidad[$key];
 			$detalle      = $detallesref[$key];
 			$id_refaccion = $value;

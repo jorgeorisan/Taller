@@ -9,10 +9,15 @@ class VehiculoServicio extends AutoVehiculoServicio {
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr($id)
 	{
-		$sql = "SELECT vr.id_servicio, r.codigo, r.nombre, vr.detalles, vr.status, IFNULL(vr.total,0) total
+		if(! intval( $id )){
+			return false;
+		}
+		$id=$this->db->real_escape_string($id);
+		$sql = "SELECT vr.id, vr.id_servicio, r.codigo, r.nombre, vr.detalles, vr.status, vr.created_date, IFNULL(vr.total,0) total
 		FROM vehiculo_servicio vr
 		JOIN servicio r on vr.id_servicio=r.id
-		 where vr.status !='deleted' and vr.id_vehiculo=".$id;
+		 where vr.status !='deleted' and vr.id_vehiculo=$id
+		  ORDER BY  vr.created_date";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -41,19 +46,23 @@ class VehiculoServicio extends AutoVehiculoServicio {
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$data=fromArray($_request,'vehiculo_servicio',$this->db,"add");
-		$sql= "INSERT INTO vehiculo_servicio (".$data[0].") VALUES(".$data[1]."); ";
-		$res=$this->db->query($sql);
-		$sql= "SELECT LAST_INSERT_ID();";//. $num ;
-		$res=$this->db->query($sql);
-		$set=array();
-		$id="";
-		if(!$res){ die("Error getting result"); }
-		else{
-			while ($row = $res->fetch_assoc())
-				$id= $row;
+		if(! intval( $_request["id_vehiculo"] )){
+			return false;
 		}
-		return $id["LAST_INSERT_ID()"];
+
+		$id=$this->db->real_escape_string( $_request["id_vehiculo"] );
+		$servicios      = $_request["id_servicio"];
+		$serviciostotal = $_request["total_servicio"];
+		$detallesserv   = ($_request["detalles_servicio"]) ? $_request["detalles_servicio"] : [] ;
+		foreach ($servicios as $key => $value) {
+			$total       = $serviciostotal[$key];
+			$detalle     = $detallesserv[$key];
+			$id_servicio = $value;
+			$sql  = "INSERT INTO vehiculo_servicio (id_vehiculo,id_servicio,detalles,total) VALUES(".$id. "," .$id_servicio. ",'". $detalle. "' ,"  .$total. "); ";
+			$res  = $this->db->query($sql);
+			if(!$res){ die("Error al dar de alta el servicio vehiculo:".$sql); }
+		}
+		echo 1;
 	}
 		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)

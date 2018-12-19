@@ -69,12 +69,14 @@ class ImagenesVehiculo extends AutoImagenesVehiculo {
 		}
 	}
 	   //metodo que sirve para hacer delete
-	public function deleteAll($id,$_request)
+	public function deleteAll($id,$_request=null)
 	{
-		$_request["status"]="deleted";
-		$_request["deleted_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'imagenes_vehiculo',$this->db,"update");	
-		$sql= "UPDATE imagenes_vehiculo SET $data[0]  WHERE id=".$id.";";
+		if(! intval( $id )){
+			return false;
+		}
+		$id=$this->db->real_escape_string($id);
+	
+		$sql= "UPDATE imagenes_vehiculo SET status='deleted'  WHERE id_vehiculo=".$id." and status='active';";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;

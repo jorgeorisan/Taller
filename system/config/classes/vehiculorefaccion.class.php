@@ -9,10 +9,15 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr($id)
 	{
-		$sql = "SELECT vr.id_refaccion, r.nombre, vr.detalles, vr.cantidad, IFNULL(vr.costo_aprox,0) costo_aprox, IFNULL((vr.cantidad*vr.costo_aprox),0) total_aprox 
+		if(! intval( $id )){
+			return false;
+		}
+		$id=$this->db->real_escape_string($id);
+		$sql = "SELECT vr.id, vr.id_refaccion, r.nombre, vr.detalles, vr.cantidad, vr.status, vr.created_date, IFNULL(vr.costo_aprox,0) costo_aprox, IFNULL((vr.cantidad*vr.costo_aprox),0) total_aprox 
 		FROM vehiculo_refaccion vr
 		JOIN refaccion r on vr.id_refaccion=r.id
-		 where vr.status='active' and vr.id_vehiculo=".$id;
+		 where vr.status !='deleted' and vr.id_vehiculo=$id
+		 ORDER BY  vr.created_date";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -41,19 +46,26 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$data=fromArray($_request,'vehiculo_refaccion',$this->db,"add");
-		$sql= "INSERT INTO vehiculo_refaccion (".$data[0].") VALUES(".$data[1]."); ";
-		$res=$this->db->query($sql);
-		$sql= "SELECT LAST_INSERT_ID();";//. $num ;
-		$res=$this->db->query($sql);
-		$set=array();
-		$id="";
-		if(!$res){ die("Error getting result"); }
-		else{
-			while ($row = $res->fetch_assoc())
-				$id= $row;
+		if(! intval( $_request["id_vehiculo"] )){
+			return false;
 		}
-		return $id["LAST_INSERT_ID()"];
+
+		$id=$this->db->real_escape_string( $_request["id_vehiculo"] );
+		$refacciones      = $_request["id_refaccion"];
+		$refaccionestotal = $_request["costorefaccion"];
+		$cantidad		  = $_request["cantidad_refaccion"];
+		$detallesref	  = $_request["detalles_refaccion"];
+		
+		foreach ($refacciones as $key => $value) {
+			$total        = ($refaccionestotal[$key]) ? $refaccionestotal[$key] : 0 ;
+			$cant         = $cantidad[$key];
+			$detalle      = $detallesref[$key];
+			$id_refaccion = $value;
+			$sql  = "INSERT INTO vehiculo_refaccion (id_vehiculo,id_refaccion,detalles,cantidad,costo_aprox) VALUES(".$id. "," .$id_refaccion. ",'". $detalle. "'," .$cant. "," .$total. "); ";
+			$res  = $this->db->query($sql);
+			if(!$res){ die("Error al dar de alta la refaccion vehiculo".$sql); }
+		}
+		echo 1;
 	}
 		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)

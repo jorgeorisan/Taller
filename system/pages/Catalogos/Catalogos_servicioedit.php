@@ -72,7 +72,7 @@ if(isPost()){
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="name">Codigo</label>
-                                                <input type="text" class="form-control" placeholder="Codigo Servicio" name="nombre" value="<?php echo htmlentities($data['codigo']); ?>" >                                                                                               
+                                                <input type="text" class="form-control" placeholder="Codigo Servicio" name="codigo" value="<?php echo htmlentities($data['codigo']); ?>" >                                                                                               
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Servicio</label>

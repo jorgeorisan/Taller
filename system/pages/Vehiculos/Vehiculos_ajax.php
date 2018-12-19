@@ -73,6 +73,28 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 				echo 0;
 			}
 			break;
+		case 'change-statusservicio':
+		    $obj = new HistorialVehiculoservicio();
+			if(isPost()){
+			    $id=$obj->addAll(getPost());
+			    if($id>0){
+			        echo $id;
+			    }else{
+			        echo 0;
+			    }
+			}
+			break;
+		case 'change-statusrefaccion':
+		    $obj = new HistorialVehiculorefaccion();
+			if(isPost()){
+			    $id=$obj->addAll(getPost());
+			    if($id>0){
+			        echo $id;
+			    }else{
+			        echo 0;
+			    }
+			}
+			break;
 		
 		default:
 			# code...

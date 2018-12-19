@@ -20,6 +20,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 		case 'savenewclient':
 		    $obj = new Cliente();
 			if(isPost()){
+			    $obj = new Cliente();
 			    $id=$obj->addAll(getPost());
 			    if($id>0){
 			        echo $id;

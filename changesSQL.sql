@@ -82,3 +82,116 @@ ADD CONSTRAINT `id_vehiculo_vehiculorefaccion_dx`
   REFERENCES `systemmy_tallerhp`.`vehiculo` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+-- 29 nov 2018
+
+
+CREATE TABLE `systemmy_tallerhp`.`historial_vehiculoservicio` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_vehiculoservicio` INT NULL,
+  `id_user` INT NULL,
+  `status_anterior` VARCHAR(45) NULL,
+  `status` VARCHAR(45) NULL,
+  `comentarios` VARCHAR(300) NULL,
+  `created_date` VARCHAR(45) NULL DEFAULT 'current_timestamp',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_vehiculoservicio_historialvehiculoservicio_dx`
+    FOREIGN KEY (`id_vehiculoservicio`)
+    REFERENCES `systemmy_tallerhp`.`vehiculo_servicio` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_user_historialvehiculoservicio_dx`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `systemmy_tallerhp`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+
+CREATE TABLE `systemmy_tallerhp`.`historial_vehiculorefaccion` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_vehiculorefaccion` INT NULL,
+  `id_user` INT NULL,
+  `status_anterior` VARCHAR(45) NULL,
+  `status` VARCHAR(45) NULL,
+  `comentarios` VARCHAR(300) NULL,
+  `created_date` VARCHAR(45) NULL DEFAULT 'current_timestamp',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_vehiculorefaccion_historialvehiculorefaccion_dx`
+    FOREIGN KEY (`id_vehiculorefaccion`)
+    REFERENCES `systemmy_tallerhp`.`vehiculo_refaccion` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_user_historialvehiculorefaccion_dx`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `systemmy_tallerhp`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+
+ALTER TABLE `systemmy_tallerhp`.`historial_vehiculoservicio` 
+CHANGE COLUMN `created_date` `created_date` TIMESTAMP NULL DEFAULT current_timestamp ;
+
+ALTER TABLE `systemmy_tallerhp`.`historial_vehiculorefaccion` 
+CHANGE COLUMN `created_date` `created_date` TIMESTAMP NULL DEFAULT current_timestamp ;
+
+
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Servicio Vehiculo Borrar', 'Vehiculos', 'vehiculoserviciodelete');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Refaccion Vehiculo Borrar', 'Vehiculos', 'vehiculorefacciondelete');
+
+
+--
+-- 19 dic 2018
+--agregar fechas al historial de servicios
+
+ALTER TABLE `systemmy_tallerhp`.`historial_vehiculoservicio` 
+ADD COLUMN `fecha_inicio` VARCHAR(45) NULL AFTER `created_date`,
+ADD COLUMN `fecha_estimada` VARCHAR(45) NULL AFTER `fecha_inicio`,
+ADD COLUMN `fecha_fin` VARCHAR(45) NULL AFTER `fecha_estimada`;
+
+ALTER TABLE `systemmy_tallerhp`.`historial_vehiculorefaccion` 
+ADD COLUMN `fecha_inicio` VARCHAR(45) NULL AFTER `created_date`,
+ADD COLUMN `fecha_estimada` VARCHAR(45) NULL AFTER `fecha_inicio`,
+ADD COLUMN `fecha_fin` VARCHAR(45) NULL AFTER `fecha_estimada`;
+
+
+ALTER TABLE `systemmy_tallerhp`.`historial_vehiculorefaccion` 
+ADD COLUMN `id_userasigned` INT NULL AFTER `fecha_fin`;
+
+ALTER TABLE `systemmy_tallerhp`.`historial_vehiculoservicio` 
+ADD COLUMN `id_userasigned` INT NULL AFTER `fecha_fin`;
+
+DELIMITER |
+CREATE TRIGGER hist_serv AFTER INSERT ON vehiculo_servicio
+  FOR EACH ROW BEGIN
+    INSERT INTO historial_vehiculoservicio (id_vehiculoservicio,id_user,status,comentarios) values(NEW.id, null,NEW.status,'Inicial');
+  END
+|
+DELIMITER ;
+
+DELIMITER |
+CREATE TRIGGER hist_refac AFTER INSERT ON vehiculo_refaccion
+  FOR EACH ROW BEGIN
+    INSERT INTO historial_vehiculorefaccion (id_vehiculorefaccion,id_user,status,comentarios) values(NEW.id, null,NEW.status,'Inicial');
+  END
+|
+DELIMITER ;
+--
+-- 19 dic 2018
+--agregar almacen
+
+CREATE TABLE `systemmy_tallerhp`.`almacen_taller` (
+  `id` INT NOT NULL,
+  `id_taller` INT NULL,
+  `nombre` VARCHAR(200) NULL,
+  `ubicacion` VARCHAR(45) NULL,
+  `status` VARCHAR(45) NULL DEFAULT 'active',
+  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_taller_almacentaller_dx`
+    FOREIGN KEY (`id_taller`)
+    REFERENCES `systemmy_tallerhp`.`taller` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

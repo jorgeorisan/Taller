@@ -53,7 +53,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 				$u  = new Refaccion();
 				if($res       = $u->getTable($id)){
 					$lineId   = rand(1000, 100000);
-					$detalles = htmlentities( $res["nombre"] );
+					$detalles = htmlentities( $res["nombre"] )."<input type='hidden' name='detalles_refaccion[]'>";
 					if ( $res['detalles'] )  $detalles ="<input type='text' name='detalles_refaccion[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
 					
 					$costoaprox = ($res["costo_aprox"] && $aseg==0 ) ? $res["costo_aprox"] : '' ;
@@ -95,7 +95,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 				if($res = $u->getTable($id)){
 					$lineId   = rand(1000, 100000);
 					$u2       = new ServicioPaquete();
-					$detalles = htmlentities( $res["nombre"] );
+					$detalles = htmlentities( $res["nombre"] )."<input type='hidden' name='detalles_servicio[]'>";
 					if ( $res['detalles'] )  $detalles ="<input type='text' name='detalles_servicio[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
 					$data="
 						<tr class='servicio' lineid='".$lineId."'>
@@ -171,6 +171,55 @@ if (  isset($_GET["action"]) && $_GET["object"]){
                 else    echo 0;
 		
 			break;
+		case 'showpopupChangeStatusServicio':
+			$page      = $_GET["page"];
+			$id        = $_GET["id"];
+			$statusant = $_GET["statusant"];
+		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupChangeStatusServicio.php');
+            if( $html )	echo $data=$html; 
+                else    echo 0;
+		
+			break;
+		case 'showpopupChangeStatusRefaccion':
+			$page      = $_GET["page"];
+			$id        = $_GET["id"];
+			$statusant = $_GET["statusant"];
+		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupChangeStatusRefaccion.php');
+            if( $html )	echo $data=$html; 
+                else    echo 0;
+		
+			break;
+		case 'showpopupHistoryStatusServicio':
+			$page      = '';
+			$id        = $_GET["id"];
+		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupHistoryStatusServicio.php');
+            if( $html )	echo $data=$html; 
+                else    echo 0;
+		
+			break;
+		case 'showpopupHistoryStatusRefaccion':
+			$page      = '';
+			$id        = $_GET["id"];
+		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupHistoryStatusRefaccion.php');
+            if( $html )	echo $data=$html; 
+                else    echo 0;
+		
+			break;
+		
+		case 'showpopupaddservicetoorden':
+			$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupaddservicetoorden.php');
+			break;
+		case 'showpopupaddrefacciontoorden':
+			if( isset($_GET["id"]) && intval($_GET["id"]) ){
+				$id = $_GET["id"];
+				$obj = new Vehiculo();
+				$datavehiculo = $obj->getTable($id);
+				if ( !$datavehiculo ) {
+				    echo "error id";
+				}
+				$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupaddrefacciontoorden.php');
+			}
+			break;
 		case 'savenewservice':
 		    $obj = new Servicio();
 			if(isPost()){
@@ -179,10 +228,26 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			    else      echo 0;
 			}
 			break;
+		case 'savenewservicetoorden':
+		    $obj = new VehiculoServicio();
+			if(isPost()){
+			    $id=$obj->addAll(getPost());
+			    if($id>0) echo $id;
+			    else      echo 0;
+			}
+
+			break;
 		case 'showpopuprefaccion':
-			
-		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_adpopuprefaccion.php');
-          
+			$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_adpopuprefaccion.php');
+			break;
+		case 'savenewrefacciontoorden':
+		    $obj = new VehiculoRefaccion();
+			if(isPost()){
+			    $id=$obj->addAll(getPost());
+			    if($id>0) echo $id;
+			    else      echo 0;
+			}
+
 			break;
 		case 'showpopuprefaccionbuscar':
 			

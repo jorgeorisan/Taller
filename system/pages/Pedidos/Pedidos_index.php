@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Autos";
+$page_title = "Pedidos";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -17,7 +17,7 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-$obj = new Vehiculo();
+$obj = new Pedido();
 $data = $obj->getAllArr();
 //print_r($users);
 ?>
@@ -35,10 +35,7 @@ $data = $obj->getAllArr();
 	<div id="content">
 		<section id="widget-grid" class="">
 			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
-				<p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" ><i class="fas fa-wrench"></i>&nbsp;Orden de Reparacion</a></p>
-			</div>
-			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
-				  <p><a class="btn btn-info" href="<?php echo make_url("Vehiculos","index")?>" ><i class="fas fa-clipboard-list"></i>&nbsp;Modo Vista</a></p>
+				<p><a class="btn btn-success" href="<?php echo make_url("Pedidos","add")?>" ><i class="fas fa-wrench"></i>&nbsp;Nuevo Pedido</a></p>
 			</div>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -55,19 +52,19 @@ $data = $obj->getAllArr();
 									<thead>
 										<tr>
 											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-list-ol  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Orden
+												<i class="fa fa-fw fa-list-ol  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Pedido
 											</th>
 											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw fa-file-alt text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Datos Auto
+												<i class="fa fa-fw fa-file-alt text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Proveedor
 											</th>
 											<th class = "col-md-1" >
-												<i class="fa fa-fw  fa-credit-card-front text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Matricula
+												<i class="fa fa-fw  fa-credit-card-front text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Referencia
 											</th>
 											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Cliente
+												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Estatus
 											</th>
 											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-calendar-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Orden
+												<i class="fa fa-fw  fa-calendar-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Pedido
 											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
 												<i class="fa fa-fw  fa-car-garage  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Taller
