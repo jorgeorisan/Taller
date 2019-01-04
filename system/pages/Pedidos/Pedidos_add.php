@@ -25,55 +25,14 @@ include(SYSTEM_DIR . "/inc/header.php");
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
 if(isPost()){
-    $obj = new Vehiculo();
+    $obj = new Pedido();
     $id  = $obj->addAll(getPost());
     //$id=240;
     
     if ($id > 0){
-        if (isset($_FILES['filevehiculo'])){
-            $cantidad = count($_FILES["filevehiculo"]["tmp_name"]);
-            $carpeta  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
-            if ( !file_exists($carpeta) ) {
-                mkdir($carpeta, 0777, true);
-                $carpetaimg = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
-                if ( !file_exists($carpetaimg) ) {
-                    mkdir($carpetaimg, 0777, true);
-                }
-            }else{
-                $carpetaimg = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
-            }
-            for ($i=0; $i < $cantidad; $i++){
-                //Comprobamos si el fichero es una imagen
-                $subir=0;
-                if ($_FILES['filevehiculo']['type'][$i]=='image/png' || $_FILES['filevehiculo']['type'][$i]=='image/jpeg'){
-                    if ( isset($_POST['deletefilevehiculo'] ) ) {
-                        $imagesdeleted = $_POST['deletefilevehiculo'];
-                        $pos = strpos($imagesdeleted, $_FILES["filevehiculo"]["name"][$i]); //quitamos las imagenes eliminadas
-                        if ($pos === false) {
-                            move_uploaded_file($_FILES["filevehiculo"]["tmp_name"][$i], $carpetaimg."/".$_FILES["filevehiculo"]["name"][$i]);
-                            $subir=1;
-                        }   
-                    }else{
-                        move_uploaded_file($_FILES["filevehiculo"]["tmp_name"][$i], $carpetaimg."/".$_FILES["filevehiculo"]["name"][$i]);
-                        $subir=1;
-                    } 
-                    if($subir)  {
-                        $objimg = new ImagenesVehiculo();
-                        $idimg  = $objimg->addImage($id,$_FILES["filevehiculo"]["name"][$i]);  
-                        if(!$idimg){
-                            echo "Error al añadir imagen".$id."->".$carpetaimg."->".$_FILES["filevehiculo"]["name"][$i];
-                            exit;
-                        }  
-                    } 
-                $validar=true;
-                }
-                else $validar=false;
-                    
-            }
-        }
-        informSuccess(true, make_url("Vehiculos","showorden",array('id'=>$id)));
+        informSuccess(true, make_url("Pedidos","showorden",array('id'=>$id)));
     }else{
-        informError(true,make_url("Vehiculos","add"));
+        informError(true,make_url("Pedidos","add"));
     }
 }
 ?>
@@ -81,7 +40,7 @@ if(isPost()){
 
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-    <?php $breadcrumbs["Vehiculos"] = APP_URL."/Vehiculos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+    <?php $breadcrumbs["Pedidos"] = APP_URL."/Pedidos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row"> 
@@ -91,14 +50,14 @@ if(isPost()){
                             <h2><i class="fa fa-automobile"></i>&nbsp;<?php echo $page_title ?></h2>
                     </header>
                     <fieldset>          
-                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
+                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Pedidos","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
 
                             <section id="widget-grid" class="">
                                 <article class="col-sm-12 col-md-12 col-lg-12"  id="article-1">
                                     <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-recepcion" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showrecepcion').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-building"></i> </span><h2>Recepcion</h2>
+                                            <i class="far fa-building"></i> </span><h2>Datos Pedido</h2>
                                         </header>
                                         <div class="showrecepcion" style="display: ;">
                                             <!-- widget edit box -->
@@ -107,76 +66,21 @@ if(isPost()){
                                                 <div class="col-sm-12">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de orden" name="fecha_alta" >
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de pedido" name="fecha_alta" >
                                                             
                                                         </div>
                                                         <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_user" id="id_user">
-                                                                <option value="" selected disabled>Selecciona Asesor</option>
-                                                                <?php 
-                                                                $obj = new User();
-                                                                $list=$obj->getAllArr();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        $selected = "";
-                                                                        if ($_SESSION['user_id'] == $val['id'] )
-                                                                            $selected = "selected";
-                                                                        
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                 ?>
-                                                            </select>
+                                                            <input type="text" class="form-control" autocomplete="off" placeholder="Nombre Pedido" name="nombre" >
+                                                            
                                                         </div>
+                                                        
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" placeholder="Fecha promesa de entrega" name="fecha_promesa" >
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_taller" id="id_taller">
-                                                                <option value="" disabled>Selecciona Taller</option>
+                                                            <select style="width:100%" class="select2" name="id_proveedor" id="id_proveedor">
+                                                                <option value="" selected disabled>Selecciona Proveedor</option>
                                                                 <?php 
-                                                                $obj = new Taller();
-                                                                $list=$obj->getAllArr();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        $selected = "";
-                                                                        if ($_SESSION['user_info']['id_taller'] == $val['id'] )
-                                                                            $selected = "selected";
-
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                 ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">    
-                                                        <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_aseguradora" id="id_aseguradora">
-                                                                <option value="1" selected disabled>Selecciona Aseguradora</option>
-                                                                <?php 
-                                                                $obj = new Aseguradora();
-                                                                $list=$obj->getAllArr();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        $selected = "";
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                 ?>
-                                                            </select>
-                                                        </div>                                                 
-                                                    </div> 
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_cliente" id="id_cliente">
-                                                                <option value="" selected disabled>Selecciona Cliente</option>
-                                                                <?php 
-                                                                $obj = new Cliente();
+                                                                $obj = new Proveedor();
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
@@ -187,11 +91,22 @@ if(isPost()){
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-2">
-                                                         <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupclientes()" > <i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-6" id="contcliente">
-                                                    
+                                                    <div class="col-sm-4">    
+                                                        <div class="form-group">
+                                                            <select style="width:100%" class="select2" name="id_almacen" id="id_almacen">
+                                                                <option value="1" selected disabled>Selecciona Almacen</option>
+                                                                <?php 
+                                                                $obj = new Almacen();
+                                                                $list=$obj->getAllArr($_SESSION['user_info']['id_taller']);
+                                                                if (is_array($list) || is_object($list)){
+                                                                    foreach($list as $val){
+                                                                        $selected = "";
+                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                    }
+                                                                }
+                                                                 ?>
+                                                            </select>
+                                                        </div>                                                 
                                                     </div> 
                                                 </div>
                                             </div>
@@ -209,6 +124,38 @@ if(isPost()){
                                                 <div class="col-sm-12">
                                                     <div class="col-sm-1"> <input style='' type='number' class="form-control" id='selectcantidad_refaccion' value='1'> </div>
                                                     <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <div class="col-sm-6">
+                                                                <select style="width:50%" class="select2" name="id_marca" id="id_marca">
+                                                                    <option value="" selected disabled>Selecciona Marca</option>
+                                                                    <?php 
+                                                                    $obj = new Marca();
+                                                                    $list=$obj->getAllArr();
+                                                                    if (is_array($list) || is_object($list)){
+                                                                        foreach($list as $val){
+                                                                            echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group" id="contsubmarca">
+                                                                    <select style="width:50%" class="select2" name="id_submarca" id="id_submarca">
+                                                                        <option value="" selected disabled>Selecciona Modelo</option>
+                                                                        <?php 
+                                                                        $obj = new SubMarca();
+                                                                        $list=$obj->getAllArr();
+                                                                        if (is_array($list) || is_object($list)){
+                                                                            foreach($list as $val){
+                                                                                echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group" id='contrefaccion'>
                                                             Selecciona primero el modelo del vehiculo
                                                         </div>
@@ -314,10 +261,26 @@ if(isPost()){
 <script>
    
     $(document).ready(function() {
-        document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
-
+         $(".select2").select2({
+            multiple: false,
+            header: "Selecciona una opcion",
+            noneSelectedText: "Seleccionar",
+            selectedList: 1
+        });
         /*GENERALES*/
-        
+        getsubmarca= function(id){
+            if ( ! id ) return;
+            $("#contsubmarca").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
+            $.get(config.base+"/Vehiculos/ajax/?action=get&object=getsubmarca&id=" + id, null, function (response) {
+                    if ( response ){
+                        $("#contsubmarca").html(response);
+                        $('#id_submarca').select2();
+                    }else{
+                        notify('error', 'Error al obtener los datos del cliente');
+                        return false;
+                    }     
+            });
+        }
         validateForm =function(){
             var fecha_alta    = $("input[name=fecha_alta]").val();
             var fecha_promesa = $("input[name=fecha_promesa]").val();
@@ -482,8 +445,21 @@ if(isPost()){
                 getrefaccion(id);
             }
         });
-       
-        
+        //marca
+        $('body').on('change', '#id_marca', function(){
+            if( $(this).val() ){
+                var id = $("#id_marca").val();
+                getsubmarca(id);
+            }
+        });
+        //submarca
+        $('body').on('change', '#id_submarca', function(){
+            if( $(this).val() ){
+                var id = $("#id_submarca").val();
+                getselectrefaccion(id);
+            }
+        });
+      
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.
          * It initializes and checks for all basic elements of the page

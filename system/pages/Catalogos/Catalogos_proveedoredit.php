@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Marca";
+$page_title = "Editar Proveedor";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,41 +24,66 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Catalogos","proveedor"));
+
+$obj = new Proveedor();
+$data = $obj->getTable($id);
+if ( !$data ) {
+    informError(true,make_url("Catalogos","proveedor"));
+}
 if(isPost()){
-    $obj = new Marca();
-    $id=$obj->addAll(getPost());
-    if($id>0){
-        informSuccess(true, make_url("Catalogos","marca"));
+    $obj = new Proveedor();
+    $id = $obj->updateAll($id,getPost());
+    if( $id  ) {
+         informSuccess(true, make_url("Catalogos","proveedor"));
     }else{
-        informError(true,make_url("Catalogos","marca"));
+        informError(true, make_url("Catalogos","proveedoredit",array('id'=>$id)),"proveedoredit");
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Marca"] = APP_URL."/Catalogos/marca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Proveedor"] = APP_URL."/Catalogos/proveedor"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
             <section id="widget-grid" class="">
-                <article class="col-sm-12 col-md-6 col-lg-6"  id="">
+                 <article class="col-sm-12 col-md-6 col-lg-6"  id="">
                     <div class="jarviswidget  jarviswidget-sortables" id="wid-id-0"
                     data-widget-colorbutton="false" data-widget-editbutton="false" 
                     data-widget-deletebutton="false" data-widget-collapsed="false">
                         <!-- Widget ID (each widget will need unique ID)-->
-                        <header> <span class="widget-icon"> 
-                            <i class="fa fa-plus"></i> </span><h2><?php echo $page_title ?></h2>
+                        <header>
+                            <span class="widget-icon"> 
+                                <i class="fa fa-edit"></i>
+                            </span>
+                            <h2><?php echo $page_title ?></h2>
                         </header>
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
-                                    <div class="tl-body">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","proveedoredit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                   <div class="tl-body">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="name">Marca</label>
-                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre"  >
+                                                <label for="name">Proveedor</label>
+                                                <input type="text" class="form-control" placeholder="Nombre proveedor" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">RFC</label>
+                                                <input type="text" class="form-control" placeholder="RFC proveedor" name="rfc" value="<?php echo htmlentities($data['rfc']); ?>" >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Direccion</label>
+                                                <input type="text" class="form-control" placeholder="Direccion proveedor" name="direccion" value="<?php echo htmlentities($data['direccion']); ?>" >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Telefono</label>
+                                                <input type="text" class="form-control" placeholder="Telefono proveedor" name="telefono" value="<?php echo htmlentities($data['telefono']); ?>" >
                                             </div>
                                         </div>
                                         <div class="col-sm-12">

@@ -278,31 +278,34 @@ function delete($id,$module,$table){
   $pagereturn = 'index';
   
   switch ($table) {
-    case 'taller':             $obj = new Taller();               $pagereturn = $table; break;
-    case 'marca':              $obj = new Marca();                $pagereturn = $table; break;
-    case 'submarca':           $obj = new SubMarca();             $pagereturn = $table; break;
-    case 'aseguradora':        $obj = new Aseguradora();          $pagereturn = $table; break;
-    case 'modelo':             $obj = new SubMarca();             $pagereturn = $table; break;
-    case 'trabajo':            $obj = new Trabajo();              $pagereturn = $table; break;
+    case 'taller':             $obj = new Taller();             $pagereturn = $table;   break;
+    case 'marca':              $obj = new Marca();              $pagereturn = $table;   break;
+    case 'submarca':           $obj = new SubMarca();           $pagereturn = $table;   break;
+    case 'aseguradora':        $obj = new Aseguradora();        $pagereturn = $table;   break;
+    case 'modelo':             $obj = new SubMarca();           $pagereturn = $table;   break;
+    case 'trabajo':            $obj = new Trabajo();            $pagereturn = $table;   break;
     case 'cliente':            $obj = new Cliente();                                    break;
     case 'user':               $obj = new User();                                       break;
     case 'permiso':            $obj = new Permiso();                                    break;
     case 'vehiculo':           $obj = new Vehiculo();                                   break;
-    case 'usertype':           $obj = new UserType();            $pagereturn = $table;  break;
-    case 'servicio':           $obj = new Servicio();            $pagereturn = $table;  break;
-    case 'refaccion':          $obj = new Refaccion();           $pagereturn = $table;  break;
-    case 'vehiculoservicio':   $obj = new VehiculoServicio();    $pagereturn = 'view';  break;
-    case 'vehiculorefaccion':  $obj = new VehiculoRefaccion();   $pagereturn = 'view';  break;
+    case 'usertype':           $obj = new UserType();          $pagereturn = $table;    break;
+    case 'servicio':           $obj = new Servicio();          $pagereturn = $table;    break;
+    case 'refaccion':          $obj = new Refaccion();         $pagereturn = $table;    break;
+    case 'vehiculoservicio':   $obj = new VehiculoServicio();  $pagereturn = 'view';    break;
+    case 'vehiculorefaccion':  $obj = new VehiculoRefaccion(); $pagereturn = 'view';    break;
+    case 'almacen':            $obj = new Almacen();           $pagereturn = $table;    break;
+    case 'proveedor':          $obj = new Proveedor();         $pagereturn = $table;    break;
+    case 'pedido':             $obj = new Pedido();            $pagereturn = $table;    break;
+    case 'pedidorefaccion':    $obj = new PedidoRefaccion();   $pagereturn = 'view';    break;
     default:
       echo "no se encontro tabla en func.global ".$table;
       exit;
       break;
   }
+  echo $id;
   $data = $obj->getTable($id);
   
 
-  echo $pagereturn;
-  exit;
   if ( !$data ) 
       informError(true,make_url($module,$pagereturn));
 

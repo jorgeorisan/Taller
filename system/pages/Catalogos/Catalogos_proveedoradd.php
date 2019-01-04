@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Marca";
+$page_title = "Agregar Proveedor";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -25,19 +25,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
 if(isPost()){
-    $obj = new Marca();
+    $obj = new Proveedor();
     $id=$obj->addAll(getPost());
     if($id>0){
-        informSuccess(true, make_url("Catalogos","marca"));
+        informSuccess(true, make_url("Catalogos","proveedor"));
     }else{
-        informError(true,make_url("Catalogos","marca"));
+        informError(true,make_url("Catalogos","proveedor"));
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Marca"] = APP_URL."/Catalogos/marca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Proveedor"] = APP_URL."/Catalogos/proveedor"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -53,12 +53,24 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","proveedoradd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
                                     <div class="tl-body">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="name">Marca</label>
-                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre"  >
+                                                <label for="name">Proveedor</label>
+                                                <input type="text" class="form-control" placeholder="Nombre proveedor" name="nombre"  >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">RFC</label>
+                                                <input type="text" class="form-control" placeholder="RFC proveedor" name="rfc"  >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Direccion</label>
+                                                <input type="text" class="form-control" placeholder="Direccion proveedor" name="direccion"  >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Telefono</label>
+                                                <input type="text" class="form-control" placeholder="Telefono proveedor" name="telefono"  >
                                             </div>
                                         </div>
                                         <div class="col-sm-12">

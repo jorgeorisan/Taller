@@ -68,13 +68,13 @@ if(isPost()){
                             <div class="widget-body">
                                 <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
                                    <div class="tl-body">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label for="name">Marca</label>
                                                 <input type="text" class="form-control" placeholder="Nombre marca" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                            <div class="form-actions" style="text-align: center">
                                                 <div class="row">
                                                    <div class="col-md-12">

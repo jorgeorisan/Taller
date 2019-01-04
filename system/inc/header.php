@@ -100,6 +100,9 @@
     .page-footer{position: fixed; bottom:0;}
     body.smart-style-7 .minifyme { background: #323950 !important;}
     input[disabled] {color: #bbb !important;}
+	#resultado{
+		padding-top:15px;
+	}
 
 </style>
 

@@ -27,27 +27,27 @@ include(SYSTEM_DIR . "/inc/nav.php");
 if(isset($request['params']['id'])   && $request['params']['id']>0)
     $id=$request['params']['id'];
 else
-    informError(true,make_url("Catalogos","modelo"));
+    informError(true,make_url("Catalogos","submarca"));
 
 $obj = new SubMarca();
 $data = $obj->getTable($id);
 if ( !$data ) {
-    informError(true,make_url("Catalogos","modelo"));
+    informError(true,make_url("Catalogos","submarca"));
 }
 if(isPost()){
     $obj = new SubMarca();
     $id = $obj->updateAll($id,getPost());
     if( $id  ) {
-         informSuccess(true, make_url("Catalogos","modelo"));
+         informSuccess(true, make_url("Catalogos","submarca"));
     }else{
-        informError(true, make_url("Catalogos","modeloedit",array('id'=>$id)),"modeloedit");
+        informError(true, make_url("Catalogos","submarcaedit",array('id'=>$id)),"submarcaedit");
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Modelo"] = APP_URL."/Catalogos/modelo"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Modelo"] = APP_URL."/Catalogos/submarca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -66,17 +66,17 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","modeloedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","submarcaedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
                                     <div class="tl-body">
                                         <div class="col-sm-13">
                                             <div class="form-group">
-                                                <label for="name">Submodelo</label> 
-                                                <input type="text" required class="form-control" placeholder="Capture Submodelo" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>" >
+                                                <label for="name">Modelo</label> 
+                                                <input type="text" required class="form-control" placeholder="Capture modelo" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>" >
                                             </div>                            
                                             <div class="form-group">
-                                                <label for="name">Modelo</label><br>
-                                                <select style="width:100%" class="select2" name="id_modelo">
-                                                    <option value="">Seleccione una Modelo</option>
+                                                <label for="name">Marca</label><br>
+                                                <select style="width:100%" class="select2" name="id_marca">
+                                                    <option value="">Seleccione una Marca</option>
                                                     <?php 
                                                         $obj = new Marca();
                                                         $list=$obj->getAllArr();
@@ -141,8 +141,8 @@ if(isPost()){
         var nombre = $("input[name=nombre]").val();
         if ( ! nombre )  return notify("info","El nombre es requerido");
 
-         var id_modelo = $('select[name=id_modelo] option:selected').val();
-        if ( ! id_modelo )  return notify("info","La modelo es requerida");
+        var id_marca = $('select[name=id_marca] option:selected').val();
+        if ( ! id_marca )  return notify("info","La marca es requerida");
 
         $("#main-form").submit();       
     }

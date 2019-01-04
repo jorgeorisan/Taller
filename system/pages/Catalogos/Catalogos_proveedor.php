@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Pedidos";
+$page_title = "Proveedores";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -17,22 +17,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-$obj = new Pedido();
+$obj = new Proveedor();
 $data = $obj->getAllArr();
-//print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-	<?php $breadcrumbs["Pedidos"] = APP_URL."/Pedidos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
-    
-
+	<?php
+		include(SYSTEM_DIR . "/inc/ribbon.php");
+	?>
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
-				<p><a class="btn btn-success" href="<?php echo make_url("Pedidos","add")?>" ><i class="fas fa-wrench"></i>&nbsp;Nuevo Pedido</a></p>
-			</div>
+			<p><a class="btn btn-success" href="<?php echo make_url("Catalogos","proveedoradd")?>" >Nuevo Proveedor</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -47,83 +44,34 @@ $data = $obj->getAllArr();
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-list-ol  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Pedido
-											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw fa-file-alt text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Proveedor
-											</th>
-											<th class = "col-md-1" >
-												<i class="fa fa-fw  fa-credit-card-front text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Nombre
-											</th>
-											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Estatus
-											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-calendar-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Pedido
-											</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-car-garage  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Almacen
-											</th>
-											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
-											</th>
+											<th class = "col-md-4" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
+											<th class = "col-md-1" data-hide=""><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>RFC</th>
+											<th class = "col-md-1" data-hide=""><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Status</th>
+											<th class = "col-md-2" data-hide=""><i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
 										</tr>
 									</thead>
 									<tbody>
 										<?php foreach($data as $row){
-											$nomalmacen      = "";
-											$nomrefaccion    = "";
-											$nomproveedor    = "";
-											if($row["id_almacentaller"]){
-												$objalmacen = new AlmacenTaller();
-												$dataalmacen = $objalmacen->getTable($row["id_almacentaller"]);
-												if($dataalmacen){ $nomalmacen = $dataalmacen["nombre"]; }
-											}
-											if($row["id_refaccion"]){
-												$objrefaccion  = new Refaccion();
-												$datarefaccion = $objrefaccion->getTable($row["id_refaccion"]);
-												if($datarefaccion){ $nomrefaccion = $datrefaccion["nombre"]; }
-											}
-											if($row["id_proveedor"]){
-												$objproveedor = new Proveedor();
-												$dataproveedor = $objproveedor->getTable($row["id_proveedor"]);
-												if($dataproveedor){ $nomproveedor = $dataproveedor["nombre"]; }
-											}
-											switch ($row['status']) {
-												case 'active':
-													$status = "En espera";
-													break;
-												default:
-													$status = $status;
-													break;
-											}
-											
-										?>
+											?>
 											<tr>
-												<td><a class="" href="<?php echo make_url("Pedidos","view",array('id'=>$row['id'])); ?>"><?php echo $row['id'] ?></a></td>
-												<td><?php echo htmlentities($nomproveedor) ?></td>
-												<td><?php echo htmlentities($row['nombre']) ?></td>
-												<td><?php echo htmlentities($status) ?></td>
-												<td><?php echo htmlentities($row['fecha_alta'])?></td>
-												<td><?php echo htmlentities($nomalmacen) ?></td>
-												
+												<td><?php echo htmlentities($row['nombre'])?></td>
+												<td><?php echo htmlentities($row['rfc'])?></td>
+												<td><?php echo htmlentities($row['status']) ?></td>												
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 															Accion <span class="caret"></span>
 														</button>
 														<ul class="dropdown-menu">
-															
 															<li>
-																<a class="" href="<?php echo make_url("Pedidos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Detalles</a>
+																<a class="" href="<?php echo make_url("Catalogos","proveedorview",array('id'=>$row['id'])); ?>">Ver</a>
 															</li>
 															<li>
-																<a class="" href="<?php echo make_url("Pedidos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>
+																<a class="" href="<?php echo make_url("Catalogos","proveedoredit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Pedidos","deletepedido",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Catalogos","proveedordelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -193,6 +141,8 @@ $data = $obj->getAllArr();
 				responsiveHelper_dt_basic.respond();
 			}
 		});
+
+	}
 	
 		 pageSetUp();
 		

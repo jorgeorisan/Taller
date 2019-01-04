@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Agregar Marca";
+$page_title = "Agregar Modelo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -25,19 +25,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
 if(isPost()){
-    $obj = new Marca();
+    $obj = new SubMarca();
     $id=$obj->addAll(getPost());
     if($id>0){
-        informSuccess(true, make_url("Catalogos","marca"));
+        informSuccess(true, make_url("Catalogos","submarca"));
     }else{
-        informError(true,make_url("Catalogos","marca"));
+        informError(true,make_url("Catalogos","submarca"));
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["Marca"] = APP_URL."/Catalogos/marca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Modelo"] = APP_URL."/Catalogos/submarca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -47,35 +47,49 @@ if(isPost()){
                     data-widget-colorbutton="false" data-widget-editbutton="false" 
                     data-widget-deletebutton="false" data-widget-collapsed="false">
                         <!-- Widget ID (each widget will need unique ID)-->
-                        <header> <span class="widget-icon"> 
-                            <i class="fa fa-plus"></i> </span><h2><?php echo $page_title ?></h2>
+                        <header>
+                            <span class="widget-icon"> 
+                                <i class="fa fa-plus"></i>
+                            </span>
+                            <h2><?php echo $page_title ?></h2>
                         </header>
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","submarcaadd");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
                                     <div class="tl-body">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-13">
                                             <div class="form-group">
-                                                <label for="name">Marca</label>
-                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre"  >
+                                                <label for="name">Modelo</label> 
+                                                <input type="text" required class="form-control" placeholder="Capture modelo" name="nombre" >
+                                            </div>                            
+                                            <div class="form-group">
+                                                <label for="name">Marca</label><br>
+                                                <select style="width:100%" class="select2" name="id_marca">
+                                                    <option value="">Seleccione una Marca</option>
+                                                    <?php 
+                                                        $obj = new Marca();
+                                                        $list=$obj->getAllArr();
+                                                        if (is_array($list) || is_object($list)){
+                                                            foreach($list as $val)
+                                                                echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
+                                                        }
+                                                    ?>
+                                                </select>                                
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
-                                           <div class="form-actions" style="text-align: center">
-                                                <div class="row">
-                                                   <div class="col-md-12">
-                                                        <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
-                                                            Cancelar
-                                                        </button>
-                                                        <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
-                                                            <i class="fa fa-save"></i>
-                                                            Guardar
-                                                        </button>
-                                                    </div>
+                                        <div class="form-actions" style="text-align: center">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
+                                                        Cancelar
+                                                    </button>
+                                                    <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
+                                                        <i class="fa fa-save"></i>
+                                                        Guardar
+                                                    </button>
                                                 </div>
-                                            </div> 
-                                            <div id="resultado"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -87,7 +101,6 @@ if(isPost()){
         </div>
     </div>
 </div>
-
 <!-- END MAIN PANEL -->
 <!-- ==========================CONTENT ENDS HERE ========================== -->
 
@@ -107,10 +120,14 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
-    function validateForm()
+   
+     function validateForm()
     {
         var nombre = $("input[name=nombre]").val();
         if ( ! nombre )  return notify("info","El nombre es requerido");
+
+        var id_marca = $('select[name=id_marca] option:selected').val();
+        if ( ! id_marca )  return notify("info","La marca es requerida");
 
         $("#main-form").submit();       
     }

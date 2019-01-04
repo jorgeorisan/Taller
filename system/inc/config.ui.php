@@ -72,6 +72,27 @@ $menuAsignaciones = array(
 	)
 );
 
+$menuInventarios = array(
+	"inventarios" => array(
+		"title" => "Inventarios",
+		"icon" => "fa-warehouse",
+		"url" => APP_URL."/Inventarios/index",
+	
+	)
+);
+
+$menuPedidos = array(
+	"pedidos" => array(
+		"title" => "Pedidos",
+		"icon" => "fa-flag",
+		//"url" => APP_URL."/solicitudes/index",
+		"sub" => array(
+			"pedido"     => array( "title" => "Pedidos",      "url" => APP_URL."/Pedidos/index" ),
+			'pedidosadd' => array( 'title' => 'Pedidos Alta', 'url' => APP_URL."/Pedidos/add" )
+		)
+	)
+);
+
 $menuCatalogos = array(
 	"catalogos" => array(
 		"title" => "Catalogo Admin",
@@ -81,9 +102,11 @@ $menuCatalogos = array(
 			"catservicio" 	 => array( "title" => "Servicios",   "url" => APP_URL."/Catalogos/servicio" ),
 			"cattaller" 	 => array( "title" => "Taller",      "url" => APP_URL."/Catalogos/taller" ),
 			'users'     	 => array( 'title' => 'Usuarios',    'url' => APP_URL."/Users/index" ),
-			"catmodelo" 	 => array( "title" => "Modelo",      "url" => APP_URL."/Catalogos/modelo" ),
+			"catmodelo" 	 => array( "title" => "Modelo",      "url" => APP_URL."/Catalogos/submarca" ),
 			"catmarca"  	 => array( "title" => "Marca",       "url" => APP_URL."/Catalogos/marca" ),
-			"cataseguradora" => array( "title" => "Aseguradoras", "url" => APP_URL."/Catalogos/aseguradora" )
+			"cataseguradora" => array( "title" => "Aseguradoras","url" => APP_URL."/Catalogos/aseguradora" ),
+			"catalmacen"     => array( "title" => "Almacenes",   "url" => APP_URL."/Catalogos/almacen" ),
+			"catproveedor"   => array( "title" => "Proveedores", "url" => APP_URL."/Catalogos/proveedor" )
 		)
 	)
 );
@@ -119,6 +142,16 @@ if(isset($_SESSION['user_id'])){
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Vehiculos');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuVehiculos);
+	}
+
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Pedidos');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuPedidos);
+	}
+
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Inventarios');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuInventarios);
 	}
 
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Solicitudes');

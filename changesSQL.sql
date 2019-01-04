@@ -182,16 +182,117 @@ DELIMITER ;
 -- 19 dic 2018
 --agregar almacen
 
-CREATE TABLE `systemmy_tallerhp`.`almacen_taller` (
-  `id` INT NOT NULL,
+CREATE TABLE `systemmy_tallerhp`.`proveedor` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(200) NULL,
+  `rfc` VARCHAR(100) NULL,
+  `direccion` VARCHAR(300) NULL,
+  `status` VARCHAR(45) NULL DEFAULT 'active',
+  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`id`));
+
+
+CREATE TABLE `systemmy_tallerhp`.`almacen` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `id_taller` INT NULL,
   `nombre` VARCHAR(200) NULL,
   `ubicacion` VARCHAR(45) NULL,
   `status` VARCHAR(45) NULL DEFAULT 'active',
   `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`),
-  CONSTRAINT `id_taller_almacentaller_dx`
+  CONSTRAINT `id_taller_almacen_dx`
     FOREIGN KEY (`id_taller`)
     REFERENCES `systemmy_tallerhp`.`taller` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+  CREATE TABLE `systemmy_tallerhp`.`inventario` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_almacen` INT NULL,
+  `id_refaccion` INT NULL,
+  `existencia` DOUBLE NULL,
+  `status` VARCHAR(45) NULL DEFAULT 'active',
+  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
+  `updated_date` TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_almacen_inventario_dx`
+    FOREIGN KEY (`id_almacen`)
+    REFERENCES `systemmy_tallerhp`.`almacen` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_refaccion_inventario_dx`
+    FOREIGN KEY (`id`)
+    REFERENCES `systemmy_tallerhp`.`refaccion` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `systemmy_tallerhp`.`pedido` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_proveedor` INT NULL,
+  `id_user` INT NULL,
+  `id_almacen` INT NULL,
+  `nombre` VARCHAR(200) NULL,
+  `total` DOUBLE NULL,
+  `status` VARCHAR(45) NULL DEFAULT 'active',
+  `comentarios` TEXT NULL,
+  `fecha_alta` TIMESTAMP NULL,
+  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_proveedor_pedido_dx`
+    FOREIGN KEY (`id_proveedor`)
+    REFERENCES `systemmy_tallerhp`.`proveedor` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_user_pedido_dx`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `systemmy_tallerhp`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_almacen_pedido_dx`
+    FOREIGN KEY (`id_almacen`)
+    REFERENCES `systemmy_tallerhp`.`almacen` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `systemmy_tallerhp`.`pedido_refaccion` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_pedido` INT NULL,
+  `id_refaccion` INT NULL,
+  `cantidad` DOUBLE NULL,
+  `status` VARCHAR(45) NULL DEFAULT 'active',
+  `costo` DOUBLE NULL,
+  `precio` DOUBLE NULL,
+  `totalcosto` DOUBLE NULL,
+  `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_pedido_pedidorefaccion_dx`
+    FOREIGN KEY (`id_pedido`)
+    REFERENCES `systemmy_tallerhp`.`pedido` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_refaccion_pedidorefaccion_dx`
+    FOREIGN KEY (`id_refaccion`)
+    REFERENCES `systemmy_tallerhp`.`refaccion` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Pedidos', 'Pedidos', 'index');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Pedidos Alta', 'Pedidos', 'add');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Pedidos Ver', 'Pedidos', 'view');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Pedidos Editar', 'Pedidos', 'edit');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Pedidos Borrar', 'Pedidos', 'pedidodelete');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Almacen', 'Catalogos', 'almacen');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Proveedor', 'Catalogos', 'proveedor');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Inventario', 'Inventarios', 'index');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Proveedor Alta', 'Catalogos', 'proveedoradd');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Proveedor Editar', 'Catalogos', 'proveedoredit');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Proveedor Borrar', 'Catalogos', 'proveedordelete');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Proveedor Ver', 'Catalogos', 'proveedorview');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Almacen Alta', 'Catalogos', 'almacenadd');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Almacen Editar', 'Catalogos', 'almacenedit');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Almacen Ver', 'Catalogos', 'almacenview');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Almacen Borrar', 'Catalogos', 'almacendelete');
+
+ALTER TABLE `systemmy_tallerhp`.`proveedor` 
+ADD COLUMN `telefono` VARCHAR(45) NULL AFTER `direccion`;
+
