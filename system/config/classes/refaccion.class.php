@@ -108,6 +108,22 @@ class Refaccion extends AutoRefaccion {
 				{ $set[] = $row; }
 		}
 		return $set;
+	}	
+	//metodo que sirve para obtener el precio de refaccion
+	public function getPrecio($id)
+	{
+		if(! intval( $id )){
+			return false;
+		}
+		$id=$this->db->real_escape_string($id);
+		$sql = "SELECT * FROM pedido_refaccion where status='active' and id_refaccion=$id order by id_pedido desc limit 1 ;";
+		$res=$this->db->query($sql);
+		if(!$res)
+			{die("Error getting result refaccion");}
+		$row = $res->fetch_assoc();
+		$res->close();
+		return $row;
+
 	}
 
 

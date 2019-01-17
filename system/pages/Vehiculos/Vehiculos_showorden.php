@@ -19,6 +19,11 @@ include(SYSTEM_DIR . "/inc/nav.php");
 
 
 //include left panel (navigation)
+if(isset($request['params']['id'])   && $request['params']['id']>0)
+    $id=$request['params']['id'];
+else
+    informError(true,make_url("Vehiculo","index"));
+
 
 $obj = new Vehiculo();
 $data = $obj->getTable($id);
@@ -93,6 +98,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                     <a class="btn btn-info" target='_blank' href="<?php echo make_url("Vehiculos","pdf",array('id'=>$id,'page'=>'orden')); ?>"> <i class="fa fa-eye"></i>&nbsp;PDF</a>
                 </div>
             </div>
+			<div class=""> &nbsp; </div>
             <div class="row" style="padding-top:20px">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 content-view">
                     <div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">

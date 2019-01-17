@@ -8,13 +8,15 @@
 		protected $id = 0;
 		protected $id_proveedor = 0;
 		protected $id_user = 0;
-		protected $id_almacentaller = 0;
+		protected $id_almacen = 0;
 		protected $nombre = "";
 		protected $total = 0;
 		protected $status = "";
 		protected $comentarios = "";
 		protected $fecha_alta = "";
 		protected $created_date = "";
+		protected $fecha_validacion = "";
+		protected $user_validacion = 0;
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -53,9 +55,9 @@
  				$this->id_user = $value;
 		}
 		
-		public function setIdAlmacentaller( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "IDALMACENTALLER","i") ) 
- 				$this->id_almacentaller = $value;
+		public function setIdAlmacen( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDALMACEN","i") ) 
+ 				$this->id_almacen = $value;
 		}
 		
 		public function setNombre( $value ){			
@@ -84,6 +86,16 @@
 		public function setCreatedDate( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "CREATEDDATE","s") ) 
  				$this->created_date = $value;
+		}
+		
+		public function setFechaValidacion( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "FECHAVALIDACION","s") ) 
+ 				$this->fecha_validacion = $value;
+		}
+		
+		public function setUserValidacion( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "USERVALIDACION","i") ) 
+ 				$this->user_validacion = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -127,11 +139,11 @@
  			}
 		}
 		
-		public function getIdAlmacentaller($sanitize=true){ 
+		public function getIdAlmacen($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->id_almacentaller) ;
+ 				return htmlspecialchars($this->id_almacen) ;
  			}else{
- 				return $this->id_almacentaller ;
+ 				return $this->id_almacen ;
  			}
 		}
 		
@@ -183,6 +195,22 @@
  			}
 		}
 		
+		public function getFechaValidacion($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->fecha_validacion) ;
+ 			}else{
+ 				return $this->fecha_validacion ;
+ 			}
+		}
+		
+		public function getUserValidacion($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->user_validacion) ;
+ 			}else{
+ 				return $this->user_validacion ;
+ 			}
+		}
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -212,13 +240,15 @@
 			$this->setId( $res['id'] );
 			$this->setIdProveedor( $res['id_proveedor'] );
 			$this->setIdUser( $res['id_user'] );
-			$this->setIdAlmacentaller( $res['id_almacentaller'] );
+			$this->setIdAlmacen( $res['id_almacen'] );
 			$this->setNombre( $res['nombre'] );
 			$this->setTotal( $res['total'] );
 			$this->setStatus( $res['status'] );
 			$this->setComentarios( $res['comentarios'] );
 			$this->setFechaAlta( $res['fecha_alta'] );
 			$this->setCreatedDate( $res['created_date'] );
+			$this->setFechaValidacion( $res['fecha_validacion'] );
+			$this->setUserValidacion( $res['user_validacion'] );
 			return true;
 		}
 		// end function load
@@ -229,13 +259,15 @@
 
 			$sql .= " `id_proveedor` = ? ,";
 			$sql .= " `id_user` = ? ,";
-			$sql .= " `id_almacentaller` = ? ,";
+			$sql .= " `id_almacen` = ? ,";
 			$sql .= " `nombre` = ? ,";
 			$sql .= " `total` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `comentarios` = ? ,";
 			$sql .= " `fecha_alta` = ? ,";
 			$sql .= " `created_date` = ? ,";
+			$sql .= " `fecha_validacion` = ? ,";
+			$sql .= " `user_validacion` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -243,13 +275,15 @@
 
 			$sql .= " `id_proveedor` = ? ,";
 			$sql .= " `id_user` = ? ,";
-			$sql .= " `id_almacentaller` = ? ,";
+			$sql .= " `id_almacen` = ? ,";
 			$sql .= " `nombre` = ? ,";
 			$sql .= " `total` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `comentarios` = ? ,";
 			$sql .= " `fecha_alta` = ? ,";
 			$sql .= " `created_date` = ? ,";
+			$sql .= " `fecha_validacion` = ? ,";
+			$sql .= " `user_validacion` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -261,13 +295,15 @@
 
 			$stmt->mbind_param( 'i', $this->id_proveedor );
 			$stmt->mbind_param( 'i', $this->id_user );
-			$stmt->mbind_param( 'i', $this->id_almacentaller );
+			$stmt->mbind_param( 'i', $this->id_almacen );
 			$stmt->mbind_param( 's', $this->nombre );
 			$stmt->mbind_param( 'd', $this->total );
 			$stmt->mbind_param( 's', $this->status );
 			$stmt->mbind_param( 's', $this->comentarios );
 			$stmt->mbind_param( 's', $this->fecha_alta );
 			$stmt->mbind_param( 's', $this->created_date );
+			$stmt->mbind_param( 's', $this->fecha_validacion );
+			$stmt->mbind_param( 'i', $this->user_validacion );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -292,8 +328,8 @@
 			if (in_array("id_user",$fieldstoupdate)){
 				$sql .= " `id_user` = ? ,";
 			}
-			if (in_array("id_almacentaller",$fieldstoupdate)){
-				$sql .= " `id_almacentaller` = ? ,";
+			if (in_array("id_almacen",$fieldstoupdate)){
+				$sql .= " `id_almacen` = ? ,";
 			}
 			if (in_array("nombre",$fieldstoupdate)){
 				$sql .= " `nombre` = ? ,";
@@ -313,6 +349,12 @@
 			if (in_array("created_date",$fieldstoupdate)){
 				$sql .= " `created_date` = ? ,";
 			}
+			if (in_array("fecha_validacion",$fieldstoupdate)){
+				$sql .= " `fecha_validacion` = ? ,";
+			}
+			if (in_array("user_validacion",$fieldstoupdate)){
+				$sql .= " `user_validacion` = ? ,";
+			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -328,8 +370,8 @@
 			if (in_array("id_user",$fieldstoupdate)){
 				$stmt->mbind_param( 'i', $this->idUser  );
 			}
-			if (in_array("id_almacentaller",$fieldstoupdate)){
-				$stmt->mbind_param( 'i', $this->idAlmacentaller  );
+			if (in_array("id_almacen",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idAlmacen  );
 			}
 			if (in_array("nombre",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->nombre  );
@@ -348,6 +390,12 @@
 			}
 			if (in_array("created_date",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->createdDate  );
+			}
+			if (in_array("fecha_validacion",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->fechaValidacion  );
+			}
+			if (in_array("user_validacion",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->userValidacion  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

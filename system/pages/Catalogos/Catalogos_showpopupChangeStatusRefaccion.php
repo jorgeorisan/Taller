@@ -41,13 +41,14 @@
                 <select style="width:100%" class="select2" name="id_almacen" id="id_almacen">
                     <option value="">Asignar Almacen</option>
                     <?php 
-                    $objref = new User();
-                    $listref=$objref->getAllArr();
-                    if (is_array($listref) || is_object($listref)){
-                        foreach($listref as $valref){
-                            echo "<option value='".$valref['id']."'>".htmlentities($valref['nombre'])."</option>";
+                        $obj = new Almacen();
+                        $list=$obj->getAllArr($_SESSION['user_info']['id_taller']);
+                        if (is_array($list) || is_object($list)){
+                            foreach($list as $val){
+                                $selected = "";
+                                echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                            }
                         }
-                    }
                     ?>
                 </select>
             </div>

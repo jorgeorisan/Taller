@@ -26,7 +26,16 @@ class Pedido extends AutoPedido {
 			return false;
 		}
 		$id=$this->db->real_escape_string($id);
-		$sql= "SELECT * FROM pedido WHERE id=$id;";
+		$sql= "
+		SELECT p.id,p.id_proveedor,p.id_user,p.id_almacen,p.nombre,p.comentarios,p.status,p.total,
+				pr.nombre proveedor, CONCAT(u.nombre,' ',ifnull(u.apellido_pat,'')) usuarioalta,a.nombre almacen,
+				p.fecha_validacion,CONCAT(uv.nombre,' ',ifnull(uv.apellido_pat,'')) usuariovalidacion,p.fecha_alta
+		FROM pedido p
+			LEFT JOIN proveedor pr ON pr.id=p.id_proveedor
+			LEFT JOIN user u ON u.id=p.id_user
+			LEFT JOIN user uv ON uv.id=p.user_validacion
+			LEFT JOIN almacen a ON a.id=p.id_almacen
+		WHERE p.id=$id;";
 		$res=$this->db->query($sql);
 		if(!$res)
 			{die("Error getting result pedido");}
@@ -38,7 +47,9 @@ class Pedido extends AutoPedido {
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$_request["id_taller"]=$_SESSION['user_info']['id_taller'];
+		$_request["id_taller"] = $_SESSION['user_info']['id_taller'];
+		$_request["id_user"]   = $_SESSION['user_id'];
+		$_request["total"]   = $_request['total-globalrefaccion'];
 		$data=fromArray($_request,'pedido',$this->db,"add");
 		$sql= "INSERT INTO pedido (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
@@ -51,7 +62,58 @@ class Pedido extends AutoPedido {
 			while ($row = $res->fetch_assoc())
 				$id= $row;
 		}
-		return $id["LAST_INSERT_ID()"];
+		$id = $id["LAST_INSERT_ID()"];
+		$refacciones      = $_request["id_refaccion"];
+		$costorefaccion   = $_request["costorefaccion"];
+		$preciorefaccion  = $_request["preciorefaccion"];
+		$cantidad		  = $_request["cantidad_refaccion"];
+		
+		foreach ($refacciones as $key => $value) {
+			$costo        = ($costorefaccion[$key])  ? $costorefaccion[$key]  : 0 ;
+			$precio       = ($preciorefaccion[$key]) ? $preciorefaccion[$key] : 0 ;
+			$cant         = $cantidad[$key];
+			$totalcosto   = $costo * $cant;
+			$id_refaccion = $value;
+			$_requestpedidoref["id_pedido"]    = $id;
+			$_requestpedidoref["id_refaccion"] = $id_refaccion;
+			$_requestpedidoref["cantidad"]     = $cant;
+			$_requestpedidoref["costo"]        = $costo;
+			$_requestpedidoref["precio"]       = $precio;
+			$_requestpedidoref["totalcosto"]   = $totalcosto;
+			$objPedidoRefaccion = new PedidoRefaccion();
+			if(!$objPedidoRefaccion->addAll($_requestpedidoref)){
+				echo "Falla en insert pedido refaccion";
+				exit;
+			}
+		}
+		return $id;
+	}
+		//metodo que sirve validar entrada de pedido
+	public function validar($id_pedido)
+	{
+		if(! intval( $id_pedido )){
+			return false;
+		}
+		$id_pedido=$this->db->real_escape_string($id_pedido);
+		$objPedidoRefaccion = new PedidoRefaccion();
+		$data = $objPedidoRefaccion->getTable($id_pedido);
+		foreach($data as $row){
+			$id_almacen   = $row["id_almacen"];
+			$id_refaccion = $row["id_refaccion"];
+			$cantidad     = $row["cantidad"];
+			$objinv = new Inventario();
+			if( !$objinv->updateAll( $id_refaccion,$id_almacen,$cantidad ) ){
+				echo "Falla en update inventario";
+				exit;
+			}
+		}
+		$sql= "UPDATE pedido SET fecha_calidacion=CURDATE(), user_validacion=".$_SESSION['user_id']."  WHERE id=".$id_pedido.";";
+		$row=$this->db->query($sql);
+		if(!$row){
+			return false;
+		}else{
+			return true;
+		}
 	}
 		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)

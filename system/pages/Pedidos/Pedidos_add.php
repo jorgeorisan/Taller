@@ -24,13 +24,14 @@ include(SYSTEM_DIR . "/inc/header.php");
 //follow the tree in inc/config.ui.php
 //$page_nav["misc"]["sub"]["blank"]["active"] = true;
 include(SYSTEM_DIR . "/inc/nav.php");
+
 if(isPost()){
     $obj = new Pedido();
     $id  = $obj->addAll(getPost());
     //$id=240;
     
     if ($id > 0){
-        informSuccess(true, make_url("Pedidos","showorden",array('id'=>$id)));
+        informSuccess(true, make_url("Pedidos","view",array('id'=>$id)));
     }else{
         informError(true,make_url("Pedidos","add"));
     }
@@ -70,7 +71,7 @@ if(isPost()){
                                                             
                                                         </div>
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control" autocomplete="off" placeholder="Nombre Pedido" name="nombre" >
+                                                            <input type="text" class="form-control" placeholder="Nombre Pedido" name="nombre" >
                                                             
                                                         </div>
                                                         
@@ -90,6 +91,10 @@ if(isPost()){
                                                                  ?>
                                                             </select>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" placeholder="Comentarios Pedido" name="comentarios" >
+                                                            
+                                                        </div>   
                                                     </div>
                                                     <div class="col-sm-4">    
                                                         <div class="form-group">
@@ -106,7 +111,8 @@ if(isPost()){
                                                                 }
                                                                  ?>
                                                             </select>
-                                                        </div>                                                 
+                                                        </div>      
+                                                                                               
                                                     </div> 
                                                 </div>
                                             </div>
@@ -132,9 +138,9 @@ if(isPost()){
                                                                     $obj = new Marca();
                                                                     $list=$obj->getAllArr();
                                                                     if (is_array($list) || is_object($list)){
-                                                                        foreach($list as $val){
+                                                                        foreach($list as $val)
                                                                             echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                        }
+                                                                        
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -147,9 +153,9 @@ if(isPost()){
                                                                         $obj = new SubMarca();
                                                                         $list=$obj->getAllArr();
                                                                         if (is_array($list) || is_object($list)){
-                                                                            foreach($list as $val){
+                                                                            foreach($list as $val)
                                                                                 echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                            }
+                                                                            
                                                                         }
                                                                         ?>
                                                                     </select>
@@ -182,8 +188,9 @@ if(isPost()){
                                                             <th>Cant.</th>
                                                             <th>Codigo</th>
                                                             <th>Refaccion</th>
-                                                            <th>Costo </th>
-                                                            <th>Total </th>
+                                                            <th>Costo Unit.</th>
+                                                            <th>Precio Unit.</th>
+                                                            <th>Total Costo </th>
                                                             <th class="borrar-td"></th>
                                                         </tr>
                                                     </table>
@@ -283,22 +290,17 @@ if(isPost()){
         }
         validateForm =function(){
             var fecha_alta    = $("input[name=fecha_alta]").val();
-            var fecha_promesa = $("input[name=fecha_promesa]").val();
-            var id_user       = $("#id_user").val();
-            var id_taller     = $("#id_taller").val();
-            var id_cliente    = $("#id_cliente").val();
-            var id_marca      = $("#id_marca").val();
-            var id_submarca   = $("#id_submarca").val();
+            var id_almacen    = $("#id_almacen").val();
+            var id_proveedor  = $("#id_proveedor").val();
             var modelo        = $("#modelo").val();
-            console.log
+            var total         = $("#total-globalrefaccion").val();
+           
             if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
-            if ( ! fecha_promesa ) return notify("info","La fecha de promesa es requerida");
-            if ( ! id_user )       return notify("info","El asesor es requerido");
-            if ( ! id_taller )     return notify("info","El taller es requerido");
-            if ( ! id_cliente )    return notify("info","El cliente es requerido");
-            if ( ! id_marca )      return notify("info","La marca es requerida");
-            if ( ! id_submarca )   return notify("info","El modelo es requerido");
-            if ( ! modelo )        return notify("info","El año es requerido");
+           
+            
+            if ( ! id_almacen )    return notify("info","El Almacen es requerido");
+            if ( ! id_proveedor )  return notify("info","El proveedor es requerido");
+            if ( total <= 0)       return notify("info","Se requieren refacciones para generar el pedido");
             
             $("#main-form").submit();       
         }
@@ -312,13 +314,13 @@ if(isPost()){
         getrefaccion = function(id) {
             if(id){
                 var text = $('select[name="idrefaccion"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getrefaccion"; // El script a dónde se realizará la petición.
-                var aseg     = $("#id_aseguradora").val();
+                var url = config.base+"/Catalogos/ajax/?action=get&object=getrefaccionpedido"; // El script a dónde se realizará la petición.
+               
                 var cantidad = $("#selectcantidad_refaccion").val();
                 $.ajax({
                     type: "GET",
                     url: url,
-                    data: "id="+id+ "&aseguradora=" + aseg + "&cantidad=" + cantidad, // Adjuntar los campos del formula=rio enviado.
+                    data: "id="+id+ "&cantidad=" + cantidad, // Adjuntar los campos del formula=rio enviado.
                     success: function(response){
                         if(response){
                             $('#contrefacciones').append(response);  
@@ -358,13 +360,13 @@ if(isPost()){
         
             $("#contrefaccion").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
             $.get(config.base+"/Catalogos/ajax/?action=get&object=getselectrefaccion&id=" + id , null, function (response) {
-                    if ( response ){
-                        $("#contrefaccion").html(response);
-                        $('#idrefaccion').select2();
-                    }else{
-                        notify('error', 'Error al obtener los datos de la refaccion');
-                        return false;
-                    }     
+                if ( response ){
+                    $("#contrefaccion").html(response);
+                    $('#idrefaccion').select2();
+                }else{
+                    notify('error', 'Error al obtener los datos de la refaccion');
+                    return false;
+                }     
             });
         }
         showpopuprefaccion= function(){

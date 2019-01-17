@@ -75,16 +75,12 @@ $data = $obj->getAllArr();
 											$nomalmacen      = "";
 											$nomrefaccion    = "";
 											$nomproveedor    = "";
-											if($row["id_almacentaller"]){
-												$objalmacen = new AlmacenTaller();
-												$dataalmacen = $objalmacen->getTable($row["id_almacentaller"]);
+											if($row["id_almacen"]){
+												$objalmacen = new Almacen();
+												$dataalmacen = $objalmacen->getTable($row["id_almacen"]);
 												if($dataalmacen){ $nomalmacen = $dataalmacen["nombre"]; }
 											}
-											if($row["id_refaccion"]){
-												$objrefaccion  = new Refaccion();
-												$datarefaccion = $objrefaccion->getTable($row["id_refaccion"]);
-												if($datarefaccion){ $nomrefaccion = $datrefaccion["nombre"]; }
-											}
+										
 											if($row["id_proveedor"]){
 												$objproveedor = new Proveedor();
 												$dataproveedor = $objproveedor->getTable($row["id_proveedor"]);
@@ -116,7 +112,7 @@ $data = $obj->getAllArr();
 														<ul class="dropdown-menu">
 															
 															<li>
-																<a class="" href="<?php echo make_url("Pedidos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Detalles</a>
+																<a class="" href="<?php echo make_url("Pedidos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver</a>
 															</li>
 															<li>
 																<a class="" href="<?php echo make_url("Pedidos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>

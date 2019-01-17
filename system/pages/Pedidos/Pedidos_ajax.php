@@ -7,7 +7,18 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
  
 if (  isset($_GET["action"]) && $_GET["object"]){
 
-	switch ($_GET["object"]) {		
+	switch ($_GET["object"]) {	
+		case 'validar':
+		    $obj = new Pedido();
+			if(isPost()){
+			    $id=$obj->validar($_POST['id']);
+			    if($id){
+			        return 1;
+			    }else{
+					return false;
+			    }
+			}
+			break;	
 		default:
 			# code...
 			break;

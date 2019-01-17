@@ -18,7 +18,7 @@ include(SYSTEM_DIR . "/inc/header.php");
 include(SYSTEM_DIR . "/inc/nav.php");
 
 $obj = new Almacen();
-$data = $obj->getAllArr();
+$data = $obj->getAllArr($_SESSION['user_info']['id_taller']);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
@@ -69,9 +69,7 @@ $data = $obj->getAllArr();
 															Accion <span class="caret"></span>
 														</button>
 														<ul class="dropdown-menu">
-															<li>
-																<a class="" href="<?php echo make_url("Catalogos","almacenview",array('id'=>$row['id'])); ?>">Ver</a>
-															</li>
+															
 															<li>
 																<a class="" href="<?php echo make_url("Catalogos","almacenedit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>

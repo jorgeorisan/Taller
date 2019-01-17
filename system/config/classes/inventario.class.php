@@ -14,7 +14,7 @@ class Inventario extends AutoInventario {
 		}
 		$id=$this->db->real_escape_string($id);
 		$sql = "SELECT i.id,a.nombre almacen,t.nombre taller,m.nombre marca,sm.nombre submarca
-			, i.id_refaccion,r.modelo,i.existencia,i.status FROM inventario i
+			, i.id_refaccion,r.modelo,i.existencia,i.status,r.nombre refaccion FROM inventario i
 		JOIN almacen a ON i.id_almacen=a.id
 		JOIN taller t ON a.id_taller=t.id
 		JOIN refaccion r ON i.id_refaccion=r.id
@@ -65,11 +65,21 @@ class Inventario extends AutoInventario {
 		return $id["LAST_INSERT_ID()"];
 	}
 		//metodo que sirve para hacer update
-	public function updateAll($id,$_request)
+	public function updateAll($idrefaccion,$idalmacen,$cant)
 	{
-		$_request["updated_date"]=date("Y-m-d H:i:s");
+		$_request["updated_date"] = date("Y-m-d H:i:s");
+		$_request["id_refaccion"] = $idrefaccion;
+		$_request["id_almacen"]   = $idalmacen;
+		
+		if ( $objinventario=$this->existeRefaccion( $idrefaccion,$idalmacen ) ){
+			$id_invent = $objinventario['id'];
+			$_request["existencia"]  = $objinventario['existencia']+$cant;
+		}else{
+			$_request["existencia"]  = $cant;
+			$id_invent = $this->addAll($_request);
+		}
 		$data=fromArray($_request,'inventario',$this->db,"update");
-		$sql= "UPDATE inventario SET $data[0]  WHERE id=".$id.";";
+		$sql= "UPDATE inventario SET $data[0]  WHERE id=".$id_invent.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -90,6 +100,18 @@ class Inventario extends AutoInventario {
 		}else{
 			return true;
 		}
+	}
+	//metodo para saber si existe un inventario
+	public function existeRefaccion($idrefaccion,$idalmacen){
+	
+		$sql= "SELECT * FROM inventario WHERE id_refaccion=$idrefaccion AND id_almacen=$idalmacen;";
+		$res=$this->db->query($sql);
+		if(!$res)
+			return false;
+
+		$row = $res->fetch_assoc();
+		$res->close();
+		return $row;
 	}
 
 

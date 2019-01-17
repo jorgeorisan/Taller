@@ -7,9 +7,16 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 
 	
 		//metodo que sirve para obtener todos los datos de la tabla
-	public function getAllArr()
+	public function getAllArr($id)
 	{
-		$sql = "SELECT * FROM pedido_refaccion where status='active';";
+		if(! intval( $id )){
+			return false;
+		}
+		$sql = "
+		SELECT pr.*,r.nombre refaccion 
+		FROM pedido_refaccion pr 
+			LEFT JOIN refaccion r ON r.id=pr.id_refaccion
+			where pr.status='active' and pr.id_pedido=$id;";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -25,9 +32,9 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 		if(! intval( $id )){
 			return false;
 		}
-		$id=$this->db->real_escape_string($id);
-		$sql= "SELECT * FROM pedido_refaccion WHERE id=$id;";
-		$res=$this->db->query($sql);
+		$id  = $this->db->real_escape_string($id);
+		$sql = "SELECT * FROM pedido_refaccion WHERE id_pedido=$id status='active';";
+		$res = $this->db->query($sql);
 		if(!$res)
 			{die("Error getting result pedido_refaccion");}
 		$row = $res->fetch_assoc();

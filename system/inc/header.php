@@ -103,6 +103,9 @@
 	#resultado{
 		padding-top:15px;
 	}
+	.cancelada {
+        opacity: .5;
+    }
 
 </style>
 

@@ -45,6 +45,51 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 				echo 0;
 			}
 			break;
+
+			case 'getrefaccionpedido':
+				if( isset($_GET["id"]) && intval($_GET["id"]) ){
+					$id    = $_GET["id"];
+					$cant  = ($_GET["cantidad"]>0) ? $_GET["cantidad"] : 1 ;
+					$u  = new Refaccion();
+					if($res       = $u->getTable($id)){
+						$lineId   = rand(1000, 100000);
+						$detalles = htmlentities( $res["nombre"] )."<input type='hidden' name='detalles_refaccion[]'>";
+						if ( $res['detalles'] ) 
+							$detalles ="<input type='text' name='detalles_refaccion[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
+						
+						$costounit  = ($res["costo_aprox"] )  ? $res["costo_aprox"] : '' ;
+						$values		= $u->getPrecio($id);
+						$preciounit = ($values)  ? $values['precio']  : 0 ;
+						$totalcosto = ($cant && $costounit )  ? $cant*$costounit    : '' ;
+						$data="
+							<tr class='refaccion' lineidrefaccion='".$lineId."'>
+								<input type='hidden' name='id_refaccion[]' value='".$id."'/>
+								<input class='cantidadesrefaccion' type='hidden' name='cantidad_refaccion[]' value='".$cant."'/>
+								<td>" . $cant . "</td>
+								<td>" . htmlentities( $res["codigo"] ) . "</td>
+								<td>" .  $detalles . "</td>";
+						
+						$data.="<td><input type='number' style='width: 80px;' class='form-control costorefaccion' name='costorefaccion[]' value='".$costounit."' placeholder='00.00'></td>
+								<td><input type='number' style='width: 80px;' class='form-control preciorefaccion' name='preciorefaccion[]' value='".$preciounit."' placeholder='00.00'></td>
+								<td><input type='number' style='width: 80px;' readonly class='form-control totalesrefaccion' name='totalrefaccion[]' value='".$totalcosto."' placeholder='00.00'></td>";
+						
+						$data.="
+								<td class='borrar-td'>
+								<a href='javascript:void(0);' class='btn btn-danger borrar-refaccion' lineidrefaccion='".$lineId."'> 
+									<i class='glyphicon glyphicon-trash'></i> </a>";
+								$data.="
+								</td>
+							</tr>
+							";
+							echo $data;
+					}else{
+						echo 'No se han encontrado resultados';
+					}
+				}else{
+					echo 0;
+				}
+			break;
+        
 		case 'getrefaccion':
 			if( isset($_GET["id"]) && intval($_GET["id"]) ){
 				$id    = $_GET["id"];
