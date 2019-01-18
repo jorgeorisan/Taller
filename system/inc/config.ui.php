@@ -34,7 +34,16 @@ $menuClientes = array(
 			)
 	)
 );
-
+$menuPersonal = array(
+	"Personal" => array(
+			"title" => "Personal",
+			"icon" => "fa-users",
+			"sub" => array(
+				'personalindex' => array('title'  => 'Personal','url' => APP_URL."/Personal/index" ),
+				'personal' => array('title'  => 'Nuevo Personal','url' => APP_URL."/Personal/add" )
+			)
+	)
+);
 $menuVehiculos = array(
 	"Vehiculos" => array(
 		"title" => "Vehiculos",
@@ -172,6 +181,11 @@ if(isset($_SESSION['user_id'])){
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Users');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuUsuarios);
+	}
+
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Personal');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuPersonal);
 	}
 
 	//default

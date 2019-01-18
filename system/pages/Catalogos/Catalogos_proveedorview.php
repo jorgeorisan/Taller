@@ -89,7 +89,6 @@ if ( !$data ) {
                                                 <input type="text" readonly class="form-control" placeholder="Numero de cuenta proveedor" name="num_cta" value="<?php echo htmlentities($data['num_cta']); ?>" >
                                             </div>
                                         </div>
-                                        
                                     </div>
                                 </form>
                             </div>

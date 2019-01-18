@@ -115,6 +115,12 @@ Routing section
       if ($request['section']==='Inventarios'){
         $page = "Inventarios_index.php";
         $dir  = "Inventarios";//si esta en carpeta
+      } 
+      if ($request['section']==='Personal'){
+        $page = "Personal_index.php";
+        $dir  = "Personal";//si esta en carpeta
+        if ($request['page']==='add')      { $page = "Personal_add.php";      }
+        if ($request['page']==='edit')     { $page = "Personal_edit.php";     }
       }
       //delete pages
       if(isset($request['params']['id'])){
