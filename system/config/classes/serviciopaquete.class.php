@@ -1,6 +1,6 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "servicio_paquete.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR. "servicio_paquete.auto.class.php");
 
 class ServicioPaquete extends AutoServicioPaquete { 
 	private $DB_TABLE = "servicio_paquete";

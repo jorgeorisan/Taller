@@ -1,6 +1,6 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "permiso_user.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR . "permiso_user.auto.class.php");
 
 class PermisoUser extends AutoPermisoUser { 
 	private $DB_TABLE = "permiso_user";

@@ -1,6 +1,6 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "imagenes_refaccion.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR. "imagenes_refaccion.auto.class.php");
 
 class ImagenesRefaccion extends AutoImagenesRefaccion { 
 	private $DB_TABLE = "imagenes_refaccion";

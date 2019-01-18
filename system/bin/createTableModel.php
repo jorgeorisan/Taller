@@ -4,7 +4,7 @@ include_once("../config/config.php");
 include_once("../config/classes/db.class.php");
 
 if ( !isset($argv[1]) || !isset($argv[2]) ){
-	echo "\n\n\n--------------\nusage: " . $argv[0]. " table_name model_name \n\t\te.g. "  . $argv[0]. " user User\n\nThe following files are created:\nsystem/config/classes/{table_name}.auto.class.php\nsystem/config/classes/{table_name}.class.php\nsystem/pages/Ajax_{table_name}.php\nsystem/pages/{table_name}_jqgrid.php\n";
+	echo "\n\n\n--------------\nusage: " . $argv[0]. " table_name model_name \n\t\te.g. "  . $argv[0]. " user User\n\nThe following files are created:\nsystem/config/classes/base/{table_name}.auto.class.php\nsystem/config/classes/{table_name}.class.php\nsystem/pages/Ajax_{table_name}.php\nsystem/pages/{table_name}_jqgrid.php\n";
 	die;
 }else{
 	$table_name=$argv[1];
@@ -424,7 +424,7 @@ $output.= '
 $output.= '
 }
 ';
-$filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."classes".DIRECTORY_SEPARATOR.$table_name.".auto.class.php";
+$filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."classes".DIRECTORY_SEPARATOR."base". DIRECTORY_SEPARATOR.$table_name.".auto.class.php";
 file_put_contents($filename, $output) ;
 
 
@@ -432,7 +432,7 @@ $filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."classes".
 
 $output='<?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR . "' . $table_name . '.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR "' . $table_name . '.auto.class.php");
 
 class ' . $model_name . ' extends Auto' . $model_name . ' { 
 	private $DB_TABLE = "'.$table_name.'";
