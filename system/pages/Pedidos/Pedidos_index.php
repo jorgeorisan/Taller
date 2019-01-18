@@ -50,11 +50,12 @@ $data = $obj->getAllArr();
 											<th class = "col-md-1" data-class="expand">
 												<i class="fa fa-fw fa-list-ol  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Pedido
 											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw fa-file-alt text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Proveedor
-											</th>
+											
 											<th class = "col-md-1" >
 												<i class="fa fa-fw  fa-credit-card-front text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Nombre
+											</th>
+											<th class = "col-md-1" data-hide="">
+												<i class="fa fa-fw fa-file-alt text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Proveedor
 											</th>
 											<th class = "col-md-2" data-hide="phone,tablet">
 												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Estatus
@@ -86,22 +87,33 @@ $data = $obj->getAllArr();
 												$dataproveedor = $objproveedor->getTable($row["id_proveedor"]);
 												if($dataproveedor){ $nomproveedor = $dataproveedor["nombre"]; }
 											}
-											switch ($row['status']) {
+											$status=htmlentities($row['status']);
+											switch ($status) {
 												case 'active':
-													$status = "En espera";
+													$status = 'Pendiente';
+													$class  = 'label label-danger';
+													break;
+												case 'Validado':
+													$status = 'Validado <br>'.date('Y-m-d',strtotime($row['fecha_validacion']));
+													$class  = 'label label-success'; 
+													break;
+												case 'deleted':
+													$status = 'Cancelado';
+													$class  = 'label label-warning';
 													break;
 												default:
 													$status = $status;
+													$class  = '';
 													break;
 											}
 											
 										?>
 											<tr>
 												<td><a class="" href="<?php echo make_url("Pedidos","view",array('id'=>$row['id'])); ?>"><?php echo $row['id'] ?></a></td>
-												<td><?php echo htmlentities($nomproveedor) ?></td>
 												<td><?php echo htmlentities($row['nombre']) ?></td>
-												<td><?php echo htmlentities($status) ?></td>
-												<td><?php echo htmlentities($row['fecha_alta'])?></td>
+												<td><?php echo htmlentities($nomproveedor) ?></td>
+												<td><label class="<?php echo $class; ?>"><?php echo $status ?></label></td>
+												<td><?php echo htmlentities(date('Y-m-d',strtotime($row['fecha_alta'])));?></td>
 												<td><?php echo htmlentities($nomalmacen) ?></td>
 												
 												<td>
@@ -114,12 +126,19 @@ $data = $obj->getAllArr();
 															<li>
 																<a class="" href="<?php echo make_url("Pedidos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver</a>
 															</li>
+															<?php if($status =="Pendiente"){
+															?>
+															<li>
+																<a class="" href="javascript:validar(<?php echo $row['id'] ?>)" ><i class="fa fa-check"></i></i> &nbsp;Validar</a>
+															</li>
 															<li>
 																<a class="" href="<?php echo make_url("Pedidos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>
 															</li>
+															
+															<?php } ?>
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Pedidos","deletepedido",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Pedidos","pedidodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -160,7 +179,38 @@ $data = $obj->getAllArr();
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <script>
-
+	function validar(id){ 
+		if ( ! id ) return;	
+		swal({
+			title: "Estas seguro?",
+			text: "Deseas eliminar este registro?",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonColor: '#DD6B55',
+			confirmButtonText: 'Si, Validar!',
+			closeOnConfirm: true
+			},
+			function(){
+				swal("Validado!", "Validado con exito!", "Exito");
+				
+				var url  = config.base+"/Pedidos/ajax/?action=get&object=validar"; 
+				var data = "id=" + id ;
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: data, // Adjuntar los campos del formulario enviado.
+					success: function(response){
+						if(response==1){
+							location.reload();
+						}else{
+							notify('error',"Oopss error al cambiar estatus: "+response);
+						}
+					}
+				});
+       
+			}
+		);
+	}
 	$(document).ready(function() {
 		var responsiveHelper_dt_basic = undefined;
 		var responsiveHelper_datatable_fixed_column = undefined;

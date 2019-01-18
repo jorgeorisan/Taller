@@ -81,7 +81,7 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 		}
 	}
 		//metodo que sirve para hacer delete
-	public function deleteAll($id,$_request)
+	public function deleteAll($id,$_request=false)
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");

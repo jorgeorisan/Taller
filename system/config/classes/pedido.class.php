@@ -9,7 +9,7 @@ class Pedido extends AutoPedido {
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM pedido where status='active';";
+		$sql = "SELECT * FROM pedido where status in ('active','Validado');";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -96,18 +96,18 @@ class Pedido extends AutoPedido {
 		}
 		$id_pedido=$this->db->real_escape_string($id_pedido);
 		$objPedidoRefaccion = new PedidoRefaccion();
-		$data = $objPedidoRefaccion->getTable($id_pedido);
+		$data = $objPedidoRefaccion->getAllArr($id_pedido);
 		foreach($data as $row){
 			$id_almacen   = $row["id_almacen"];
 			$id_refaccion = $row["id_refaccion"];
 			$cantidad     = $row["cantidad"];
 			$objinv = new Inventario();
 			if( !$objinv->updateAll( $id_refaccion,$id_almacen,$cantidad ) ){
-				echo "Falla en update inventario";
+				echo "Falla en update inventario".$id_refaccion.' '.$id_almacen.' '.$cantidad ;
 				exit;
 			}
 		}
-		$sql= "UPDATE pedido SET fecha_calidacion=CURDATE(), user_validacion=".$_SESSION['user_id']."  WHERE id=".$id_pedido.";";
+		$sql= "UPDATE pedido SET fecha_validacion=CURDATE(),status='Validado',fecha_validacion=CURDATE(), user_validacion=".$_SESSION['user_id']."  WHERE id=".$id_pedido.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -129,7 +129,7 @@ class Pedido extends AutoPedido {
 		}
 	}
 		//metodo que sirve para hacer delete
-	public function deleteAll($id,$_request)
+	public function deleteAll($id,$_request=false)
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");

@@ -140,7 +140,7 @@ Routing section
         
         $datapermuser  = $objpermuser->getpermisouser($_SESSION['user_id'],$request['section'],$page2);
         if ( !$datapermuser ) {
-          echo $_SESSION['user_id']."------".$request['section']."-----".$page2;
+          echo "ERROR permisos".$_SESSION['user_id']."------".$request['section']."-----".$page2;
           exit;
           informPermiss(true,make_url("Home","index"));
         }

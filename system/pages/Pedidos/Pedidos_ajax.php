@@ -13,7 +13,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			if(isPost()){
 			    $id=$obj->validar($_POST['id']);
 			    if($id){
-			        return 1;
+			        echo 1;
 			    }else{
 					return false;
 			    }

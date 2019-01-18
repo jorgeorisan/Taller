@@ -34,14 +34,13 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
-				<p><a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" ><i class="fas fa-wrench"></i>&nbsp; Nueva Orden</a></p>
-			</div>
-			<div class="col-sm-6 col-md-6 col-lg-2 no-padding">
-				  <p><a class="btn btn-info" href="<?php echo make_url("Vehiculos","indexlist")?>" ><i class="fas fa-list-ol"></i>&nbsp;Modo Lista</a></p>
-			</div>
-			 
-			
+			<div class="row">   
+                <div class="widget-body" style='padding-left: 15px;'>
+					<a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" ><i class="fas fa-wrench"></i>&nbsp; Nueva Orden</a>
+					<a class="btn btn-info" href="<?php echo make_url("Vehiculos","indexlist")?>" ><i class="fas fa-list-ol"></i>&nbsp;Modo Lista</a>
+                </div>
+            </div>		 
+			<div class="row">&nbsp;</div>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 content-view" >
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">

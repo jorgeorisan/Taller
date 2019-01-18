@@ -63,7 +63,10 @@ switch ($status) {
 			<div class="row">   
                 <div class="widget-body" style='padding-left: 15px;'>
 					<a class="btn btn-success" target="_blank" href="<?php echo make_url("Pedidos","print",array('id'=>$id))?>" ><i class="fa fa-print"></i> &nbsp;Imprimir</a>
-					<a class="btn btn-info" target="" href="javascript:validar(<?php echo $data['id']?>)" ><i class="fa fa-check"></i></i> &nbsp;Validar</a>
+					<?php if($status=='Pendiente'){
+                    ?>
+                    <a class="btn btn-info" target="" href="javascript:validar(<?php echo $id ?>)" ><i class="fa fa-check"></i></i> &nbsp;Validar</a>
+                    <?php } ?>
                 </div>
             </div>
 			<div class=""> &nbsp; </div>
@@ -262,7 +265,6 @@ switch ($status) {
 			function(){
 				swal("Validado!", "Validado con exito!", "Exito");
 				
-				var id   = id;
 				var url  = config.base+"/Pedidos/ajax/?action=get&object=validar"; 
 				var data = "id=" + id ;
 				$.ajax({
@@ -270,7 +272,7 @@ switch ($status) {
 					url: url,
 					data: data, // Adjuntar los campos del formulario enviado.
 					success: function(response){
-						if(response>1){
+						if(response==1){
 							location.reload();
 						}else{
 							notify('error',"Oopss error al cambiar estatus: "+response);

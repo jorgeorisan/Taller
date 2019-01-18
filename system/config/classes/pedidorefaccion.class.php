@@ -13,9 +13,10 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 			return false;
 		}
 		$sql = "
-		SELECT pr.*,r.nombre refaccion 
+		SELECT pr.*,r.nombre refaccion, p.id_almacen
 		FROM pedido_refaccion pr 
 			LEFT JOIN refaccion r ON r.id=pr.id_refaccion
+			LEFT JOIN pedido p ON p.id=pr.id_pedido
 			where pr.status='active' and pr.id_pedido=$id;";
 		$res = $this->db->query($sql);
 		$set = array();
@@ -73,7 +74,7 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 		}
 	}
 		//metodo que sirve para hacer delete
-	public function deleteAll($id,$_request)
+	public function deleteAll($id,$_request=false)
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
