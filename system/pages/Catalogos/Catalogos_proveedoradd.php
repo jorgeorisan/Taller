@@ -71,6 +71,18 @@ if(isPost()){
                                             <div class="form-group">
                                                 <label for="name">Telefono</label>
                                                 <input type="text" class="form-control" placeholder="Telefono proveedor" name="telefono"  >
+                                            </div> 
+                                            <div class="form-group">
+                                                <label for="name">Email</label>
+                                                <input type="text" class="form-control" placeholder="Email proveedor" name="email"  >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Banco</label>
+                                                <input type="text" class="form-control" placeholder="Banco proveedor" name="banco">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Numero de cuenta</label>
+                                                <input type="text" class="form-control" placeholder="Numero de cuenta proveedor" name="num_cta"  >
                                             </div>
                                         </div>
                                         <div class="col-sm-12">

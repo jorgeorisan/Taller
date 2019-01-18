@@ -46,6 +46,7 @@ $data = $obj->getAllArr();
 										<tr>
 											<th class = "col-md-4" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
 											<th class = "col-md-1" data-hide=""><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>RFC</th>
+											<th class = "col-md-1" data-hide=""><i class="fa fa-fw  fa-envelope-square  text-muted hidden-md hidden-sm hidden-xs"></i>Email</th>
 											<th class = "col-md-1" data-hide=""><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Status</th>
 											<th class = "col-md-2" data-hide=""><i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
 										</tr>
@@ -56,6 +57,7 @@ $data = $obj->getAllArr();
 											<tr>
 												<td><?php echo htmlentities($row['nombre'])?></td>
 												<td><?php echo htmlentities($row['rfc'])?></td>
+												<td><?php echo htmlentities($row['email']) ?></td>	
 												<td><?php echo htmlentities($row['status']) ?></td>												
 												<td>
 													<div class="btn-group">

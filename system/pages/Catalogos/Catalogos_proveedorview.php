@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Editar Proveedor";
+$page_title = "Ver Proveedor";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -33,15 +33,6 @@ $obj = new Proveedor();
 $data = $obj->getTable($id);
 if ( !$data ) {
     informError(true,make_url("Catalogos","proveedor"));
-}
-if(isPost()){
-    $obj = new Proveedor();
-    $id = $obj->updateAll($id,getPost());
-    if( $id  ) {
-         informSuccess(true, make_url("Catalogos","proveedor"));
-    }else{
-        informError(true, make_url("Catalogos","proveedoredit",array('id'=>$id)),"proveedoredit");
-    }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -71,49 +62,34 @@ if(isPost()){
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label for="name">Proveedor</label>
-                                                <input type="text" class="form-control" placeholder="Nombre proveedor" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
+                                                <input type="text" readonly class="form-control" placeholder="Nombre proveedor" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">RFC</label>
-                                                <input type="text" class="form-control" placeholder="RFC proveedor" name="rfc" value="<?php echo htmlentities($data['rfc']); ?>" >
+                                                <input type="text" readonly class="form-control" placeholder="RFC proveedor" name="rfc" value="<?php echo htmlentities($data['rfc']); ?>" >
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Direccion</label>
-                                                <input type="text" class="form-control" placeholder="Direccion proveedor" name="direccion" value="<?php echo htmlentities($data['direccion']); ?>" >
+                                                <input type="text" readonly class="form-control" placeholder="Direccion proveedor" name="direccion" value="<?php echo htmlentities($data['direccion']); ?>" >
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Telefono</label>
-                                                <input type="text" class="form-control" placeholder="Telefono proveedor" name="telefono" value="<?php echo htmlentities($data['telefono']); ?>" >
+                                                <input type="text" readonly class="form-control" placeholder="Telefono proveedor" name="telefono" value="<?php echo htmlentities($data['telefono']); ?>" >
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Email</label>
-                                                <input type="text" class="form-control" placeholder="Email proveedor" name="email" value="<?php echo htmlentities($data['email']); ?>" >
+                                                <input type="text" readonly class="form-control" placeholder="Email proveedor" name="email" value="<?php echo htmlentities($data['email']); ?>" >
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Banco</label>
-                                                <input type="text" class="form-control" placeholder="Banco proveedor" name="banco" value="<?php echo htmlentities($data['banco']); ?>" >
+                                                <input type="text" readonly class="form-control" placeholder="Banco proveedor" name="banco" value="<?php echo htmlentities($data['banco']); ?>" >
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Numero de cuenta</label>
-                                                <input type="text" class="form-control" placeholder="Numero de cuenta proveedor" name="num_cta" value="<?php echo htmlentities($data['num_cta']); ?>" >
+                                                <input type="text" readonly class="form-control" placeholder="Numero de cuenta proveedor" name="num_cta" value="<?php echo htmlentities($data['num_cta']); ?>" >
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
-                                           <div class="form-actions" style="text-align: center">
-                                                <div class="row">
-                                                   <div class="col-md-12">
-                                                        <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
-                                                            Cancelar
-                                                        </button>
-                                                        <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
-                                                            <i class="fa fa-save"></i>
-                                                            Guardar
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                            <div id="resultado"></div>
-                                        </div>
+                                        
                                     </div>
                                 </form>
                             </div>

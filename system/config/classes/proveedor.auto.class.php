@@ -12,6 +12,9 @@
 		protected $telefono = "";
 		protected $status = "";
 		protected $created_date = "";
+		protected $banco = "";
+		protected $num_cta = "";
+		protected $email = "";
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -68,6 +71,21 @@
 		public function setCreatedDate( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "CREATEDDATE","s") ) 
  				$this->created_date = $value;
+		}
+		
+		public function setBanco( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "BANCO","s") ) 
+ 				$this->banco = $value;
+		}
+		
+		public function setNumCta( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "NUMCTA","s") ) 
+ 				$this->num_cta = $value;
+		}
+		
+		public function setEmail( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "EMAIL","s") ) 
+ 				$this->email = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -143,6 +161,30 @@
  			}
 		}
 		
+		public function getBanco($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->banco) ;
+ 			}else{
+ 				return $this->banco ;
+ 			}
+		}
+		
+		public function getNumCta($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->num_cta) ;
+ 			}else{
+ 				return $this->num_cta ;
+ 			}
+		}
+		
+		public function getEmail($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->email) ;
+ 			}else{
+ 				return $this->email ;
+ 			}
+		}
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -176,6 +218,9 @@
 			$this->setTelefono( $res['telefono'] );
 			$this->setStatus( $res['status'] );
 			$this->setCreatedDate( $res['created_date'] );
+			$this->setBanco( $res['banco'] );
+			$this->setNumCta( $res['num_cta'] );
+			$this->setEmail( $res['email'] );
 			return true;
 		}
 		// end function load
@@ -190,6 +235,9 @@
 			$sql .= " `telefono` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `created_date` = ? ,";
+			$sql .= " `banco` = ? ,";
+			$sql .= " `num_cta` = ? ,";
+			$sql .= " `email` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -201,6 +249,9 @@
 			$sql .= " `telefono` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `created_date` = ? ,";
+			$sql .= " `banco` = ? ,";
+			$sql .= " `num_cta` = ? ,";
+			$sql .= " `email` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -216,6 +267,9 @@
 			$stmt->mbind_param( 's', $this->telefono );
 			$stmt->mbind_param( 's', $this->status );
 			$stmt->mbind_param( 's', $this->created_date );
+			$stmt->mbind_param( 's', $this->banco );
+			$stmt->mbind_param( 's', $this->num_cta );
+			$stmt->mbind_param( 's', $this->email );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -252,6 +306,15 @@
 			if (in_array("created_date",$fieldstoupdate)){
 				$sql .= " `created_date` = ? ,";
 			}
+			if (in_array("banco",$fieldstoupdate)){
+				$sql .= " `banco` = ? ,";
+			}
+			if (in_array("num_cta",$fieldstoupdate)){
+				$sql .= " `num_cta` = ? ,";
+			}
+			if (in_array("email",$fieldstoupdate)){
+				$sql .= " `email` = ? ,";
+			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -278,6 +341,15 @@
 			}
 			if (in_array("created_date",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->createdDate  );
+			}
+			if (in_array("banco",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->banco  );
+			}
+			if (in_array("num_cta",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->numCta  );
+			}
+			if (in_array("email",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->email  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );
