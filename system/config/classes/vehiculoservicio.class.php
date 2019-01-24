@@ -7,16 +7,17 @@ class VehiculoServicio extends AutoVehiculoServicio {
 
 	
 		//metodo que sirve para obtener todos los datos de la tabla
-	public function getAllArr($id)
+	public function getAllArr($id,$All=false)
 	{
 		if(! intval( $id )){
 			return false;
 		}
 		$id=$this->db->real_escape_string($id);
+		$deleted = (!$All) ? "and vr.status !='deleted' " : "";
 		$sql = "SELECT vr.id, vr.id_servicio, r.codigo, r.nombre, vr.detalles, vr.status, vr.created_date, IFNULL(vr.total,0) total
 		FROM vehiculo_servicio vr
 		JOIN servicio r on vr.id_servicio=r.id
-		 where vr.status !='deleted' and vr.id_vehiculo=$id
+		 where  vr.id_vehiculo=$id $deleted
 		  ORDER BY  vr.created_date";
 		$res = $this->db->query($sql);
 		$set = array();

@@ -7,16 +7,17 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 
 	
 		//metodo que sirve para obtener todos los datos de la tabla
-	public function getAllArr($id)
+	public function getAllArr($id,$All=false)
 	{
 		if(! intval( $id )){
 			return false;
 		}
 		$id=$this->db->real_escape_string($id);
+		$deleted = (!$All) ? "and vr.status !='deleted' " : "";
 		$sql = "SELECT vr.id, vr.id_refaccion, r.nombre, vr.detalles, vr.cantidad, vr.status, vr.created_date, IFNULL(vr.costo_aprox,0) costo_aprox, IFNULL((vr.cantidad*vr.costo_aprox),0) total_aprox 
 		FROM vehiculo_refaccion vr
 		JOIN refaccion r on vr.id_refaccion=r.id
-		 where vr.status !='deleted' and vr.id_vehiculo=$id
+		 where  vr.id_vehiculo=$id $deleted
 		 ORDER BY  vr.created_date";
 		$res = $this->db->query($sql);
 		$set = array();

@@ -119,4 +119,4 @@ if($_SERVER["SERVER_NAME"]){
 }
 $db->set_charset('utf8');
      
-//var_dump($db);
+//echo var_dump($db);

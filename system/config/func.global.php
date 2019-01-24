@@ -130,21 +130,23 @@ function catModelo()
 }
 function getStatusServicio(){
   $arrayStatus = array();
-  $arrayStatus["En Proceso"] = "En Proceso";
-  $arrayStatus["active"]     = "Pendiente";
-  $arrayStatus["Realizado"]  = "Realizado";
-  $arrayStatus["Stand-By"]   = "Stand-By";
+  $arrayStatus["En Proceso"]     = "En Proceso";
+  //$arrayStatus["active"]     = "Pendiente";
+  $arrayStatus["Realizado"]      = "Realizado";
+  $arrayStatus["Stand-By"]       = "Stand-By";
+  $arrayStatus["Perdida o daño"] = "Perdida o daño";
   return $arrayStatus;
 }
 function getStatusRefaccion(){
   $arrayStatus = array();
-  $arrayStatus["active"]     = "Solicitada";
+  //$arrayStatus["active"]     = "Solicitada";
   $arrayStatus["Recibida"]   = "Recibida";
   $arrayStatus["Rechazada"]  = "Rechazada";
   $arrayStatus["Entregada"]  = "Entregada";
   $arrayStatus["Reenvio"]    = "Reenvio";
   $arrayStatus["Instalado"]  = "Instalado";
   $arrayStatus["Proporcionado-Cliente"]  = "Proporcionado-Cliente";
+  $arrayStatus["Perdida-daño"] = "Perdida-daño";
   return $arrayStatus;
 }
 

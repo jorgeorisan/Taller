@@ -15,7 +15,8 @@
 		protected $fecha_inicio = "";
 		protected $fecha_estimada = "";
 		protected $fecha_fin = "";
-		protected $id_userasigned = 0;
+		protected $id_personal = 0;
+		protected $id_almacen = 0;
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -89,9 +90,14 @@
  				$this->fecha_fin = $value;
 		}
 		
-		public function setIdUserasigned( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "IDUSERASIGNED","i") ) 
- 				$this->id_userasigned = $value;
+		public function setIdPersonal( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDPERSONAL","i") ) 
+ 				$this->id_personal = $value;
+		}
+		
+		public function setIdAlmacen( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDALMACEN","i") ) 
+ 				$this->id_almacen = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -191,11 +197,19 @@
  			}
 		}
 		
-		public function getIdUserasigned($sanitize=true){ 
+		public function getIdPersonal($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->id_userasigned) ;
+ 				return htmlspecialchars($this->id_personal) ;
  			}else{
- 				return $this->id_userasigned ;
+ 				return $this->id_personal ;
+ 			}
+		}
+		
+		public function getIdAlmacen($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->id_almacen) ;
+ 			}else{
+ 				return $this->id_almacen ;
  			}
 		}
 		
@@ -235,7 +249,8 @@
 			$this->setFechaInicio( $res['fecha_inicio'] );
 			$this->setFechaEstimada( $res['fecha_estimada'] );
 			$this->setFechaFin( $res['fecha_fin'] );
-			$this->setIdUserasigned( $res['id_userasigned'] );
+			$this->setIdPersonal( $res['id_personal'] );
+			$this->setIdAlmacen( $res['id_almacen'] );
 			return true;
 		}
 		// end function load
@@ -253,7 +268,8 @@
 			$sql .= " `fecha_inicio` = ? ,";
 			$sql .= " `fecha_estimada` = ? ,";
 			$sql .= " `fecha_fin` = ? ,";
-			$sql .= " `id_userasigned` = ? ,";
+			$sql .= " `id_personal` = ? ,";
+			$sql .= " `id_almacen` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -268,7 +284,8 @@
 			$sql .= " `fecha_inicio` = ? ,";
 			$sql .= " `fecha_estimada` = ? ,";
 			$sql .= " `fecha_fin` = ? ,";
-			$sql .= " `id_userasigned` = ? ,";
+			$sql .= " `id_personal` = ? ,";
+			$sql .= " `id_almacen` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -287,7 +304,8 @@
 			$stmt->mbind_param( 's', $this->fecha_inicio );
 			$stmt->mbind_param( 's', $this->fecha_estimada );
 			$stmt->mbind_param( 's', $this->fecha_fin );
-			$stmt->mbind_param( 'i', $this->id_userasigned );
+			$stmt->mbind_param( 'i', $this->id_personal );
+			$stmt->mbind_param( 'i', $this->id_almacen );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -333,8 +351,11 @@
 			if (in_array("fecha_fin",$fieldstoupdate)){
 				$sql .= " `fecha_fin` = ? ,";
 			}
-			if (in_array("id_userasigned",$fieldstoupdate)){
-				$sql .= " `id_userasigned` = ? ,";
+			if (in_array("id_personal",$fieldstoupdate)){
+				$sql .= " `id_personal` = ? ,";
+			}
+			if (in_array("id_almacen",$fieldstoupdate)){
+				$sql .= " `id_almacen` = ? ,";
 			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
@@ -372,8 +393,11 @@
 			if (in_array("fecha_fin",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->fechaFin  );
 			}
-			if (in_array("id_userasigned",$fieldstoupdate)){
-				$stmt->mbind_param( 'i', $this->idUserasigned  );
+			if (in_array("id_personal",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idPersonal  );
+			}
+			if (in_array("id_almacen",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idAlmacen  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

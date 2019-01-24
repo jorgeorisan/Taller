@@ -8,40 +8,53 @@ $data = $obj->getAllArr($id);
             <tr>
                 <th class = "col-md-2" data-class="expand"> Status Anterior</th>
                 <th class = "col-md-2" data-hide=""> Status</th>
-                <th class = "col-md-1" data-hide=""> Comentarios</th>
-                <th class = "col-md-2" data-hide=""> Usuario Asignado</th>
+                <th class = "col-md-2" data-hide=""> Personal</th>
                 <th class = "col-md-1" data-hide=""> Fecha Inicial </th>
                 <th class = "col-md-1" data-hide=""> Fecha Estimada </th>
                 <th class = "col-md-1" data-hide=""> Fecha Termino </th>
-                <th class = "col-md-2" data-hide=""> Fecha Registro</th>
+                <th class = "col-md-1" data-hide=""> Comentarios</th>
                 
             </tr>
         </thead>
         <tbody>
         <?php 
+        
+        if(count($data)){
             foreach($data as $key => $row){
                 $nomuser        = "";
-                if($row["id_userasigned"]){
-                    $objuser = new User();
-                    $datauser = $objuser->getTable($row["id_userasigned"]);
-                    if($datauser){ $nomuser = $datauser["nombre"]; }
+                if($row["id_personal"]){
+                    $objuser = new Personal();
+                    $datauser = $objuser->getTable($row["id_personal"]);
+                    if($datauser){ $nomuser = $datauser["nombre"]." ".$datauser["apellido_pat"]; }
                 }
+                $status = htmlentities($row['status']);
+                switch ($row['status']) {
+                    case 'active': $status = 'Solicitada'; break;    
+                    default: $class  = ''; break;
+                } 
+                $statusant = htmlentities($row['status_anterior']);
+                switch ($row['status_anterior']) {
+                    case 'active':   $statusant = 'Solicitada';   break;
+                    default:
+                        $class  = '';
+                        break;
+                } 
                 $key++;
                 ?>
                 <tr>
-                    <td><?php echo htmlentities($row['status_anterior'])?></td>
-                    <td><?php echo htmlentities($row['status'])?></td>
-                    <td><?php echo htmlentities($row['comentarios'])?></td>
+                    <td><?php echo $key."->".$statusant ?></td>
+                    <td><?php echo $status?></td>
                     <td><?php echo htmlentities($nomuser)?></td>
                     <td><?php echo htmlentities($row['fecha_inicio'])?></td>
                     <td><?php echo htmlentities($row['fecha_estimada'])?></td>
-                    <td><?php echo htmlentities($row['fecha_fin'])?></td>
-                    
-                    <td><?php echo date('Y-m-d', strtotime($row['created_date']))?></td>
-                   
+                    <td><?php echo htmlentities($row['fecha_fin'])?></td>                    
+                    <td><?php echo htmlentities($row['comentarios'])?></td>
                 </tr>
             <?php
             } 
+        }else{
+            echo "<tr ><td colspan=7> No se encontraron resultados</td></tr>";
+        }
             ?>
         </tbody>
     </table>

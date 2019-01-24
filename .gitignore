@@ -5,6 +5,9 @@ error_log
 .well-known
 cgi-bin
 .DS_Store
+.expediente/
+.expedientesterminados/
+.refaccion/
 
 #system/
 #system/config/config.php

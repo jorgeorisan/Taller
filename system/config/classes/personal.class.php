@@ -9,7 +9,7 @@ class Personal extends AutoPersonal {
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM personal where status='active';";
+		$sql = "SELECT * FROM personal where status='active' and id_taller=".$_SESSION['user_info']['id_taller'].";";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }

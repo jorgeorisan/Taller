@@ -35,7 +35,23 @@ class HistorialVehiculoservicio extends AutoHistorialVehiculoservicio {
 		return $row;
 
 	}
-		//metodo que sirve para agregar nuevo
+	//metodo que sirve paraobtener el ultimo movimiento del estatus
+	public function getLastStatus($id)
+	{
+		if(! intval( $id )){
+			return false;
+		}
+		$id=$this->db->real_escape_string($id);
+		$sql= "SELECT * FROM historial_vehiculoservicio WHERE id_vehiculoservicio=$id  order by id desc limit 1";
+		$res=$this->db->query($sql);
+		if(!$res)
+			{die("Error getting result historial_vehiculoservicio");}
+		$row = $res->fetch_assoc();
+		$res->close();
+		return $row;
+
+	}
+	//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
 		$_request["id_user"] = $this->db->real_escape_string($_SESSION['user_id']);

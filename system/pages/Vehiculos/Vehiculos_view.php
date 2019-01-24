@@ -74,9 +74,9 @@ $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRE
 $objimg       = new ImagenesVehiculo();
 $dataimagenes = $objimg->getAllArr($id);
 $objref       = new VehiculoRefaccion();
-$dataref      = $objref->getAllArr($id);
+$dataref      = $objref->getAllArr($id,true);
 $objser       = new VehiculoServicio();
-$dataser      = $objser->getAllArr($id);
+$dataser      = $objser->getAllArr($id,true);
 if(isPost()){
     $obj = new Vehiculo();
     if($id>0){
@@ -329,43 +329,49 @@ if(isPost()){
 													</tr>
 													<?php 
 													$totalservicio = 0 ;
+													$hvs  = new HistorialVehiculoservicio();
 													foreach($dataser as $key => $row) {
-														$totalservicio += $row['total'];  
+														
 														$status = htmlentities($row['status']);
+														
+														$cancelada = ($status == "deleted")? "cancelada": "";
 														$nombre = $row['nombre'] ;
 														if($row['detalles']){
 															$nombre=$row['detalles'];
 														} 
 														switch ($row['status']) {
-															case 'En Proceso':
-																$class  = 'label label-info';
-															break;
-															case 'active':
-																$status = 'Pendiente';
-																$class  = 'label label-danger';
-																break;
-															case 'Realizado':
-																$class  = 'label label-success';
-																break;
-															case 'Stand-By':
-																$class  = 'label label-warning';
-																break;
-															default:
-																$class  = '';
-																break;
+															case 'deleted':	   $status = 'Eliminado';	break;
+															case 'En Proceso': $class  = 'label label-info';	break;
+															case 'active':	   $status = 'Pendiente';	$class  = 'label label-danger';	break;
+															case 'Realizado':  $class  = 'label label-success';	break;
+															case 'Stand-By':   $class  = 'label label-warning';	break;
+															default:           $class  = '';	break;
 														} 
+														$datelast =  date("Y-m-d",strtotime($row['created_date']));
+														if($reslast = $hvs->getLastStatus($row['id'])){
+															if($reslast['fecha_fin'])
+																$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
+															elseif($reslast['fecha_estimada'])
+																$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
+															elseif($reslast['fecha_inicial'])
+																$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
+														}
 														?>
-														<tr style="height: 30px;">
+														<tr style="height: 30px;"  class="<?php echo $cancelada;?>">
 															<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
 															<td><?php echo htmlentities($row['codigo']); ?></td>
 															<td><?php echo htmlentities($nombre); ?></td>
 															<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
-															<td style="text-align: right;"><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
+															<td style="text-align: right;"><?php echo $datelast; ?></td>
 															<td style="text-align: right;">
+																<?php if(!$cancelada){
+																	$totalservicio += $row['total'];  	
+																?>
 																<div class="btn-group">
 																	<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusservice " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
 																	<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
 																</div>
+																<?php } ?>
 																<div class="btn-group">
 																	<a data-toggle="modal" class="btn-historystatusservice" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
 																	<i class="fa fa-history"></i>&nbsp;Historial</a>
@@ -404,45 +410,52 @@ if(isPost()){
 													</tr>
 													<?php 
 													$totalrefaccion = 0 ;
+													
+													$hvr  = new HistorialVehiculorefaccion();
 													foreach($dataref as $key => $row) {
-														$totalrefaccion+= $row['total_aprox']; 
 														$status = htmlentities($row['status']);
+														$cancelada = ($status == "deleted")? "cancelada": "";
+														$totalrefaccion+= $row['total_aprox']; 
 														$nombre = $row['nombre'] ;
 														if($row['detalles']){
 															$nombre=$row['detalles'];
 														} 
 														switch ($row['status']) {
-															case 'active':
-																$status = 'Solicitada';
-																$class  = 'label label-danger';
-																break;
-															case 'Realizado':
-																$class  = 'label label-success';
-																break;
-															case 'Stand-By':
-																$class  = 'label label-warning';
-																break;
-															default:
-																$class  = '';
-																break;
+															case 'deleted':	$status = 'Eliminado';	break;
+															case 'active':	$status = 'Solicitada';	break;
+															default: break;
 														}  
+														$datelast =  date("Y-m-d",strtotime($row['created_date']));
+														if($reslast = $hvs->getLastStatus($row['id'])){
+															if($reslast['fecha_fin'])
+																$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
+															elseif($reslast['fecha_estimada'])
+																$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
+															elseif($reslast['fecha_inicial'])
+																$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
+														}
 														?>
-														<tr style="height: 30px;">
-															<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
+														<tr style="height: 30px;" class="<?php echo $cancelada;?>">
+															<td><span class='<?php  ?>'><?php echo $status;?></span></td>
 															<td><?php echo htmlentities($row['cantidad']); ?></td>
 															<td><?php echo htmlentities($nombre); ?></td>
 															<td style="text-align: right;">$<?php echo number_format(htmlentities($row['costo_aprox']),2); ?></td>
 															<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total_aprox']),2); ?></td>
-															<td style="text-align: right;"><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
+															<td style="text-align: right;"><?php echo $datelast; ?></td>
 															<td style="text-align: right;">
+																<?php if(!$cancelada){ ?>
 																<div class="btn-group">
 																	<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusrefaccion " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idref='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
 																	<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
 																</div>
+																<?php } ?>
 																<div class="btn-group">
 																	<a data-toggle="modal" class="btn-historystatusrefaccion" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
 																	<i class="fa fa-history"></i>&nbsp;Historial</a>
 																</div>
+																<?php if(!$cancelada){ ?>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculorefacciondelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<?php } ?>
 															</td>
 														</tr>
 														<?php
@@ -477,23 +490,15 @@ if(isPost()){
 														if ($status=="Realizado") {
 															$totalservicio += $row['total'];  
 															switch ($row['status']) {
-																case 'active':
-																	$status = 'Pendiente';
-																	$class  = 'label label-danger';
-																	break;
-																case 'Realizado':
-																	$class  = 'label label-success';
-																	break;
-																case 'Stand-By':
-																	$class  = 'label label-warning';
-																	break;
-																default:
-																	$class  = '';
-																	break;
+																case 'En Proceso':	$class  = 'label label-info';	break;
+																case 'active':	  $status = 'Pendiente';	$class  = 'label label-danger';	break;
+																case 'Realizado': $class  = 'label label-success';	break;
+																case 'Stand-By':  $class  = 'label label-warning';	break;
+																default:          $class  = '';	break;
 															} 
 															?>
 															<tr style="height: 30px;">
-																<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
+																<td><span class='<?php echo $class ?>'><?php echo $status;?></span></td>
 																<td><?php echo htmlentities($row['codigo']); ?></td>
 																<td ><?php echo htmlentities($row['nombre']); ?></td>
 																<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
@@ -661,25 +666,7 @@ if(isPost()){
 	$(document).ready(function() {
 		document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
 
-		$('body').on('click', '#SaveNewStatus', function(){
-            var page = $(this).attr("page");
-			var id   = $(this).attr("idaux");
-            var url  = config.base+"/Vehiculos/ajax/?action=get&object=" + page; 
-            var data = (page=='change-statusservicio') ? "&id_vehiculoservicio=" + id : "&id_vehiculorefaccion=" + id ;
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $( "form#form-"+ page ).serialize() + data, // Adjuntar los campos del formulario enviado.
-                success: function(response){
-					if(response>0){
-						location.reload();
-                    }else{
-                        notify('error',"Oopss error al cambiar estatus: "+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-        });
+		
 
 		//servicios
 		$('body').on('click', '.btn-statusservice', function(){
@@ -694,6 +681,40 @@ if(isPost()){
 					return notify('error', 'Error al obtener los datos del Formulario');
 				}     
             });
+        });
+		$('body').on('click', '#SaveNewStatus', function(){
+            var page  = $(this).attr("page");
+			var id    = $(this).attr("idaux");
+			var hoy   = new Date();
+			var status_anterior= $("#status_anterior").val();
+			var status         = $("#status").val();
+			var idpersonal     = $("#id_personal").val();
+			var fecha_inicio   = $("#fecha_inicio").val();
+			var fecha_estimada = $("#fecha_estimada").val();
+			var fecha_final    = $("#fecha_fin").val();
+			if ( !status )       return notify('error',"Se necesita el estatus");
+			if ( !idpersonal )   return notify('error',"Se necesita el personal");
+			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
+			if ( status == "En Proceso" && fecha_final!="") return notify('error',"Este estatus no puede estar terminado");
+			if ( status_anterior == status) return notify('error',"El estatus no se puede repetir");
+			if ( fecha_estimada < fecha_inicio )  return notify('error',"La fecha estimada no puede ser menor a la fecha inicio");
+			if ( fecha_final && (fecha_final < fecha_inicio ) )     return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
+			
+            var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusservicio"; 
+            var data = (page=='change-statusservicio') ? "&id_vehiculoservicio=" + id : "&id_vehiculorefaccion=" + id ;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $( "form#form-"+ page ).serialize() + data, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+					if(response>0){
+						location.reload();
+                    }else{
+                        notify('error',"Oopss error al cambiar estatus: "+response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
         });
 		$('body').on('click', '.btn-historystatusservice', function(){
 			//history status
@@ -755,6 +776,51 @@ if(isPost()){
 					return notify('error', 'Error al obtener los datos del Formulario');
 				}     
             });
+        });
+		$('body').on('click', '#SaveNewStatusRefaccion', function(){
+            var page  = $(this).attr("page");
+			var id    = $(this).attr("idaux");
+			var hoy   = new Date();
+			var status_anterior= $("#status_anterior").val();
+			var status         = $("#status").val();
+			var idalmacen      = $("#id_almacen").val();
+			var idpersonal     = $("#id_personal").val();
+			var fecha_inicio   = $("#fecha_inicio").val();
+			var fecha_estimada = $("#fecha_estimada").val();
+			var fecha_final    = $("#fecha_fin").val();
+			if ( !status )       return notify('error',"Se necesita el estatus");
+			if ( !idalmacen )    return notify('error',"Se necesita el almacen");
+			if ( !idpersonal )   return notify('error',"Se necesita el personal");
+			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
+			
+			if ( status_anterior == status) return notify('error',"El estatus no se puede repetir");
+			if ( status == "Recibida" && fecha_final!="") return notify('error',"Este estatus no puede estar terminado");
+			if ( (status_anterior=="Proporcionado-Cliente" && status == "Recibida") || (status=="Proporcionado-Cliente" && status_anterior == "Recibida") ) 
+				return notify('error',"Este estatus no puede ser posible");
+			if ( (status_anterior=="Entregada" && status == "Reenvio") || (status=="Entregada" && status_anterior == "Reenvio") ) 
+				return notify('error',"Este estatus no puede ser posible");
+			
+			if( status != "Recibida" && status != "Proporcionado-Cliente"){
+				if ( fecha_estimada < fecha_inicio )  return notify('error',"La fecha estimada no puede ser menor a la fecha inicio");
+				if ( fecha_final && (fecha_final < fecha_inicio ) )     return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
+			}
+
+            var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusrefaccion"; 
+            var data = (page=='change-statusservicio') ? "&id_vehiculoservicio=" + id : "&id_vehiculorefaccion=" + id ;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $( "form#form-"+ page ).serialize() + data, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+					if(response>0){
+						location.reload();
+                    }else{
+                        notify('error',"Oopss error al cambiar estatus: "+response);
+						console.log(response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
         });
 		$('body').on('click', '.btn-historystatusrefaccion', function(){
 			//history status

@@ -35,6 +35,22 @@ class HistorialVehiculorefaccion extends AutoHistorialVehiculorefaccion {
 		return $row;
 
 	}
+	//metodo que sirve paraobtener el ultimo movimiento del estatus
+	public function getLastStatus($id)
+	{
+		if(! intval( $id )){
+			return false;
+		}
+		$id=$this->db->real_escape_string($id);
+		$sql= "SELECT * FROM historial_vehiculorefaccion WHERE id_vehiculorefaccion=$id  order by id desc limit 1";
+		$res=$this->db->query($sql);
+		if(!$res)
+			{die("Error getting result historial_vehiculorefaccion");}
+		$row = $res->fetch_assoc();
+		$res->close();
+		return $row;
+
+	}
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
@@ -42,6 +58,7 @@ class HistorialVehiculorefaccion extends AutoHistorialVehiculorefaccion {
 		$id_vehiculoref      = $this->db->real_escape_string($_request["id_vehiculorefaccion"]);
 		$status     		 = $this->db->real_escape_string($_request["status"]);
 		$cometarios     	 = $this->db->real_escape_string($_request["comentarios"]);
+		$idalmacen       	 = $this->db->real_escape_string($_request["id_almacen"]);
 		$data=fromArray($_request,'historial_vehiculorefaccion',$this->db,"add");
 		$sql= "INSERT INTO historial_vehiculorefaccion (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
@@ -56,6 +73,41 @@ class HistorialVehiculorefaccion extends AutoHistorialVehiculorefaccion {
 
 			$sql = "UPDATE vehiculo_refaccion SET status='". $status ."'  WHERE id=".$id_vehiculoref.";";
 			$row = $this->db->query($sql);
+			//updating inventario if estatus ='Recibida,Proporcionada Por el cliente'
+			$objvr = new VehiculoRefaccion();
+			$datavr = $objvr->getTable($id_vehiculoref);
+			if ( !$datavr ) die("Error getting result vehiculo refaccion");
+				
+			$id_refaccion = $datavr["id_refaccion"];
+			$cantidad     = $datavr["cantidad"];
+
+			$objinv = new Inventario();
+			$datainv = $objinv->existeRefaccion($id_refaccion,$idalmacen);
+			$existencia = ( $datainv ) ? $datainv['existencia'] : 0;
+			$update = false;
+			switch ($status) {
+				case 'Recibida':
+				case 'Proporcionado-Cliente':
+					# entra a inventario
+					$update = true;
+					$existencia += $cantidad;
+					break;
+				case 'Entregada':
+				case 'Reenvio':
+					# sale de inventario
+					$update = true;
+					$existencia -= $cantidad;
+					break;
+				default:
+					# code...
+					break;
+			}
+			if ($update) {
+				if( !$objinv->updateAll( $id_refaccion,$idalmacen,$existencia ,$rename=true) ){
+					echo "Falla en update inventario".$id_refaccion.' '.$idalmacen.' '.$existencia ;
+					exit;
+				}
+			}
 			if(!$row)
 				die("Error updating VehiculoRefaccion");
 			

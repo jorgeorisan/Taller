@@ -217,18 +217,50 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 		
 			break;
 		case 'showpopupChangeStatusServicio':
-			$page      = $_GET["page"];
-			$id        = $_GET["id"];
-			$statusant = $_GET["statusant"];
+			$page           = $_GET["page"];
+			$id             = $_GET["id"];
+			$status         = $_GET["statusant"];
+			$personal       = "";
+			$fecha_inicio   = date("Y-m-d");
+			$fecha_estimada = "";
+			$fecha_fin      = "";
+			$u  = new HistorialVehiculoservicio();
+			if($res = $u->getLastStatus($id)){
+				$personal       = $res['id_personal'];
+				$fecha_inicio   = $res['fecha_inicio'];
+				$fecha_estimada = $res['fecha_estimada'];
+				$fecha_fin      = $res['fecha_fin'];
+				$status         = $res['status'];
+				
+			}else{
+				$res=[];
+			}
 		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupChangeStatusServicio.php');
             if( $html )	echo $data=$html; 
                 else    echo 0;
 		
 			break;
 		case 'showpopupChangeStatusRefaccion':
-			$page      = $_GET["page"];
-			$id        = $_GET["id"];
-			$statusant = $_GET["statusant"];
+			$page           = $_GET["page"];
+			$id             = $_GET["id"];
+			$status         = $_GET["statusant"];
+			$personal       = "";
+			$fecha_inicio   = date("Y-m-d");
+			$fecha_estimada = "";
+			$fecha_fin      = "";
+			$almacen		= "";
+			$u  = new HistorialVehiculorefaccion();
+			if($res = $u->getLastStatus($id)){
+				$personal       = $res['id_personal'];
+				$fecha_inicio   = $res['fecha_inicio'];
+				$fecha_estimada = $res['fecha_estimada'];
+				$almacen        = $res['id_almacen'];
+				$fecha_fin      = $res['fecha_fin'];
+				$status         = $res['status'];
+				
+			}else{
+				$res=[];
+			}
 		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupChangeStatusRefaccion.php');
             if( $html )	echo $data=$html; 
                 else    echo 0;
@@ -237,9 +269,10 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 		case 'showpopupHistoryStatusServicio':
 			$page      = '';
 			$id        = $_GET["id"];
-		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupHistoryStatusServicio.php');
-            if( $html )	echo $data=$html; 
-                else    echo 0;
+		    if($html=require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupHistoryStatusServicio.php')){
+				echo $html;
+			}
+           
 		
 			break;
 		case 'showpopupHistoryStatusRefaccion':

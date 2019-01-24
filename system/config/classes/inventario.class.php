@@ -65,15 +65,16 @@ class Inventario extends AutoInventario {
 		return $id["LAST_INSERT_ID()"];
 	}
 		//metodo que sirve para hacer update
-	public function updateAll($idrefaccion,$idalmacen,$cant)
+	public function updateAll($idrefaccion,$idalmacen,$cant,$rename=false)
 	{
 		$_request["updated_date"] = date("Y-m-d H:i:s");
 		$_request["id_refaccion"] = $idrefaccion;
 		$_request["id_almacen"]   = $idalmacen;
-		
+	
 		if ( $objinventario=$this->existeRefaccion( $idrefaccion,$idalmacen ) ){
 			$id_invent = $objinventario['id'];
-			$_request["existencia"]  = $objinventario['existencia']+$cant;
+			$nuevaexistencia = ($rename) ? $cant : $objinventario['existencia']+$cant ;
+			$_request["existencia"]  = $nuevaexistencia;
 		}else{
 			$_request["existencia"]  = $cant;
 			$id_invent = $this->addAll($_request);
@@ -104,7 +105,7 @@ class Inventario extends AutoInventario {
 	//metodo para saber si existe un inventario
 	public function existeRefaccion($idrefaccion,$idalmacen){
 	
-		$sql= "SELECT * FROM inventario WHERE id_refaccion=$idrefaccion AND id_almacen=$idalmacen;";
+		$sql= "SELECT * FROM inventario WHERE id_refaccion=$idrefaccion AND id_almacen=$idalmacen limit 1;";
 		$res=$this->db->query($sql);
 		if(!$res)
 			return false;

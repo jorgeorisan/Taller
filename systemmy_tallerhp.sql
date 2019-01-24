@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 15-01-2019 a las 13:43:39
+-- Tiempo de generación: 23-01-2019 a las 15:15:39
 -- Versión del servidor: 5.6.41
 -- Versión de PHP: 7.2.7
 
@@ -35,7 +35,7 @@ CREATE TABLE `almacen` (
   `ubicacion` varchar(45) DEFAULT NULL,
   `status` varchar(45) DEFAULT 'active',
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `almacen`
@@ -481,7 +481,7 @@ CREATE TABLE `historial_vehiculorefaccion` (
   `fecha_estimada` varchar(45) DEFAULT NULL,
   `fecha_fin` varchar(45) DEFAULT NULL,
   `id_userasigned` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `historial_vehiculorefaccion`
@@ -509,21 +509,8 @@ CREATE TABLE `historial_vehiculoservicio` (
   `fecha_inicio` varchar(45) DEFAULT NULL,
   `fecha_estimada` varchar(45) DEFAULT NULL,
   `fecha_fin` varchar(45) DEFAULT NULL,
-  `id_userasigned` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `historial_vehiculoservicio`
---
-
-INSERT INTO `historial_vehiculoservicio` (`id`, `id_vehiculoservicio`, `id_user`, `status_anterior`, `status`, `comentarios`, `created_date`, `fecha_inicio`, `fecha_estimada`, `fecha_fin`, `id_userasigned`) VALUES
-(1, 9, 3, 'active', 'Realizado', NULL, '2018-12-12 05:35:19', NULL, NULL, NULL, NULL),
-(2, 0, 3, 'active', 'Realizado', NULL, '2018-12-13 06:33:27', NULL, NULL, NULL, NULL),
-(3, 0, 3, 'active', 'Realizado', NULL, '2018-12-13 06:34:42', NULL, NULL, NULL, NULL),
-(4, 10, 3, 'active', 'Realizado', 'le falto un poco', '2018-12-13 15:41:55', NULL, NULL, NULL, NULL),
-(5, 17, 3, 'active', 'Stand-By', '', '2018-12-13 15:43:45', NULL, NULL, NULL, NULL),
-(6, 10, 3, 'Realizado', 'active', '', '2018-12-13 18:04:50', NULL, NULL, NULL, NULL),
-(7, 10, 3, 'active', 'Realizado', '', '2018-12-19 09:32:29', '', '', '', 0);
+  `id_personal` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -534,13 +521,13 @@ INSERT INTO `historial_vehiculoservicio` (`id`, `id_vehiculoservicio`, `id_user`
 CREATE TABLE `imagenes_refaccion` (
   `id` int(11) NOT NULL,
   `id_refaccion` int(11) DEFAULT NULL,
-  `nombre` text,
-  `descripcion` text,
-  `url` text,
+  `nombre` mediumtext,
+  `descripcion` mediumtext,
+  `url` mediumtext,
   `status` varchar(45) DEFAULT 'active',
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_date` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `imagenes_refaccion`
@@ -744,7 +731,7 @@ CREATE TABLE `inventario` (
   `status` varchar(45) DEFAULT 'active',
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_date` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -826,10 +813,12 @@ CREATE TABLE `pedido` (
   `nombre` varchar(200) DEFAULT NULL,
   `total` double DEFAULT NULL,
   `status` varchar(45) DEFAULT 'active',
-  `comentarios` text,
+  `comentarios` mediumtext,
   `fecha_alta` timestamp NULL DEFAULT NULL,
-  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_validacion` timestamp NULL DEFAULT NULL,
+  `user_validacion` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -847,7 +836,7 @@ CREATE TABLE `pedido_refaccion` (
   `precio` double DEFAULT NULL,
   `totalcosto` double DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -864,59 +853,59 @@ CREATE TABLE `permiso` (
   `updated_date` timestamp NULL DEFAULT NULL,
   `deleted_date` timestamp NULL DEFAULT NULL,
   `status` varchar(45) DEFAULT 'active'
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `permiso`
 --
 
 INSERT INTO `permiso` (`id`, `nombre`, `section`, `page`, `created_date`, `updated_date`, `deleted_date`, `status`) VALUES
-(46, 'Servicios Borrar', 'Catalogos', 'serviciodelete', '2018-10-02 22:01:17', NULL, NULL, 'active'),
-(44, 'Servicios Alta', 'Catalogos', 'servicioadd', '2018-10-02 22:01:17', NULL, NULL, 'active'),
-(45, 'Servicios Editar', 'Catalogos', 'servicioedit', '2018-10-02 22:01:17', NULL, NULL, 'active'),
-(43, 'Servicios', 'Catalogos', 'servicio', '2018-10-02 22:01:17', NULL, NULL, 'active'),
-(42, 'Sub Marca Borrar', 'Catalogos', 'submarcadelete', '2018-09-28 20:09:32', NULL, NULL, 'active'),
-(41, 'Sub Marca Editar', 'Catalogos', 'submarcaedit', '2018-09-28 20:09:19', NULL, NULL, 'active'),
-(40, 'Sub Marca Alta', 'Catalogos', 'submarcaadd', '2018-09-28 20:09:07', NULL, NULL, 'active'),
-(39, 'Sub Marcas', 'Catalogos', 'submarca', '2018-09-28 20:08:54', NULL, NULL, 'active'),
-(38, 'Aseguradora Borrar', 'Catalogos', 'aseguradoradelete', '2018-09-28 20:01:36', NULL, NULL, 'active'),
-(37, 'Marca Borrar', 'Catalogos', 'marcadelete', '2018-09-28 19:54:21', '2018-09-29 02:58:25', NULL, 'active'),
-(35, 'Marca Alta', 'Catalogos', 'marcaadd', '2018-09-28 19:38:03', NULL, NULL, 'active'),
-(36, 'Marca Editar', 'Catalogos', 'marcaedit', '2018-09-28 19:38:18', NULL, NULL, 'active'),
-(34, 'Marcas', 'Catalogos', 'marca', '2018-09-28 19:37:50', NULL, NULL, 'active'),
-(33, 'Aseguradoras', 'Catalogos', 'aseguradora', '2018-09-28 19:37:19', NULL, NULL, 'active'),
-(32, 'Aseguradora Editar', 'Catalogos', 'aseguradoraedit', '2018-09-28 19:37:08', NULL, NULL, 'active'),
-(31, 'Aseguradora Alta', 'Catalogos', 'aseguradoraadd', '2018-09-28 19:36:45', NULL, NULL, 'active'),
-(30, 'Usuarios Tipos Borrar', 'Users', 'usertypedelete', '2018-09-28 17:56:47', NULL, NULL, 'active'),
-(29, 'Usuarios Tipos', 'Users', 'usertype', '2018-09-28 17:48:39', NULL, NULL, 'active'),
-(28, 'Permiso Tipos de Usuario', 'Permisos', 'asignartipouser', '2018-09-28 17:47:44', NULL, NULL, 'active'),
-(27, 'Usuarios Cambiar Password', 'Users', 'changepassword', '2018-09-28 04:22:23', NULL, NULL, 'active'),
-(25, 'Usuarios Editar', 'Users', 'edit', '2018-09-28 04:22:23', NULL, NULL, 'active'),
-(26, 'Usuarios Borrar', 'Users', 'userdelete', '2018-09-28 04:22:23', NULL, NULL, 'active'),
-(24, 'Usuarios Alta', 'Users', 'add', '2018-09-28 04:22:23', NULL, NULL, 'active'),
-(23, 'Usuarios', 'Users', 'index', '2018-09-28 04:22:23', NULL, NULL, 'active'),
+(1, 'Clientes', 'Clientes', 'index', '2018-09-26 18:14:07', NULL, NULL, 'active'),
+(2, 'Clientes Alta', 'Clientes', 'add', '2018-09-26 18:14:07', NULL, NULL, 'active'),
+(3, 'Clientes Editar', 'Clientes', 'edit', '2018-09-26 18:14:07', NULL, NULL, 'active'),
+(4, 'Vehiculos', 'Vehiculos', 'index', '2018-09-27 02:23:22', NULL, NULL, 'active'),
+(5, 'Vehiculos Alta', 'Vehiculos', 'add', '2018-09-27 02:33:14', NULL, NULL, 'active'),
+(6, 'Vehiculos Editar', 'Vehiculos', 'edit', '2018-09-27 02:33:14', NULL, NULL, 'active'),
+(7, 'Vehiculos Ver', 'Vehiculos', 'view', '2018-09-27 02:33:14', NULL, NULL, 'active'),
+(8, 'Vehiculos Mostrar Orden', 'Vehiculos', 'showorden', '2018-09-27 02:33:14', NULL, NULL, 'active'),
+(9, 'Clientes Borrar', 'Clientes', 'clientedelete', '2018-09-27 02:33:14', NULL, NULL, 'active'),
+(10, 'Vehiculos Borrar', 'Vehiculos', 'vehiculodelete', '2018-09-27 02:33:14', NULL, NULL, 'active'),
+(11, 'Talleres', 'Catalogos', 'taller', '2018-09-27 02:48:28', NULL, NULL, 'active'),
+(12, 'Taller Alta', 'Catalogos', 'talleradd', '2018-09-27 02:48:28', NULL, NULL, 'active'),
+(13, 'Taller Editar', 'Catalogos', 'talleredit', '2018-09-27 02:48:28', NULL, NULL, 'active'),
+(14, 'Taller Borrar', 'Catalogos', 'tallerdelete', '2018-09-27 02:48:28', NULL, NULL, 'active'),
+(15, 'Vehiculos Lista', 'Vehiculos', 'indexlist', '2018-09-27 14:02:07', NULL, NULL, 'active'),
+(16, 'Cliente Ver', 'Clientes', 'show', '2018-09-27 15:04:32', '2018-09-28 23:41:30', NULL, 'active'),
+(17, 'Vehiculos Imprimir Orden', 'Vehiculos', 'print', '2018-09-27 15:20:25', NULL, NULL, 'active'),
+(18, 'Permisos', 'Permisos', 'index', '2018-09-28 04:12:59', NULL, NULL, 'active'),
+(19, 'Permisos Asignar', 'Permisos', 'asignar', '2018-09-28 04:12:59', NULL, NULL, 'active'),
+(20, 'Permisos Alta', 'Permisos', 'add', '2018-09-28 04:12:59', NULL, NULL, 'active'),
 (21, 'Permisos Editar', 'Permisos', 'edit', '2018-09-28 04:12:59', NULL, NULL, 'active'),
 (22, 'Permisos Borrar', 'Permisos', 'permisodelete', '2018-09-28 04:12:59', NULL, NULL, 'active'),
-(20, 'Permisos Alta', 'Permisos', 'add', '2018-09-28 04:12:59', NULL, NULL, 'active'),
-(19, 'Permisos Asignar', 'Permisos', 'asignar', '2018-09-28 04:12:59', NULL, NULL, 'active'),
-(18, 'Permisos', 'Permisos', 'index', '2018-09-28 04:12:59', NULL, NULL, 'active'),
-(17, 'Vehiculos Imprimir Orden', 'Vehiculos', 'print', '2018-09-27 15:20:25', NULL, NULL, 'active'),
-(16, 'Cliente Ver', 'Clientes', 'show', '2018-09-27 15:04:32', '2018-09-28 23:41:30', NULL, 'active'),
-(15, 'Vehiculos Lista', 'Vehiculos', 'indexlist', '2018-09-27 14:02:07', NULL, NULL, 'active'),
-(14, 'Taller Borrar', 'Catalogos', 'tallerdelete', '2018-09-27 02:48:28', NULL, NULL, 'active'),
-(13, 'Taller Editar', 'Catalogos', 'talleredit', '2018-09-27 02:48:28', NULL, NULL, 'active'),
-(12, 'Taller Alta', 'Catalogos', 'talleradd', '2018-09-27 02:48:28', NULL, NULL, 'active'),
-(11, 'Talleres', 'Catalogos', 'taller', '2018-09-27 02:48:28', NULL, NULL, 'active'),
-(10, 'Vehiculos Borrar', 'Vehiculos', 'vehiculodelete', '2018-09-27 02:33:14', NULL, NULL, 'active'),
-(9, 'Clientes Borrar', 'Clientes', 'clientedelete', '2018-09-27 02:33:14', NULL, NULL, 'active'),
-(8, 'Vehiculos Mostrar Orden', 'Vehiculos', 'showorden', '2018-09-27 02:33:14', NULL, NULL, 'active'),
-(7, 'Vehiculos Ver', 'Vehiculos', 'view', '2018-09-27 02:33:14', NULL, NULL, 'active'),
-(6, 'Vehiculos Editar', 'Vehiculos', 'edit', '2018-09-27 02:33:14', NULL, NULL, 'active'),
-(5, 'Vehiculos Alta', 'Vehiculos', 'add', '2018-09-27 02:33:14', NULL, NULL, 'active'),
-(4, 'Vehiculos', 'Vehiculos', 'index', '2018-09-27 02:23:22', NULL, NULL, 'active'),
-(3, 'Clientes Editar', 'Clientes', 'edit', '2018-09-26 18:14:07', NULL, NULL, 'active'),
-(2, 'Clientes Alta', 'Clientes', 'add', '2018-09-26 18:14:07', NULL, NULL, 'active'),
-(1, 'Clientes', 'Clientes', 'index', '2018-09-26 18:14:07', NULL, NULL, 'active'),
+(23, 'Usuarios', 'Users', 'index', '2018-09-28 04:22:23', NULL, NULL, 'active'),
+(24, 'Usuarios Alta', 'Users', 'add', '2018-09-28 04:22:23', NULL, NULL, 'active'),
+(25, 'Usuarios Editar', 'Users', 'edit', '2018-09-28 04:22:23', NULL, NULL, 'active'),
+(26, 'Usuarios Borrar', 'Users', 'userdelete', '2018-09-28 04:22:23', NULL, NULL, 'active'),
+(27, 'Usuarios Cambiar Password', 'Users', 'changepassword', '2018-09-28 04:22:23', NULL, NULL, 'active'),
+(28, 'Permiso Tipos de Usuario', 'Permisos', 'asignartipouser', '2018-09-28 17:47:44', NULL, NULL, 'active'),
+(29, 'Usuarios Tipos', 'Users', 'usertype', '2018-09-28 17:48:39', NULL, NULL, 'active'),
+(30, 'Usuarios Tipos Borrar', 'Users', 'usertypedelete', '2018-09-28 17:56:47', NULL, NULL, 'active'),
+(31, 'Aseguradora Alta', 'Catalogos', 'aseguradoraadd', '2018-09-28 19:36:45', NULL, NULL, 'active'),
+(32, 'Aseguradora Editar', 'Catalogos', 'aseguradoraedit', '2018-09-28 19:37:08', NULL, NULL, 'active'),
+(33, 'Aseguradoras', 'Catalogos', 'aseguradora', '2018-09-28 19:37:19', NULL, NULL, 'active'),
+(34, 'Marcas', 'Catalogos', 'marca', '2018-09-28 19:37:50', NULL, NULL, 'active'),
+(35, 'Marca Alta', 'Catalogos', 'marcaadd', '2018-09-28 19:38:03', NULL, NULL, 'active'),
+(36, 'Marca Editar', 'Catalogos', 'marcaedit', '2018-09-28 19:38:18', NULL, NULL, 'active'),
+(37, 'Marca Borrar', 'Catalogos', 'marcadelete', '2018-09-28 19:54:21', '2018-09-29 02:58:25', NULL, 'active'),
+(38, 'Aseguradora Borrar', 'Catalogos', 'aseguradoradelete', '2018-09-28 20:01:36', NULL, NULL, 'active'),
+(39, 'Sub Marcas', 'Catalogos', 'submarca', '2018-09-28 20:08:54', NULL, NULL, 'active'),
+(40, 'Sub Marca Alta', 'Catalogos', 'submarcaadd', '2018-09-28 20:09:07', NULL, NULL, 'active'),
+(41, 'Sub Marca Editar', 'Catalogos', 'submarcaedit', '2018-09-28 20:09:19', NULL, NULL, 'active'),
+(42, 'Sub Marca Borrar', 'Catalogos', 'submarcadelete', '2018-09-28 20:09:32', NULL, NULL, 'active'),
+(43, 'Servicios', 'Catalogos', 'servicio', '2018-10-02 22:01:17', NULL, NULL, 'active'),
+(44, 'Servicios Alta', 'Catalogos', 'servicioadd', '2018-10-02 22:01:17', NULL, NULL, 'active'),
+(45, 'Servicios Editar', 'Catalogos', 'servicioedit', '2018-10-02 22:01:17', NULL, NULL, 'active'),
+(46, 'Servicios Borrar', 'Catalogos', 'serviciodelete', '2018-10-02 22:01:17', NULL, NULL, 'active'),
 (47, 'Servicio Paquete', 'Catalogos', 'paquete', '2018-10-13 17:39:24', NULL, NULL, 'active'),
 (51, 'Asignar Servicios Paquete', 'Catalogos', 'serviciopaquete', '2018-10-13 17:57:13', NULL, NULL, 'active'),
 (52, 'Refacciones', 'Catalogos', 'refaccion', '2018-10-23 02:43:45', NULL, NULL, 'active'),
@@ -941,7 +930,12 @@ INSERT INTO `permiso` (`id`, `nombre`, `section`, `page`, `created_date`, `updat
 (71, 'Almacen Alta', 'Catalogos', 'almacenadd', '2019-01-04 05:58:34', NULL, NULL, 'active'),
 (72, 'Almacen Editar', 'Catalogos', 'almacenedit', '2019-01-04 05:58:34', NULL, NULL, 'active'),
 (73, 'Almacen Ver', 'Catalogos', 'almacenview', '2019-01-04 05:58:34', NULL, NULL, 'active'),
-(74, 'Almacen Borrar', 'Catalogos', 'almacendelete', '2019-01-04 05:58:34', NULL, NULL, 'active');
+(74, 'Almacen Borrar', 'Catalogos', 'almacendelete', '2019-01-04 05:58:34', NULL, NULL, 'active'),
+(75, 'Personal Ver', 'Personal', 'show', '2019-01-18 22:12:18', NULL, NULL, 'active'),
+(76, 'Personal Borrar', 'Personal', 'personaldelete', '2019-01-18 22:12:18', NULL, NULL, 'active'),
+(77, 'Personal Editar', 'Personal', 'edit', '2019-01-18 22:12:18', NULL, NULL, 'active'),
+(78, 'Personal Alta', 'Personal', 'add', '2019-01-18 22:12:18', NULL, NULL, 'active'),
+(79, 'Personal', 'Personal', 'index', '2019-01-18 22:12:18', NULL, NULL, 'active');
 
 -- --------------------------------------------------------
 
@@ -954,84 +948,89 @@ CREATE TABLE `permiso_user` (
   `id_permiso` int(11) DEFAULT NULL,
   `id_user` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `permiso_user`
 --
 
 INSERT INTO `permiso_user` (`id`, `id_permiso`, `id_user`, `created_date`) VALUES
-(730, 27, 3, '2019-01-04 06:59:34'),
-(729, 24, 3, '2019-01-04 06:59:34'),
-(728, 22, 3, '2019-01-04 06:59:34'),
-(727, 18, 3, '2019-01-04 06:59:34'),
-(726, 21, 3, '2019-01-04 06:59:34'),
-(725, 28, 3, '2019-01-04 06:59:34'),
-(724, 19, 3, '2019-01-04 06:59:34'),
-(723, 20, 3, '2019-01-04 06:59:34'),
-(722, 61, 3, '2019-01-04 06:59:34'),
-(721, 63, 3, '2019-01-04 06:59:34'),
-(720, 59, 3, '2019-01-04 06:59:34'),
-(719, 62, 3, '2019-01-04 06:59:34'),
-(718, 60, 3, '2019-01-04 06:59:34'),
-(717, 66, 3, '2019-01-04 06:59:34'),
-(716, 16, 3, '2019-01-04 06:59:34'),
-(715, 1, 3, '2019-01-04 06:59:34'),
-(714, 3, 3, '2019-01-04 06:59:34'),
-(713, 9, 3, '2019-01-04 06:59:34'),
-(712, 2, 3, '2019-01-04 06:59:34'),
-(711, 13, 3, '2019-01-04 06:59:34'),
-(710, 14, 3, '2019-01-04 06:59:34'),
-(709, 12, 3, '2019-01-04 06:59:34'),
-(708, 11, 3, '2019-01-04 06:59:34'),
-(707, 41, 3, '2019-01-04 06:59:34'),
-(706, 42, 3, '2019-01-04 06:59:34'),
-(705, 40, 3, '2019-01-04 06:59:34'),
-(704, 39, 3, '2019-01-04 06:59:34'),
-(703, 51, 3, '2019-01-04 06:59:34'),
-(702, 45, 3, '2019-01-04 06:59:34'),
-(701, 46, 3, '2019-01-04 06:59:34'),
-(700, 44, 3, '2019-01-04 06:59:34'),
-(699, 43, 3, '2019-01-04 06:59:34'),
-(698, 55, 3, '2019-01-04 06:59:34'),
-(697, 54, 3, '2019-01-04 06:59:34'),
-(696, 53, 3, '2019-01-04 06:59:34'),
-(695, 52, 3, '2019-01-04 06:59:34'),
-(694, 70, 3, '2019-01-04 06:59:34'),
-(693, 68, 3, '2019-01-04 06:59:34'),
-(692, 69, 3, '2019-01-04 06:59:34'),
-(691, 67, 3, '2019-01-04 06:59:34'),
-(690, 65, 3, '2019-01-04 06:59:34'),
-(689, 47, 3, '2019-01-04 06:59:34'),
-(688, 36, 3, '2019-01-04 06:59:34'),
-(687, 37, 3, '2019-01-04 06:59:34'),
-(686, 35, 3, '2019-01-04 06:59:34'),
-(685, 34, 3, '2019-01-04 06:59:34'),
-(684, 32, 3, '2019-01-04 06:59:34'),
-(683, 38, 3, '2019-01-04 06:59:34'),
-(682, 31, 3, '2019-01-04 06:59:34'),
-(681, 33, 3, '2019-01-04 06:59:34'),
-(680, 73, 3, '2019-01-04 06:59:34'),
-(679, 72, 3, '2019-01-04 06:59:34'),
-(678, 74, 3, '2019-01-04 06:59:34'),
-(677, 71, 3, '2019-01-04 06:59:34'),
-(676, 64, 3, '2019-01-04 06:59:34'),
-(731, 25, 3, '2019-01-04 06:59:34'),
-(732, 23, 3, '2019-01-04 06:59:34'),
-(733, 26, 3, '2019-01-04 06:59:34'),
-(734, 29, 3, '2019-01-04 06:59:34'),
-(735, 30, 3, '2019-01-04 06:59:34'),
-(736, 5, 3, '2019-01-04 06:59:34'),
-(737, 6, 3, '2019-01-04 06:59:34'),
-(738, 4, 3, '2019-01-04 06:59:34'),
-(739, 15, 3, '2019-01-04 06:59:34'),
-(740, 56, 3, '2019-01-04 06:59:34'),
-(741, 17, 3, '2019-01-04 06:59:34'),
-(742, 8, 3, '2019-01-04 06:59:34'),
-(743, 10, 3, '2019-01-04 06:59:34'),
-(744, 58, 3, '2019-01-04 06:59:34'),
-(745, 57, 3, '2019-01-04 06:59:34'),
-(746, 7, 3, '2019-01-04 06:59:34');
+(747, 64, 3, '2019-01-18 22:31:54'),
+(748, 71, 3, '2019-01-18 22:31:54'),
+(749, 74, 3, '2019-01-18 22:31:54'),
+(750, 72, 3, '2019-01-18 22:31:54'),
+(751, 73, 3, '2019-01-18 22:31:54'),
+(752, 33, 3, '2019-01-18 22:31:54'),
+(753, 31, 3, '2019-01-18 22:31:54'),
+(754, 38, 3, '2019-01-18 22:31:54'),
+(755, 32, 3, '2019-01-18 22:31:54'),
+(756, 34, 3, '2019-01-18 22:31:54'),
+(757, 35, 3, '2019-01-18 22:31:54'),
+(758, 37, 3, '2019-01-18 22:31:54'),
+(759, 36, 3, '2019-01-18 22:31:54'),
+(760, 47, 3, '2019-01-18 22:31:54'),
+(761, 65, 3, '2019-01-18 22:31:54'),
+(762, 67, 3, '2019-01-18 22:31:54'),
+(763, 69, 3, '2019-01-18 22:31:54'),
+(764, 68, 3, '2019-01-18 22:31:54'),
+(765, 70, 3, '2019-01-18 22:31:54'),
+(766, 52, 3, '2019-01-18 22:31:54'),
+(767, 53, 3, '2019-01-18 22:31:54'),
+(768, 54, 3, '2019-01-18 22:31:54'),
+(769, 55, 3, '2019-01-18 22:31:54'),
+(770, 43, 3, '2019-01-18 22:31:54'),
+(771, 44, 3, '2019-01-18 22:31:54'),
+(772, 46, 3, '2019-01-18 22:31:54'),
+(773, 45, 3, '2019-01-18 22:31:54'),
+(774, 51, 3, '2019-01-18 22:31:54'),
+(775, 39, 3, '2019-01-18 22:31:54'),
+(776, 40, 3, '2019-01-18 22:31:54'),
+(777, 42, 3, '2019-01-18 22:31:54'),
+(778, 41, 3, '2019-01-18 22:31:54'),
+(779, 11, 3, '2019-01-18 22:31:54'),
+(780, 12, 3, '2019-01-18 22:31:54'),
+(781, 14, 3, '2019-01-18 22:31:54'),
+(782, 13, 3, '2019-01-18 22:31:54'),
+(783, 2, 3, '2019-01-18 22:31:54'),
+(784, 9, 3, '2019-01-18 22:31:54'),
+(785, 3, 3, '2019-01-18 22:31:54'),
+(786, 1, 3, '2019-01-18 22:31:54'),
+(787, 16, 3, '2019-01-18 22:31:54'),
+(788, 66, 3, '2019-01-18 22:31:54'),
+(789, 60, 3, '2019-01-18 22:31:54'),
+(790, 62, 3, '2019-01-18 22:31:54'),
+(791, 59, 3, '2019-01-18 22:31:54'),
+(792, 63, 3, '2019-01-18 22:31:54'),
+(793, 61, 3, '2019-01-18 22:31:54'),
+(794, 20, 3, '2019-01-18 22:31:54'),
+(795, 19, 3, '2019-01-18 22:31:54'),
+(796, 28, 3, '2019-01-18 22:31:54'),
+(797, 21, 3, '2019-01-18 22:31:54'),
+(798, 18, 3, '2019-01-18 22:31:54'),
+(799, 22, 3, '2019-01-18 22:31:54'),
+(800, 78, 3, '2019-01-18 22:31:54'),
+(801, 77, 3, '2019-01-18 22:31:54'),
+(802, 79, 3, '2019-01-18 22:31:54'),
+(803, 76, 3, '2019-01-18 22:31:54'),
+(804, 75, 3, '2019-01-18 22:31:54'),
+(805, 24, 3, '2019-01-18 22:31:54'),
+(806, 27, 3, '2019-01-18 22:31:54'),
+(807, 25, 3, '2019-01-18 22:31:54'),
+(808, 23, 3, '2019-01-18 22:31:54'),
+(809, 26, 3, '2019-01-18 22:31:54'),
+(810, 29, 3, '2019-01-18 22:31:54'),
+(811, 30, 3, '2019-01-18 22:31:54'),
+(812, 5, 3, '2019-01-18 22:31:54'),
+(813, 6, 3, '2019-01-18 22:31:54'),
+(814, 4, 3, '2019-01-18 22:31:54'),
+(815, 15, 3, '2019-01-18 22:31:54'),
+(816, 56, 3, '2019-01-18 22:31:54'),
+(817, 17, 3, '2019-01-18 22:31:54'),
+(818, 8, 3, '2019-01-18 22:31:54'),
+(819, 10, 3, '2019-01-18 22:31:54'),
+(820, 58, 3, '2019-01-18 22:31:54'),
+(821, 57, 3, '2019-01-18 22:31:54'),
+(822, 7, 3, '2019-01-18 22:31:54');
 
 -- --------------------------------------------------------
 
@@ -1044,7 +1043,7 @@ CREATE TABLE `permiso_usertype` (
   `id_permiso` int(11) DEFAULT NULL,
   `id_usertype` int(11) DEFAULT NULL,
   `status` varchar(45) DEFAULT 'active'
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `permiso_usertype`
@@ -1103,6 +1102,34 @@ INSERT INTO `permiso_usertype` (`id`, `id_permiso`, `id_usertype`, `status`) VAL
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `personal`
+--
+
+CREATE TABLE `personal` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `id_taller` int(11) DEFAULT NULL,
+  `nombre` varchar(200) DEFAULT NULL,
+  `apellido_pat` varchar(100) DEFAULT NULL,
+  `apellido_mat` varchar(100) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `calle` varchar(200) DEFAULT NULL,
+  `num_int` varchar(45) DEFAULT NULL,
+  `num_ext` varchar(45) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL,
+  `cp` varchar(45) DEFAULT NULL,
+  `colonia` varchar(100) DEFAULT NULL,
+  `ciudad` varchar(100) DEFAULT NULL,
+  `estado` varchar(100) DEFAULT NULL,
+  `status` varchar(45) DEFAULT 'active',
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_date` timestamp NULL DEFAULT NULL,
+  `deleted_date` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `proveedor`
 --
 
@@ -1113,8 +1140,11 @@ CREATE TABLE `proveedor` (
   `direccion` varchar(300) DEFAULT NULL,
   `telefono` varchar(45) DEFAULT NULL,
   `status` varchar(45) DEFAULT 'active',
-  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `banco` varchar(45) DEFAULT NULL,
+  `num_cta` varchar(45) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1258,7 +1288,7 @@ CREATE TABLE `servicio_paquete` (
   `status` varchar(45) DEFAULT 'active',
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_date` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `servicio_paquete`
@@ -2317,7 +2347,7 @@ CREATE TABLE `vehiculo_refaccion` (
   `id` int(11) NOT NULL,
   `id_vehiculo` int(11) DEFAULT NULL,
   `id_refaccion` int(11) DEFAULT NULL,
-  `detalles` text,
+  `detalles` mediumtext,
   `cantidad` double DEFAULT NULL,
   `costo_aprox` double DEFAULT NULL,
   `costo_real` double DEFAULT NULL,
@@ -2326,7 +2356,7 @@ CREATE TABLE `vehiculo_refaccion` (
   `updated_date` timestamp NULL DEFAULT NULL,
   `deleted_date` timestamp NULL DEFAULT NULL,
   `updated_user` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `vehiculo_refaccion`
@@ -2360,14 +2390,14 @@ CREATE TABLE `vehiculo_servicio` (
   `id` int(11) NOT NULL,
   `id_vehiculo` int(11) DEFAULT NULL,
   `id_servicio` int(11) DEFAULT NULL,
-  `detalles` text,
+  `detalles` mediumtext,
   `total` double DEFAULT NULL,
   `status` varchar(45) DEFAULT 'active',
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_date` timestamp NULL DEFAULT NULL,
   `deleted_date` timestamp NULL DEFAULT NULL,
   `updated_user` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `vehiculo_servicio`
@@ -2453,8 +2483,9 @@ ALTER TABLE `historial_vehiculorefaccion`
 --
 ALTER TABLE `historial_vehiculoservicio`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_vehiculoservicio_historialvehiculoservicio_dx` (`id_vehiculoservicio`),
-  ADD KEY `id_user_historialvehiculoservicio_dx` (`id_user`);
+  ADD KEY `id_personal_historialservicio_dx` (`id_personal`),
+  ADD KEY `id_usuario_historialservicio_dx` (`id_user`),
+  ADD KEY `id_vehiculoservicio_historialvehiculoservicio_dx` (`id_vehiculoservicio`);
 
 --
 -- Indices de la tabla `imagenes_refaccion`
@@ -2521,6 +2552,13 @@ ALTER TABLE `permiso_usertype`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usertypepermisousertype_dx_idx` (`id_usertype`),
   ADD KEY `id_permisopermisousertype_dx_idx` (`id_permiso`);
+
+--
+-- Indices de la tabla `personal`
+--
+ALTER TABLE `personal`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_userpersonal_dx_idx` (`id_user`);
 
 --
 -- Indices de la tabla `proveedor`
@@ -2617,8 +2655,8 @@ ALTER TABLE `vehiculo_refaccion`
 --
 ALTER TABLE `vehiculo_servicio`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_servicio_vehiculoservicio_dx` (`id_servicio`),
-  ADD KEY `id_vehiculo_vehiculoservicio_dx` (`id_vehiculo`);
+  ADD KEY `id_vehiculo_vehiculoservicio_dx` (`id_vehiculo`),
+  ADD KEY `id_servicio_vehiculoservicio_dx` (`id_servicio`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -2658,7 +2696,7 @@ ALTER TABLE `historial_vehiculorefaccion`
 -- AUTO_INCREMENT de la tabla `historial_vehiculoservicio`
 --
 ALTER TABLE `historial_vehiculoservicio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes_refaccion`
@@ -2700,19 +2738,25 @@ ALTER TABLE `pedido_refaccion`
 -- AUTO_INCREMENT de la tabla `permiso`
 --
 ALTER TABLE `permiso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT de la tabla `permiso_user`
 --
 ALTER TABLE `permiso_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=747;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=823;
 
 --
 -- AUTO_INCREMENT de la tabla `permiso_usertype`
 --
 ALTER TABLE `permiso_usertype`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+
+--
+-- AUTO_INCREMENT de la tabla `personal`
+--
+ALTER TABLE `personal`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -2742,6 +2786,12 @@ ALTER TABLE `servicio_paquete`
 -- AUTO_INCREMENT de la tabla `solicitud`
 --
 ALTER TABLE `solicitud`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `solicitud_refaccion`
+--
+ALTER TABLE `solicitud_refaccion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -2808,6 +2858,12 @@ ALTER TABLE `detalles_vehiculo`
 --
 ALTER TABLE `imagenes_vehiculo`
   ADD CONSTRAINT `id_vehiculoimagenes_dx` FOREIGN KEY (`id_vehiculo`) REFERENCES `vehiculo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `personal`
+--
+ALTER TABLE `personal`
+  ADD CONSTRAINT `id_userpersonal_dx` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `refaccion`
