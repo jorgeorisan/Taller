@@ -77,6 +77,7 @@ Routing section
         if ($request['page'] === 'refaccion')      { $page = "Catalogos_refaccion.php";  }
         if ($request['page'] === 'proveedor')      { $page = "Catalogos_proveedor.php";  }
         if ($request['page'] === 'almacen')        { $page = "Catalogos_almacen.php";  }
+        if ($request['page'] === 'gastostipo')     { $page = "Catalogos_gastostipo.php";  }
       }
       if ($request['section']==='Users'){
        $page = "Users_index.php";
@@ -115,12 +116,20 @@ Routing section
       if ($request['section']==='Inventarios'){
         $page = "Inventarios_index.php";
         $dir  = "Inventarios";//si esta en carpeta
+        if ($request['page']==='kardex')   { $page = "Inventarios_kardex.php"; }
       } 
       if ($request['section']==='Personal'){
         $page = "Personal_index.php";
         $dir  = "Personal";//si esta en carpeta
         if ($request['page']==='add')      { $page = "Personal_add.php";      }
         if ($request['page']==='edit')     { $page = "Personal_edit.php";     }
+      }
+      if ($request['section']==='Gastos'){
+        $page = "Gastos_index.php";
+        $dir  = "Gastos";//si esta en carpeta
+        if ($request['page']==='add')      { $page = "Gastos_add.php";      }
+        if ($request['page']==='edit')     { $page = "Gastos_edit.php";     }
+        if ($request['page']==='view')     { $page = "Gastos_view.php";     }
       }
       //delete pages
       if(isset($request['params']['id'])){

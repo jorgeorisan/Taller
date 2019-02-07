@@ -299,6 +299,9 @@ function delete($id,$module,$table){
     case 'proveedor':          $obj = new Proveedor();         $pagereturn = $table;    break;
     case 'pedido':             $obj = new Pedido();                                     break;
     case 'pedidorefaccion':    $obj = new PedidoRefaccion();   $pagereturn = 'view';    break;
+    case 'gastotipo':          $obj = new GastoTipo();         $pagereturn = $table;   break;
+    case 'gastos':             $obj = new Gastos();                                     break;
+    case 'pedidorefaccion':    $obj = new GastosRegistros();   $pagereturn = 'view';    break;
     default:
       echo "no se encontro tabla en func.global ".$table;
       exit;

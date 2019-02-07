@@ -432,7 +432,7 @@ $filename=SYSTEM_DIR.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."classes".
 
 $output='<?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR "' . $table_name . '.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR ."' . $table_name . '.auto.class.php");
 
 class ' . $model_name . ' extends Auto' . $model_name . ' { 
 	private $DB_TABLE = "'.$table_name.'";

@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Inventario";
+$page_title = "Gastos";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -17,8 +17,10 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-$obj = new Inventario();
-$data = $obj->getAllArr($_SESSION['user_info']['id_taller']);
+
+$obj = new Gastos();
+$data = $obj->getAllArr();
+
 //print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -34,7 +36,7 @@ $data = $obj->getAllArr($_SESSION['user_info']['id_taller']);
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			
+			 <p><a class="btn btn-success" href="<?php echo make_url("Gastos","add")?>" >Nuevo Gastos</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -49,55 +51,61 @@ $data = $obj->getAllArr($_SESSION['user_info']['id_taller']);
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> No. Gastos
+											</th>
 											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-list-ol  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;No.
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Taller
+											</th>
+											<th class = "col-md-1" data-class="expand">
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Tipo Gastos
+											</th>
+											<th class = "col-md-1" data-class="expand">
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Concepto
 											</th>
 											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw fa-car-garage text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Almacen
+												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Total
 											</th>
-											<th class = "col-md-1" >
-												<i class="fa fa-fw  fa-credit-card-front text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Refaccion
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Alta
 											</th>
-											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-user  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Existencia
-											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-calendar-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Status
-											</th>
-											<th class = "col-md-2" data-hide="phone,tablet">
-												<i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  text-muted hidden-md hidden-sm hidden-xs"></i>Action
 											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach($data as $row){
-											$nomtaller      = "";
-											$nommarca       = "";
-											$nomsubmarca    = "";
-											$nomaseguradora = "";
-											$nomcliente     = "";
-											
+										<?php  foreach($data as $row) {
+											$nomtaller="";
+											$objtaller = new Taller();
+											$datataller = $objtaller->getTable($row["id_taller"]);
+											if($datataller){ $nomtaller = $datataller["nombre"]; }
 											?>
 											<tr>
 												<td><?php echo htmlentities($row['id'])?></td>
-												<td><?php echo htmlentities($row['taller'])."<br>".htmlentities($row['almacen'])?></td>
-												<td><a class="" href="<?php echo make_url("Catalogos","refaccionshow",array('id'=>$row['id_refaccion'])); ?>"><?php echo htmlentities($row['refaccion']) ?></a></td>
+												<td><?php echo htmlentities($row['nombre'].' '.$row['apellido_pat'].' '.$row['apellido_mat'])?></td>
+												<td><?php echo htmlentities($row['email'])?></td>
+												<td><?php echo htmlentities($row['telefono']) ?></td>
+												<td><?php echo htmlentities($row['ciudad']." ".$row['estado']." Col. ".$row['colonia']." Calle. ".$row['calle']." Num. ".$row['num_ext']." ".$row['num_int']) ?></td>
 												
-												<td><?php echo htmlentities($row['existencia']) ?></td>
-												<td><?php echo htmlentities($row['status']) ?></td>
-												
+												<td><?php echo htmlentities($row['created_date']) ?></td>
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 															Accion <span class="caret"></span>
 														</button>
 														<ul class="dropdown-menu">
-															
 															<li>
-																<a class="" href="<?php echo make_url("Inventarios","kardex",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Kardex</a>
+																<a class="" href="<?php echo make_url("Gastos","show",array('id'=>$row['id'])); ?>">Ver</a>
+															</li>
+															<li>
+																<a class="" href="<?php echo make_url("Gastos","edit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
 															
-															
+															<li class="divider"></li>
+															<li>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Gastos","gastosdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+															</li>
 														</ul>
 													</div>
 												</td>
@@ -167,9 +175,15 @@ $data = $obj->getAllArr($_SESSION['user_info']['id_taller']);
 			}
 		});
 	
-		 pageSetUp();
+		/* DO NOT REMOVE : GLOBAL FUNCTIONS!
+		 *
+		 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+		 *
 		
-	});
+		 */
+
+		 pageSetUp();
+	})
 
 </script>
 

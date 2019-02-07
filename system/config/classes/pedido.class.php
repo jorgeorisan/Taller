@@ -91,9 +91,8 @@ class Pedido extends AutoPedido {
 		//metodo que sirve validar entrada de pedido
 	public function validar($id_pedido)
 	{
-		if(! intval( $id_pedido )){
-			return false;
-		}
+		if(! intval( $id_pedido )) return false;
+
 		$id_pedido=$this->db->real_escape_string($id_pedido);
 		$objPedidoRefaccion = new PedidoRefaccion();
 		$data = $objPedidoRefaccion->getAllArr($id_pedido);
@@ -103,16 +102,21 @@ class Pedido extends AutoPedido {
 			$cantidad     = $row["cantidad"];
 			$objinv = new Inventario();
 			if( !$objinv->updateAll( $id_refaccion,$id_almacen,$cantidad ) ){
-				echo "Falla en update inventario".$id_refaccion.' '.$id_almacen.' '.$cantidad ;
-				exit;
+				die("Falla en update inventario".$id_refaccion.' '.$id_almacen.' '.$cantidad );
 			}
 		}
-		$sql= "UPDATE pedido SET fecha_validacion=CURDATE(),status='Validado',fecha_validacion=CURDATE(), user_validacion=".$_SESSION['user_id']."  WHERE id=".$id_pedido.";";
+		$sql= "UPDATE pedido SET fecha_validacion=CURDATE(),status='Validado', user_validacion=".$_SESSION['user_id']."  WHERE id=".$id_pedido.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
 		}else{
-			return true;
+			$sql= "UPDATE pedido_refaccion SET status='Validado'  WHERE id_pedido=".$id_pedido." and status='active';";
+			$row=$this->db->query($sql);
+			if(!$row){
+				return false;
+			}else{
+				return true;
+			}
 		}
 	}
 		//metodo que sirve para hacer update
@@ -125,7 +129,34 @@ class Pedido extends AutoPedido {
 		if(!$row){
 			return false;
 		}else{
-			return true;
+			$objpr = new PedidoRefaccion();
+			$resp  = $objpr->deleteAll($id);
+			if(!$resp) die("Error deleting pedido refaccion");  
+
+			$refacciones      = $_request["id_refaccion"];
+			$costorefaccion   = $_request["costorefaccion"];
+			$preciorefaccion  = $_request["preciorefaccion"];
+			$cantidad		  = $_request["cantidad_refaccion"];
+			
+			foreach ($refacciones as $key => $value) {
+				$costo        = ($costorefaccion[$key])  ? $costorefaccion[$key]  : 0 ;
+				$precio       = ($preciorefaccion[$key]) ? $preciorefaccion[$key] : 0 ;
+				$cant         = $cantidad[$key];
+				$totalcosto   = $costo * $cant;
+				$id_refaccion = $value;
+				$_requestpedidoref["id_pedido"]    = $id;
+				$_requestpedidoref["id_refaccion"] = $id_refaccion;
+				$_requestpedidoref["cantidad"]     = $cant;
+				$_requestpedidoref["costo"]        = $costo;
+				$_requestpedidoref["precio"]       = $precio;
+				$_requestpedidoref["totalcosto"]   = $totalcosto;
+				$objPedidoRefaccion = new PedidoRefaccion();
+				if(!$objPedidoRefaccion->addAll($_requestpedidoref)){
+					echo "Falla en insert pedido refaccion";
+					exit;
+				}
+			}
+			return $id;
 		}
 	}
 		//metodo que sirve para hacer delete

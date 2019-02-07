@@ -182,11 +182,11 @@ $data = $obj->getAllArr();
 	function validar(id){ 
 		if ( ! id ) return;	
 		swal({
-			title: "Estas seguro?",
-			text: "Deseas eliminar este registro?",
+			title: "Deseas validar este pedido?",
+			text: "El pedido se agregara al inventario.",
 			type: "info",
 			showCancelButton: true,
-			confirmButtonColor: '#DD6B55',
+			confirmButtonColor: '#396bf2',
 			confirmButtonText: 'Si, Validar!',
 			closeOnConfirm: true
 			},

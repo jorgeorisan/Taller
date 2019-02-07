@@ -188,8 +188,8 @@ if(isPost()){
 								<div class="product-image"> 
 									<div id="myCarousel-2" class="carousel slide">
 									<ol class="carousel-indicators">
-										<li data-target="#myCarousel-2" data-slide-to="0" class=""></li>
-										<li data-target="#myCarousel-2" data-slide-to="1" class="active"></li>
+										<li data-target="#myCarousel-2" data-slide-to="0" class="active"></li>
+										<li data-target="#myCarousel-2" data-slide-to="1" class=""></li>
 										<li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
 									</ol>
 									<div class="carousel-inner">
@@ -197,11 +197,13 @@ if(isPost()){
 											$image= "";
 											foreach($dataimagenes as $key => $row) {
 												$active = ($key==1) ? 'active' : '';
-												$image.= "<div class='item ".$active."'>
-														<img src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
-														alt='".$row['nombre']."' title='".$row['nombre']."'
-														max-width='430px'
-														>
+												$image.= "
+													<div class='item ".$active."'>
+														<div style='text-align: center;'>
+															<img src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
+															alt='".$row['nombre']."' title='".$row['nombre']."'
+															style='max-width:430px; max-height: 300px';>
+														</div>
 													</div>";
 											}
 											if(!$image) {
@@ -301,236 +303,235 @@ if(isPost()){
 									</div>
 								</form>
 
-								<div class="col-sm-12 col-md-12 col-lg-12">
-									<div class="description description-tabs">
-
-
-										<ul id="myTab" class="nav nav-pills">
-											<li class="active"><a href="#more-information" data-toggle="tab" class="no-margin">Servicios </a></li>
-											<li class=""><a href="#refacciones" data-toggle="tab">Refacciones</a></li>
-											<li class=""><a href="#terminados" data-toggle="tab">Terminados</a></li>
-										</ul>
-										<div id="myTabContent" class="tab-content">
-											<div class="tab-pane fade active in" id="more-information">
-												<div class="col-sm-12 col-md-12 col-lg-12" style="padding:5px;text-align:right">
-													<div class="btn-group">
-														<a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'cotizaciontrabajo'))?>" style="margin-left: 10px;" ><i class="fa fa-print" ></i>&nbsp;Imprimir Orden de Trabajo</a>&nbsp;
-														<a data-toggle="modal" class="btn btn-info" title="Agregar Servicio" id="btnaddservice" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Servicio</a>
-													</div>
+								
+							</div>
+							<div class="col-sm-12 col-md-12 col-lg-12">
+								<div class="description description-tabs">
+									<ul id="myTab" class="nav nav-pills">
+										<li class="active"><a href="#more-information" data-toggle="tab" class="no-margin">Servicios </a></li>
+										<li class=""><a href="#refacciones" data-toggle="tab">Refacciones</a></li>
+										<li class=""><a href="#terminados" data-toggle="tab">Terminados</a></li>
+									</ul>
+									<div id="myTabContent" class="tab-content">
+										<div class="tab-pane fade active in" id="more-information">
+											<div class="col-sm-12 col-md-12 col-lg-12" style="padding:5px;text-align:right">
+												<div class="btn-group">
+													<a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'cotizaciontrabajo'))?>" style="margin-left: 10px;" ><i class="fa fa-print" ></i>&nbsp;Imprimir Orden de Trabajo</a>&nbsp;
+													<a data-toggle="modal" class="btn btn-info" title="Agregar Servicio" id="btnaddservice" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Servicio</a>
 												</div>
-												<table style="height: 100%;">
-													<tr style="">
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Servicio.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Total.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Fecha</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Acciones</th>
+											</div>
+											<table style="height: 100%;">
+												<tr style="">
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Servicio.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Total.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Fecha</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Acciones</th>
+												</tr>
+												<?php 
+												$totalservicio = 0 ;
+												$hvs  = new HistorialVehiculoservicio();
+												foreach($dataser as $key => $row) {
+													
+													$status = htmlentities($row['status']);
+													
+													$cancelada = ($status == "deleted")? "cancelada": "";
+													$nombre = $row['nombre'] ;
+													if($row['detalles']){
+														$nombre=$row['detalles'];
+													} 
+													switch ($row['status']) {
+														case 'deleted':	   $status = 'Eliminado';	break;
+														case 'En Proceso': $class  = 'label label-info';	break;
+														case 'active':	   $status = 'Pendiente';	$class  = 'label label-danger';	break;
+														case 'Realizado':  $class  = 'label label-success';	break;
+														case 'Stand-By':   $class  = 'label label-warning';	break;
+														default:           $class  = '';	break;
+													} 
+													$datelast =  date("Y-m-d",strtotime($row['created_date']));
+													if($reslast = $hvs->getLastStatus($row['id'])){
+														if($reslast['fecha_fin'])
+															$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
+														elseif($reslast['fecha_estimada'])
+															$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
+														elseif($reslast['fecha_inicial'])
+															$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
+													}
+													?>
+													<tr style="height: 30px;"  class="<?php echo $cancelada;?>">
+														<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
+														<td><?php echo htmlentities($row['codigo']); ?></td>
+														<td><?php echo htmlentities($nombre); ?></td>
+														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
+														<td style="text-align: right;"><?php echo $datelast; ?></td>
+														<td style="text-align: right;">
+															<?php if(!$cancelada){
+																$totalservicio += $row['total'];  	
+															?>
+															<div class="btn-group">
+																<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusservice " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
+															</div>
+															<?php } ?>
+															<div class="btn-group">
+																<a data-toggle="modal" class="btn-historystatusservice" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																<i class="fa fa-history"></i>&nbsp;Historial</a>
+															</div>
+														</td>
+													<tr>
+													<?php
+												} 
+												?>
+												<tr style="height: 30px; text-align: right;">
+													<td></td>
+													<td></td>
+													<td>Total:</td>
+													<td><strong>$<?php echo number_format($totalservicio,2); ?></strong></td>
+													<td></td>
+												</tr>
+											</table>
+											
+										</div>
+										<div class="tab-pane fade" id="refacciones">
+											<div class="col-sm-12 col-md-12 col-lg-12" style="padding:5px;text-align:right">
+												<div class="btn-group">
+													<a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'presupuesto'))?>" style="margin-left: 10px;"><i class="fa fa-print" ></i>&nbsp;Imprimir Presupuesto</a>&nbsp;
+													<a data-toggle="modal" class="btn btn-info" title="Agregar Refaccion" id="btnaddrefaccion" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Refaccion</a>
+												</div>
+											</div>
+											<table style="height: 100%;" >
+												<tr>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
+													<th style="width:10%;background-color:#d0d0cf;  font-weight:bold;">Cant.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion.</th>
+													<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Costo </th>
+													<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Total </th>
+													<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Fecha </th>
+													<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Acciones</th>
+												</tr>
+												<?php 
+												$totalrefaccion = 0 ;
+												
+												$hvr  = new HistorialVehiculorefaccion();
+												foreach($dataref as $key => $row) {
+													$status = htmlentities($row['status']);
+													$cancelada = ($status == "deleted")? "cancelada": "";
+													$totalrefaccion+= $row['total_aprox']; 
+													$nombre = $row['nombre'] ;
+													if($row['detalles']){
+														$nombre=$row['detalles'];
+													} 
+													switch ($row['status']) {
+														case 'deleted':	$status = 'Eliminado';	break;
+														case 'active':	$status = 'Solicitada';	break;
+														default: break;
+													}  
+													$datelast =  date("Y-m-d",strtotime($row['created_date']));
+													if($reslast = $hvs->getLastStatus($row['id'])){
+														if($reslast['fecha_fin'])
+															$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
+														elseif($reslast['fecha_estimada'])
+															$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
+														elseif($reslast['fecha_inicial'])
+															$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
+													}
+													?>
+													<tr style="height: 30px;" class="<?php echo $cancelada;?>">
+														<td><span class='<?php  ?>'><?php echo $status;?></span></td>
+														<td><?php echo htmlentities($row['cantidad']); ?></td>
+														<td><?php echo htmlentities($nombre); ?></td>
+														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['costo_aprox']),2); ?></td>
+														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total_aprox']),2); ?></td>
+														<td style="text-align: right;"><?php echo $datelast; ?></td>
+														<td style="text-align: right;">
+															<?php if(!$cancelada){ ?>
+															<div class="btn-group">
+																<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusrefaccion " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idref='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
+															</div>
+															<?php } ?>
+															<div class="btn-group">
+																<a data-toggle="modal" class="btn-historystatusrefaccion" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																<i class="fa fa-history"></i>&nbsp;Historial</a>
+															</div>
+															<?php if(!$cancelada){ ?>
+															<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculorefacciondelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+															<?php } ?>
+														</td>
 													</tr>
-													<?php 
-													$totalservicio = 0 ;
-													$hvs  = new HistorialVehiculoservicio();
-													foreach($dataser as $key => $row) {
-														
-														$status = htmlentities($row['status']);
-														
-														$cancelada = ($status == "deleted")? "cancelada": "";
-														$nombre = $row['nombre'] ;
-														if($row['detalles']){
-															$nombre=$row['detalles'];
-														} 
+													<?php
+												} 
+												?>
+												<tr style="height: 30px; text-align: right;">
+													<td></td>
+													<td></td>
+													<td></td>
+													<td>Total:</td>
+													<td style="text-align: right;"><strong>$<?php echo number_format($totalrefaccion,2); ?></strong>
+													</td>
+													<td></td>
+													<td></td>
+												</tr>
+											</table>
+										</div>
+										<div class="tab-pane fade" id="terminados">
+											<table style="height: 100%;">
+												<tr style="">
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Servicio.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Total.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Fecha</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Acciones</th>
+												</tr>
+												<?php 
+												$totalservicio = 0 ;
+												foreach($dataser as $row) {
+													$status = htmlentities($row['status']);
+													if ($status=="Realizado") {
+														$totalservicio += $row['total'];  
 														switch ($row['status']) {
-															case 'deleted':	   $status = 'Eliminado';	break;
-															case 'En Proceso': $class  = 'label label-info';	break;
-															case 'active':	   $status = 'Pendiente';	$class  = 'label label-danger';	break;
-															case 'Realizado':  $class  = 'label label-success';	break;
-															case 'Stand-By':   $class  = 'label label-warning';	break;
-															default:           $class  = '';	break;
+															case 'En Proceso':	$class  = 'label label-info';	break;
+															case 'active':	  $status = 'Pendiente';	$class  = 'label label-danger';	break;
+															case 'Realizado': $class  = 'label label-success';	break;
+															case 'Stand-By':  $class  = 'label label-warning';	break;
+															default:          $class  = '';	break;
 														} 
-														$datelast =  date("Y-m-d",strtotime($row['created_date']));
-														if($reslast = $hvs->getLastStatus($row['id'])){
-															if($reslast['fecha_fin'])
-																$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
-															elseif($reslast['fecha_estimada'])
-																$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
-															elseif($reslast['fecha_inicial'])
-																$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
-														}
 														?>
-														<tr style="height: 30px;"  class="<?php echo $cancelada;?>">
-															<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
+														<tr style="height: 30px;">
+															<td><span class='<?php echo $class ?>'><?php echo $status;?></span></td>
 															<td><?php echo htmlentities($row['codigo']); ?></td>
-															<td><?php echo htmlentities($nombre); ?></td>
+															<td ><?php echo htmlentities($row['nombre']); ?></td>
 															<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
-															<td style="text-align: right;"><?php echo $datelast; ?></td>
+															<td style="text-align: right;"><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
 															<td style="text-align: right;">
-																<?php if(!$cancelada){
-																	$totalservicio += $row['total'];  	
-																?>
 																<div class="btn-group">
-																	<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusservice " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																	<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
-																</div>
-																<?php } ?>
-																<div class="btn-group">
-																	<a data-toggle="modal" class="btn-historystatusservice" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																	<i class="fa fa-history"></i>&nbsp;Historial</a>
+																	<button class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+																		Cambiar status <span class="caret"></span>
+																	</button>
+																	<ul class="dropdown-menu">
+																		
+																	</ul>
 																</div>
 															</td>
 														<tr>
-														<?php
-													} 
-													?>
-													<tr style="height: 30px; text-align: right;">
-														<td></td>
-														<td></td>
-														<td>Total:</td>
-														<td><strong>$<?php echo number_format($totalservicio,2); ?></strong></td>
-														<td></td>
-													</tr>
-												</table>
-												
-											</div>
-											<div class="tab-pane fade" id="refacciones">
-												<div class="col-sm-12 col-md-12 col-lg-12" style="padding:5px;text-align:right">
-													<div class="btn-group">
-														<a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'presupuesto'))?>" style="margin-left: 10px;"><i class="fa fa-print" ></i>&nbsp;Imprimir Presupuesto</a>&nbsp;
-														<a data-toggle="modal" class="btn btn-info" title="Agregar Refaccion" id="btnaddrefaccion" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Refaccion</a>
-													</div>
-												</div>
-												<table style="height: 100%;" >
-													<tr>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
-														<th style="width:10%;background-color:#d0d0cf;  font-weight:bold;">Cant.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion.</th>
-														<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Costo </th>
-														<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Total </th>
-														<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Fecha </th>
-														<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Acciones</th>
-													</tr>
-													<?php 
-													$totalrefaccion = 0 ;
-													
-													$hvr  = new HistorialVehiculorefaccion();
-													foreach($dataref as $key => $row) {
-														$status = htmlentities($row['status']);
-														$cancelada = ($status == "deleted")? "cancelada": "";
-														$totalrefaccion+= $row['total_aprox']; 
-														$nombre = $row['nombre'] ;
-														if($row['detalles']){
-															$nombre=$row['detalles'];
-														} 
-														switch ($row['status']) {
-															case 'deleted':	$status = 'Eliminado';	break;
-															case 'active':	$status = 'Solicitada';	break;
-															default: break;
-														}  
-														$datelast =  date("Y-m-d",strtotime($row['created_date']));
-														if($reslast = $hvs->getLastStatus($row['id'])){
-															if($reslast['fecha_fin'])
-																$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
-															elseif($reslast['fecha_estimada'])
-																$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
-															elseif($reslast['fecha_inicial'])
-																$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
-														}
-														?>
-														<tr style="height: 30px;" class="<?php echo $cancelada;?>">
-															<td><span class='<?php  ?>'><?php echo $status;?></span></td>
-															<td><?php echo htmlentities($row['cantidad']); ?></td>
-															<td><?php echo htmlentities($nombre); ?></td>
-															<td style="text-align: right;">$<?php echo number_format(htmlentities($row['costo_aprox']),2); ?></td>
-															<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total_aprox']),2); ?></td>
-															<td style="text-align: right;"><?php echo $datelast; ?></td>
-															<td style="text-align: right;">
-																<?php if(!$cancelada){ ?>
-																<div class="btn-group">
-																	<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusrefaccion " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idref='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																	<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
-																</div>
-																<?php } ?>
-																<div class="btn-group">
-																	<a data-toggle="modal" class="btn-historystatusrefaccion" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																	<i class="fa fa-history"></i>&nbsp;Historial</a>
-																</div>
-																<?php if(!$cancelada){ ?>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculorefacciondelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
-																<?php } ?>
-															</td>
-														</tr>
-														<?php
-													} 
-													?>
-													<tr style="height: 30px; text-align: right;">
-														<td></td>
-														<td></td>
-														<td></td>
-														<td>Total:</td>
-														<td style="text-align: right;"><strong>$<?php echo number_format($totalrefaccion,2); ?></strong>
-														</td>
-														<td></td>
-														<td></td>
-													</tr>
-												</table>
-											</div>
-											<div class="tab-pane fade" id="terminados">
-												<table style="height: 100%;">
-													<tr style="">
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Servicio.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Total.</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Fecha</th>
-														<th style="width:10%;background-color:#d0d0cf; font-weight:bold; text-align: right;">Acciones</th>
-													</tr>
-													<?php 
-													$totalservicio = 0 ;
-													foreach($dataser as $row) {
-														$status = htmlentities($row['status']);
-														if ($status=="Realizado") {
-															$totalservicio += $row['total'];  
-															switch ($row['status']) {
-																case 'En Proceso':	$class  = 'label label-info';	break;
-																case 'active':	  $status = 'Pendiente';	$class  = 'label label-danger';	break;
-																case 'Realizado': $class  = 'label label-success';	break;
-																case 'Stand-By':  $class  = 'label label-warning';	break;
-																default:          $class  = '';	break;
-															} 
-															?>
-															<tr style="height: 30px;">
-																<td><span class='<?php echo $class ?>'><?php echo $status;?></span></td>
-																<td><?php echo htmlentities($row['codigo']); ?></td>
-																<td ><?php echo htmlentities($row['nombre']); ?></td>
-																<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
-																<td style="text-align: right;"><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
-																<td style="text-align: right;">
-																	<div class="btn-group">
-																		<button class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-																			Cambiar status <span class="caret"></span>
-																		</button>
-																		<ul class="dropdown-menu">
-																			
-																		</ul>
-																	</div>
-																</td>
-															<tr>
-														<?php
-														}
-													} 
-													?>
-													<tr style="height: 30px; text-align: right;">
-														<td></td>
-														<td></td>
-														<td>Total:</td>
-														<td><strong>$<?php echo number_format($totalservicio,2); ?></strong></td>
-														<td></td>
-													</tr>
-												</table>
-											</div>
+													<?php
+													}
+												} 
+												?>
+												<tr style="height: 30px; text-align: right;">
+													<td></td>
+													<td></td>
+													<td>Total:</td>
+													<td><strong>$<?php echo number_format($totalservicio,2); ?></strong></td>
+													<td></td>
+												</tr>
+											</table>
 										</div>
 									</div>
-									<hr>
 								</div>
+								<hr>
 							</div>
 						</div>
 					</div>
@@ -591,6 +592,7 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <script>
+	$('.carousel').carousel('pause');
 	/*************FOTOS**************/
     function getFoto(id, e)
     {

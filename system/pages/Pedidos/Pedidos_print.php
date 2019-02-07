@@ -7,7 +7,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Autos";
+$page_title = "Pedidos";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -17,11 +17,11 @@ if(isset($request['params']['id'])   && $request['params']['id']>0){
     $id=$request['params']['id'];
     $page=$request['params']['page'];
 }else{
-    informError(true,make_url("Vehiculos","index"));
+    informError(true,make_url("Pedidos","index"));
 }
 
   
-if(!$page) informError(true,make_url("Vehiculos","index"));
+if(!$page) informError(true,make_url("Pedidos","index"));
 
 if ($page) {
     include SYSTEM_DIR . "/lib/Templates/print_".$page.".php";

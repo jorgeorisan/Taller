@@ -131,6 +131,17 @@ $menuUsuarios = array(
 		)
 	)
 );
+$menuGastos = array(
+	"gastos" => array(
+		"title" => "Gastos",
+		"icon" => "fa-flag",
+		//"url" => APP_URL."/solicitudes/index",
+		"sub" => array(
+			"pedido"     => array( "title" => "Gastos",      "url" => APP_URL."/Gastos/index" ),
+			'pedidosadd' => array( 'title' => 'Gastos Alta', 'url' => APP_URL."/Gastos/add" )
+		)
+	)
+);
 
 
 $extras = array(
@@ -186,6 +197,11 @@ if(isset($_SESSION['user_id'])){
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Personal');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuPersonal);
+	}
+
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Gastos');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuGastos);
 	}
 
 	//default

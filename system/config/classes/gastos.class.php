@@ -1,23 +1,15 @@
 <?php
 
-require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR. "pedido_refaccion.auto.class.php");
+require_once(SYSTEM_DIR . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "classes" . DIRECTORY_SEPARATOR ."base". DIRECTORY_SEPARATOR. "gastos.auto.class.php");
 
-class PedidoRefaccion extends AutoPedidoRefaccion { 
-	private $DB_TABLE = "pedido_refaccion";
+class Gastos extends AutoGastos { 
+	private $DB_TABLE = "gastos";
 
 	
 		//metodo que sirve para obtener todos los datos de la tabla
-	public function getAllArr($id)
+	public function getAllArr()
 	{
-		if(! intval( $id )){
-			return false;
-		}
-		$sql = "
-		SELECT pr.*,r.nombre refaccion,r.codigo, p.id_almacen
-		FROM pedido_refaccion pr 
-			LEFT JOIN refaccion r ON r.id=pr.id_refaccion
-			LEFT JOIN pedido p ON p.id=pr.id_pedido
-			where pr.status='active' and pr.id_pedido=$id;";
+		$sql = "SELECT * FROM gastos where status='active';";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -33,11 +25,11 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 		if(! intval( $id )){
 			return false;
 		}
-		$id  = $this->db->real_escape_string($id);
-		$sql = "SELECT * FROM pedido_refaccion WHERE id_pedido=$id status='active';";
-		$res = $this->db->query($sql);
+		$id=$this->db->real_escape_string($id);
+		$sql= "SELECT * FROM gastos WHERE id=$id;";
+		$res=$this->db->query($sql);
 		if(!$res)
-			{die("Error getting result pedido_refaccion");}
+			{die("Error getting result gastos");}
 		$row = $res->fetch_assoc();
 		$res->close();
 		return $row;
@@ -46,8 +38,8 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$data=fromArray($_request,'pedido_refaccion',$this->db,"add");
-		$sql= "INSERT INTO pedido_refaccion (".$data[0].") VALUES(".$data[1]."); ";
+		$data=fromArray($_request,'gastos',$this->db,"add");
+		$sql= "INSERT INTO gastos (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
 		$sql= "SELECT LAST_INSERT_ID();";//. $num ;
 		$res=$this->db->query($sql);
@@ -64,8 +56,8 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 	public function updateAll($id,$_request)
 	{
 		$_request["updated_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'pedido_refaccion',$this->db,"update");
-		$sql= "UPDATE pedido_refaccion SET $data[0]  WHERE id=".$id.";";
+		$data=fromArray($_request,'gastos',$this->db,"update");
+		$sql= "UPDATE gastos SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;
@@ -78,8 +70,8 @@ class PedidoRefaccion extends AutoPedidoRefaccion {
 	{
 		$_request["status"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
-		$data=fromArray($_request,'pedido_refaccion',$this->db,"update");	
-		$sql= "UPDATE pedido_refaccion SET $data[0]  WHERE id_pedido=".$id.";";
+		$data=fromArray($_request,'gastos',$this->db,"update");	
+		$sql= "UPDATE gastos SET $data[0]  WHERE id=".$id.";";
 		$row=$this->db->query($sql);
 		if(!$row){
 			return false;

@@ -49,6 +49,12 @@ switch ($status) {
 		$class  = '';
 		break;
 } 
+
+$objprov = new Proveedor();
+$dataprov = $objprov->getTable($data['id_proveedor']);
+
+$objalm = new Almacen();
+$dataalma = $objalm->getTable($data['id_almacen']);
 ?>
 
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -62,7 +68,7 @@ switch ($status) {
 			
 			<div class="row">   
                 <div class="widget-body" style='padding-left: 15px;'>
-					<a class="btn btn-success" target="_blank" href="<?php echo make_url("Pedidos","print",array('id'=>$id))?>" ><i class="fa fa-print"></i> &nbsp;Imprimir</a>
+					<a class="btn btn-success" target="_blank" href="<?php echo make_url("Pedidos","print",array('id'=>$id,'page'=>'pedido'))?>" ><i class="fa fa-print"></i> &nbsp;Imprimir</a>
 					<?php if($status=='Pendiente'){
                     ?>
                     <a class="btn btn-info" target="" href="javascript:validar(<?php echo $id ?>)" ><i class="fa fa-check"></i></i> &nbsp;Validar</a>
@@ -140,6 +146,12 @@ switch ($status) {
 													<td colspan="" style="width:30%;"><?php echo htmlentities($data['nombre']); ?></td>
 													<td colspan="" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Fecha Validacion: </td>
 													<td colspan=""><?php echo htmlentities($data['fecha_validacion']); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Proveedor: </td>
+													<td colspan="" style="width:30%;"><?php echo htmlentities($dataprov['nombre']); ?></td>
+													<td colspan="" style="width:20%;background-color:#d0d0cf; font-weight:bold;">Almacen: </td>
+													<td colspan=""><?php echo htmlentities($dataalma['nombre']); ?></td>
                                                 </tr>
                                                  <tr>
                                                     <td colspan="4" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">REFACCIONES DEL PEDIDO : </td>
@@ -254,11 +266,11 @@ switch ($status) {
 	function validar(id){ 
 		if ( ! id ) return;	
 		swal({
-			title: "Estas seguro?",
-			text: "Deseas eliminar este registro?",
+			title: "Deseas validar este pedido?",
+			text: "El pedido se agregara al inventario.",
 			type: "info",
 			showCancelButton: true,
-			confirmButtonColor: '#DD6B55',
+			confirmButtonColor: '#396bf2',
 			confirmButtonText: 'Si, Validar!',
 			closeOnConfirm: true
 			},
