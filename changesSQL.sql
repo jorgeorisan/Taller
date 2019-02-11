@@ -24,7 +24,7 @@ CREATE TABLE `systemmy_tallerhp`.`gastos` (
   `created_date` TIMESTAMP NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`));
 
-----------------------------------------------------------------------------
+-- 
 -- 06 febrero 
 --
 
@@ -113,8 +113,43 @@ INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES (
 INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Editar', 'Gastos', 'add');
 INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Ver', 'Gastos', 'view');
 INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Borrar', 'Gastos', 'gastosdelete');
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos', 'Catalogos', 'gastotipo');
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Alta', 'Catalogos', 'gastotipoadd');
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Editar', 'Catalogos', 'gastotipoedit');
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Borrar', 'Catalogos', 'gastotipodelete');
-INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Ver', 'Catalogos', 'gastotiposhow');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos', 'Catalogos', 'gastostipo');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Alta', 'Catalogos', 'gastostipoadd');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Editar', 'Catalogos', 'gastostipoedit');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Borrar', 'Catalogos', 'gastostipodelete');
+INSERT INTO `systemmy_tallerhp`.`permiso` (`nombre`, `section`, `page`) VALUES ('Gastos Tipos Ver', 'Catalogos', 'gastostiposhow');
+
+ALTER TABLE `systemmy_tallerhp`.`gasto_tipo` 
+RENAME TO  `systemmy_tallerhp`.`gastos_tipo` ;
+
+
+ALTER TABLE `systemmy_tallerhp`.`gastos_tipo` 
+ADD COLUMN `detalles` INT NULL DEFAULT 1 AFTER `descripcion`;
+ALTER TABLE `systemmy_tallerhp`.`gastos_tipo` 
+ADD COLUMN `tipo` VARCHAR(45) NULL DEFAULT 'Normal' AFTER `detalles`;
+
+
+ALTER TABLE `systemmy_tallerhp`.`gastos_registros` 
+DROP FOREIGN KEY `id_gastostipo_gastosregistros_dx`;
+ALTER TABLE `systemmy_tallerhp`.`gastos_registros` 
+CHANGE COLUMN `id_gastotipo` `id_gastostipo` INT(11) NULL DEFAULT NULL ;
+ALTER TABLE `systemmy_tallerhp`.`gastos_registros` 
+ADD CONSTRAINT `id_gastostipo_gastosregistros_dx`
+  FOREIGN KEY (`id_gastostipo`)
+  REFERENCES `systemmy_tallerhp`.`gastos_tipo` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+DROP TABLE `systemmy_tallerhp`.`catgastos`;
+
+
+
+ALTER TABLE `systemmy_tallerhp`.`gastos_registros` 
+ADD COLUMN `id_gastos` INT NULL AFTER `id_gastostipo`;
+ALTER TABLE `systemmy_tallerhp`.`gastos_registros` 
+ADD CONSTRAINT `id_gastos_gastostipo_dx`
+  FOREIGN KEY (`id_gastos`)
+  REFERENCES `systemmy_tallerhp`.`gastos` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;

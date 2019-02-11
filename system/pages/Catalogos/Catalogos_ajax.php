@@ -340,6 +340,47 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 		    $html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_getresrefaccion.php');
             
 			break;
+		case 'getgastostipo':
+			if( isset($_GET["id"]) && intval($_GET["id"]) ){
+				$id    = $_GET["id"];
+				$cant  = ($_GET["cantidad"]>0)    ? $_GET["cantidad"] : 1 ;
+				$u  = new GastosTipo();
+				if($res       = $u->getTable($id)){
+					$lineId   = rand(1000, 100000);
+					$detalles = htmlentities( $res["nombre"] );
+					if ( $res['detalles'] )  $detalles .="<input type='text' name='detalles[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
+					
+					$values	   = $u->getPrecio($id);
+					$totalunit = ($values)  ? $values['total']/$values['cantidad']  : 0 ;
+					$total     = ($values)  ? $values['total']  : 0 ;
+					$data="
+							<tr class='gastos' lineidgastos='".$lineId."'>
+								<input type='hidden' name='id_gastos[]' value='".$id."'/>
+								<input class='cantidadesgastos' type='hidden' name='cantidad[]' value='".$cant."'/>
+								<td>" . $cant . "</td>
+								<td>" . htmlentities( $res["codigo"] ) . "</td>
+								<td>" .  $detalles . "</td>";
+						
+						$data.="
+								<td><input type='number' style='width: 80px;' class='form-control totalesgastos' name='total[]' value='".$total."' placeholder='00.00'></td>";
+						
+						$data.="
+								<td class='borrar-td'>
+								<a href='javascript:void(0);' class='btn btn-danger borrar-gastos' lineidgastos='".$lineId."'> 
+									<i class='glyphicon glyphicon-trash'></i> </a>";
+								$data.="
+								</td>
+							</tr>
+							";
+							echo $data;
+				}else{
+					echo 'No se han encontrado resultados';
+				}
+			}else{
+				echo 0;
+			}
+            
+			break;
 		case 'savenewrefaccion':
 		    $obj = new Refaccion();
 			if(isPost()){

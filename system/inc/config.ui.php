@@ -115,7 +115,8 @@ $menuCatalogos = array(
 			"catmarca"  	 => array( "title" => "Marca",       "url" => APP_URL."/Catalogos/marca" ),
 			"cataseguradora" => array( "title" => "Aseguradoras","url" => APP_URL."/Catalogos/aseguradora" ),
 			"catalmacen"     => array( "title" => "Almacenes",   "url" => APP_URL."/Catalogos/almacen" ),
-			"catproveedor"   => array( "title" => "Proveedores", "url" => APP_URL."/Catalogos/proveedor" )
+			"catproveedor"   => array( "title" => "Proveedores", "url" => APP_URL."/Catalogos/proveedor" ),
+			"catgastostipo"   => array( "title" => "Gastos Tipo", "url" => APP_URL."/Catalogos/gastostipo" )
 		)
 	)
 );

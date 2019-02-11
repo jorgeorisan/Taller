@@ -6,7 +6,8 @@
 		protected $db;
 		
 		protected $id = 0;
-		protected $id_gastotipo = 0;
+		protected $id_gastostipo = 0;
+		protected $id_gastos = 0;
 		protected $detalles = "";
 		protected $status = "";
 		protected $created_date = "";
@@ -42,9 +43,14 @@
  				$this->id = $value;
 		}
 		
-		public function setIdGastotipo( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "IDGASTOTIPO","i") ) 
- 				$this->id_gastotipo = $value;
+		public function setIdGastostipo( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDGASTOSTIPO","i") ) 
+ 				$this->id_gastostipo = $value;
+		}
+		
+		public function setIdGastos( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDGASTOS","i") ) 
+ 				$this->id_gastos = $value;
 		}
 		
 		public function setDetalles( $value ){			
@@ -107,11 +113,19 @@
  			}
 		}
 		
-		public function getIdGastotipo($sanitize=true){ 
+		public function getIdGastostipo($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->id_gastotipo) ;
+ 				return htmlspecialchars($this->id_gastostipo) ;
  			}else{
- 				return $this->id_gastotipo ;
+ 				return $this->id_gastostipo ;
+ 			}
+		}
+		
+		public function getIdGastos($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->id_gastos) ;
+ 			}else{
+ 				return $this->id_gastos ;
  			}
 		}
 		
@@ -198,7 +212,8 @@
 			}
 
 			$this->setId( $res['id'] );
-			$this->setIdGastotipo( $res['id_gastotipo'] );
+			$this->setIdGastostipo( $res['id_gastostipo'] );
+			$this->setIdGastos( $res['id_gastos'] );
 			$this->setDetalles( $res['detalles'] );
 			$this->setStatus( $res['status'] );
 			$this->setCreatedDate( $res['created_date'] );
@@ -214,7 +229,8 @@
 			if ($this->getId()==0){ // insert new
 				$sql = "INSERT INTO gastos_registros SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),"; 
 
-			$sql .= " `id_gastotipo` = ? ,";
+			$sql .= " `id_gastostipo` = ? ,";
+			$sql .= " `id_gastos` = ? ,";
 			$sql .= " `detalles` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `created_date` = ? ,";
@@ -227,7 +243,8 @@
 			} else { // updated existing
 				$sql = "UPDATE gastos_registros SET modified=UTC_TIMESTAMP(),";	
 
-			$sql .= " `id_gastotipo` = ? ,";
+			$sql .= " `id_gastostipo` = ? ,";
+			$sql .= " `id_gastos` = ? ,";
 			$sql .= " `detalles` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `created_date` = ? ,";
@@ -244,7 +261,8 @@
 			$stmt = $this->db->prepare( $sql );
 			//$stmt->mbind_param( 'i', $id );
 
-			$stmt->mbind_param( 'i', $this->id_gastotipo );
+			$stmt->mbind_param( 'i', $this->id_gastostipo );
+			$stmt->mbind_param( 'i', $this->id_gastos );
 			$stmt->mbind_param( 's', $this->detalles );
 			$stmt->mbind_param( 's', $this->status );
 			$stmt->mbind_param( 's', $this->created_date );
@@ -270,8 +288,11 @@
 			} else { // updated existing
 				$sql = "UPDATE gastos_registros SET modified=UTC_TIMESTAMP(),";	
 
-			if (in_array("id_gastotipo",$fieldstoupdate)){
-				$sql .= " `id_gastotipo` = ? ,";
+			if (in_array("id_gastostipo",$fieldstoupdate)){
+				$sql .= " `id_gastostipo` = ? ,";
+			}
+			if (in_array("id_gastos",$fieldstoupdate)){
+				$sql .= " `id_gastos` = ? ,";
 			}
 			if (in_array("detalles",$fieldstoupdate)){
 				$sql .= " `detalles` = ? ,";
@@ -303,8 +324,11 @@
 			$stmt = $this->db->prepare( $sql );
 			//$stmt->mbind_param( 'i', $id );
 
-			if (in_array("id_gastotipo",$fieldstoupdate)){
-				$stmt->mbind_param( 'i', $this->idGastotipo  );
+			if (in_array("id_gastostipo",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idGastostipo  );
+			}
+			if (in_array("id_gastos",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idGastos  );
 			}
 			if (in_array("detalles",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->detalles  );

@@ -67,22 +67,16 @@ if(isPost()){
                                                 <div class="col-sm-12">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de Alta" name="fecha_alta" >
-                                                            
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yyyy-mm-dd' autocomplete="off" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de Alta" name="fecha_alta" >
                                                         </div>
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" placeholder="Nombre Gasto" name="nombre" >
-                                                            
-                                                        </div>
-                                                        
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_gastotipo" id="">
+                                                            <select style="width:100%" class="select2" name="id_gastostipo" id="">
                                                                 <option value="" selected disabled>Selecciona Tipo Gasto</option>
                                                                 <?php 
-                                                                $obj = new GastoTipo();
-                                                                $list=$obj->getAllArr();
+                                                                $obj = new GastosTipo();
+                                                                $list=$obj->getAllArrGral();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
                                                                         echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
@@ -90,15 +84,27 @@ if(isPost()){
                                                                 }
                                                                  ?>
                                                             </select>
+                                                        </div> 
+                                                    </div>
+                                                    
+                                                    <div class="col-sm-4">
+                                                      
+                                                    </div> 
+                                                    
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control " value="" placeholder="Nombre " name="nombre" >
                                                         </div>
-                                                          
                                                     </div>
                                                     <div class="col-sm-4">
-                                                       
-                                                    </div> <div class="form-group">
+                                                        <div class="form-group">
                                                             <input type="text" class="form-control" placeholder="Comentarios Gasto" name="comentarios" >
                                                             
                                                         </div>
+                                                    </div> 
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -119,10 +125,10 @@ if(isPost()){
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <div class="col-sm-6">
-                                                                <select style="width:50%" class="select2" name="id_gastotiporegistro" id="id_gastotiporegistro">
+                                                                <select style="width:50%" class="select2" name="id_gastostiporegistro" id="id_gastostiporegistro">
                                                                     <option value="" selected disabled>Selecciona </option>
                                                                     <?php 
-                                                                    $obj = new GastoTipo();
+                                                                    $obj = new GastosTipo();
                                                                     $list=$obj->getAllArr();
                                                                     if (is_array($list) || is_object($list)){
                                                                         foreach($list as $val)
@@ -135,7 +141,7 @@ if(isPost()){
                                                             
                                                         </div>
                                                         <div class="form-group" id=''>
-                                                            <button class="btn btn-primary btn-md" type="button" onclick=" getgastotipo();"> Agregar  </button>
+                                                            <button class="btn btn-primary btn-md" type="button" onclick=" getgastostipo();"> Agregar  </button>
                                                         </div>
                                                         
                                                     </div>
@@ -264,11 +270,11 @@ if(isPost()){
         }
         
         //**********Gastos*************/
-        getgastotipo = function() {
-            var id = $('select[name="id_gastotiporegistro"] option:selected').val();
+        getgastostipo = function() {
+            var id = $('select[name="id_gastostiporegistro"] option:selected').val();
             if(id){
-                var text = $('select[name="id_gastotiporegistro"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getgastotipo"; // El script a dónde se realizará la petición.
+                var text = $('select[name="id_gastostiporegistro"] option:selected').text();
+                var url = config.base+"/Catalogos/ajax/?action=get&object=getgastostipo"; // El script a dónde se realizará la petición.
                
                 var cantidad = $("#selectcantidad_gasto").val();
                 $.ajax({
@@ -289,22 +295,17 @@ if(isPost()){
             }
         }
         calcTotalgasto = function() {
-            var costos     = $(".costogasto");
-            var totales    = $(".totalesgasto");
-            var cantidades = $(".cantidadesgasto");
+            var totalesgastos     = $(".totalesgastos");
             var total = 0;
-            if($("#id_aseguradora").val()==null || $("#id_aseguradora").val()==1 ){
-                for (var i = 0, len = costos.length; i < len; i++) {
-                    var valor=$(costos[i]).val();
-                    if (! isNaN( valor )  && valor > 0 ){
-                        total += parseFloat(valor*$(cantidades[i]).val());
-                        $(totales[i]).val(valor*$(cantidades[i]).val());
-                        //console.log(total);    
-                    }
+            for (var i = 0, len = totalesgastos.length; i < len; i++) {
+                var valor=$(totalesgastos[i]).val();
+                if (! isNaN( valor )  && valor > 0 ){
+                    total += parseFloat(valor);
+                    
+                    //console.log(total);    
                 }
             }
             
-
             $("#total-numgasto").html(total);
             $("#total-globalgasto").val(total);
         }
@@ -378,15 +379,15 @@ if(isPost()){
              });
             return false; // Evitar ejecutar el submit del formulario.
         });
-        $('body').on('blur', '.totalgasto', function(){
+        $('body').on('blur', '.totalesgastos', function(){
             calcTotalgasto();
         });
              
         //gastotipo
-        $('body').on('change', '#id_gastotipo', function(){
+        $('body').on('change', '#id_gastostipo', function(){
             if( $(this).val() ){
-                var id = $("#id_gastotipo").val();
-                getgastotipo(id);
+                var id = $("#id_gastostipo").val();
+                getgastostipo(id);
             }
         });
       

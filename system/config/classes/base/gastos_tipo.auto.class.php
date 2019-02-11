@@ -1,6 +1,6 @@
 <?php 
 
-	class AutoGastoTipo {
+	class AutoGastosTipo {
 
 	// Variables
 		protected $db;
@@ -10,6 +10,8 @@
 		protected $nombre = "";
 		protected $status = "";
 		protected $descripcion = "";
+		protected $detalles = 0;
+		protected $tipo = "";
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -21,14 +23,14 @@
 			$this->db = $db;
 		}
 		public static function construct( $id ){
-			$gastoTipo = new GastoTipo();
-			$gastoTipo->setId( $id );
-			return $gastoTipo;
+			$gastosTipo = new GastosTipo();
+			$gastosTipo->setId( $id );
+			return $gastosTipo;
 		}
 		public static function constructWithValues( $values ){
-			$gastoTipo = new GastoTipo();
-			$gastoTipo->setValues( $values );
-			return $gastoTipo;
+			$gastosTipo = new GastosTipo();
+			$gastosTipo->setValues( $values );
+			return $gastosTipo;
 		}
 
 
@@ -54,6 +56,16 @@
 		}
 		
 		public function setDescripcion( $value ){ 				$this->descripcion = $value;
+		}
+		
+		public function setDetalles( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "DETALLES","i") ) 
+ 				$this->detalles = $value;
+		}
+		
+		public function setTipo( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "TIPO","s") ) 
+ 				$this->tipo = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -113,6 +125,22 @@
  			}
 		}
 		
+		public function getDetalles($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->detalles) ;
+ 			}else{
+ 				return $this->detalles ;
+ 			}
+		}
+		
+		public function getTipo($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->tipo) ;
+ 			}else{
+ 				return $this->tipo ;
+ 			}
+		}
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -122,7 +150,7 @@
 
 	// Public Support Functions
 		public function load($id) {
-			$sql="SELECT * FROM gasto_tipo WHERE id = ?";
+			$sql="SELECT * FROM gastos_tipo WHERE id = ?";
 
 			if ( $id == 0 )
 				return $this->killInvalidclass( "The ID not validclass." );
@@ -144,27 +172,33 @@
 			$this->setNombre( $res['nombre'] );
 			$this->setStatus( $res['status'] );
 			$this->setDescripcion( $res['descripcion'] );
+			$this->setDetalles( $res['detalles'] );
+			$this->setTipo( $res['tipo'] );
 			return true;
 		}
 		// end function load
 
 		public function save() {
 			if ($this->getId()==0){ // insert new
-				$sql = "INSERT INTO gasto_tipo SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),"; 
+				$sql = "INSERT INTO gastos_tipo SET modified=UTC_TIMESTAMP(),created=UTC_TIMESTAMP(),"; 
 
 			$sql .= " `codigo` = ? ,";
 			$sql .= " `nombre` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `descripcion` = ? ,";
+			$sql .= " `detalles` = ? ,";
+			$sql .= " `tipo` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
-				$sql = "UPDATE gasto_tipo SET modified=UTC_TIMESTAMP(),";	
+				$sql = "UPDATE gastos_tipo SET modified=UTC_TIMESTAMP(),";	
 
 			$sql .= " `codigo` = ? ,";
 			$sql .= " `nombre` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `descripcion` = ? ,";
+			$sql .= " `detalles` = ? ,";
+			$sql .= " `tipo` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -178,6 +212,8 @@
 			$stmt->mbind_param( 's', $this->nombre );
 			$stmt->mbind_param( 's', $this->status );
 			$stmt->mbind_param( 's', $this->descripcion );
+			$stmt->mbind_param( 'i', $this->detalles );
+			$stmt->mbind_param( 's', $this->tipo );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -194,7 +230,7 @@
 			if ($this->getId()==0){ // insert new
 				// only updates no save new here
 			} else { // updated existing
-				$sql = "UPDATE gasto_tipo SET modified=UTC_TIMESTAMP(),";	
+				$sql = "UPDATE gastos_tipo SET modified=UTC_TIMESTAMP(),";	
 
 			if (in_array("codigo",$fieldstoupdate)){
 				$sql .= " `codigo` = ? ,";
@@ -207,6 +243,12 @@
 			}
 			if (in_array("descripcion",$fieldstoupdate)){
 				$sql .= " `descripcion` = ? ,";
+			}
+			if (in_array("detalles",$fieldstoupdate)){
+				$sql .= " `detalles` = ? ,";
+			}
+			if (in_array("tipo",$fieldstoupdate)){
+				$sql .= " `tipo` = ? ,";
 			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
@@ -229,6 +271,12 @@
 			if (in_array("descripcion",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->descripcion  );
 			}
+			if (in_array("detalles",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->detalles  );
+			}
+			if (in_array("tipo",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->tipo  );
+			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );
 			}
@@ -242,7 +290,7 @@
 		
 
 		public function getAll() {
-			$sql="SELECT id FROM gasto_tipo WHERE 1 and status='active'";
+			$sql="SELECT id FROM gastos_tipo WHERE 1 and status='active'";
 			// Get data 
 			$stmt = $this->db->prepare( $sql );
 			$stmt->execute();
@@ -250,7 +298,7 @@
 			$res = $stmt->get_result();
 			$retval=array();
 			while($id = mysqli_fetch_row($res)){
-				$retval[$id[0]] = new GastoTipo();
+				$retval[$id[0]] = new GastosTipo();
 				$retval[$id[0]]->load($id[0]);
 			}
 			return $retval;
