@@ -8,6 +8,7 @@
 		protected $id = 0;
 		protected $id_vehiculo = 0;
 		protected $id_refaccion = 0;
+		protected $id_proveedor = 0;
 		protected $detalles = "";
 		protected $cantidad = 0;
 		protected $costo_aprox = 0;
@@ -53,6 +54,11 @@
 		public function setIdRefaccion( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "IDREFACCION","i") ) 
  				$this->id_refaccion = $value;
+		}
+		
+		public function setIdProveedor( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDPROVEEDOR","i") ) 
+ 				$this->id_proveedor = $value;
 		}
 		
 		public function setDetalles( $value ){ 				$this->detalles = $value;
@@ -136,6 +142,14 @@
  				return htmlspecialchars($this->id_refaccion) ;
  			}else{
  				return $this->id_refaccion ;
+ 			}
+		}
+		
+		public function getIdProveedor($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->id_proveedor) ;
+ 			}else{
+ 				return $this->id_proveedor ;
  			}
 		}
 		
@@ -240,6 +254,7 @@
 			$this->setId( $res['id'] );
 			$this->setIdVehiculo( $res['id_vehiculo'] );
 			$this->setIdRefaccion( $res['id_refaccion'] );
+			$this->setIdProveedor( $res['id_proveedor'] );
 			$this->setDetalles( $res['detalles'] );
 			$this->setCantidad( $res['cantidad'] );
 			$this->setCostoAprox( $res['costo_aprox'] );
@@ -259,6 +274,7 @@
 
 			$sql .= " `id_vehiculo` = ? ,";
 			$sql .= " `id_refaccion` = ? ,";
+			$sql .= " `id_proveedor` = ? ,";
 			$sql .= " `detalles` = ? ,";
 			$sql .= " `cantidad` = ? ,";
 			$sql .= " `costo_aprox` = ? ,";
@@ -275,6 +291,7 @@
 
 			$sql .= " `id_vehiculo` = ? ,";
 			$sql .= " `id_refaccion` = ? ,";
+			$sql .= " `id_proveedor` = ? ,";
 			$sql .= " `detalles` = ? ,";
 			$sql .= " `cantidad` = ? ,";
 			$sql .= " `costo_aprox` = ? ,";
@@ -295,6 +312,7 @@
 
 			$stmt->mbind_param( 'i', $this->id_vehiculo );
 			$stmt->mbind_param( 'i', $this->id_refaccion );
+			$stmt->mbind_param( 'i', $this->id_proveedor );
 			$stmt->mbind_param( 's', $this->detalles );
 			$stmt->mbind_param( 'd', $this->cantidad );
 			$stmt->mbind_param( 'd', $this->costo_aprox );
@@ -327,6 +345,9 @@
 			}
 			if (in_array("id_refaccion",$fieldstoupdate)){
 				$sql .= " `id_refaccion` = ? ,";
+			}
+			if (in_array("id_proveedor",$fieldstoupdate)){
+				$sql .= " `id_proveedor` = ? ,";
 			}
 			if (in_array("detalles",$fieldstoupdate)){
 				$sql .= " `detalles` = ? ,";
@@ -369,6 +390,9 @@
 			}
 			if (in_array("id_refaccion",$fieldstoupdate)){
 				$stmt->mbind_param( 'i', $this->idRefaccion  );
+			}
+			if (in_array("id_proveedor",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idProveedor  );
 			}
 			if (in_array("detalles",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->detalles  );

@@ -8,6 +8,7 @@
 		protected $id = 0;
 		protected $id_user = 0;
 		protected $id_taller = 0;
+		protected $id_personalpuesto = 0;
 		protected $nombre = "";
 		protected $apellido_pat = "";
 		protected $apellido_mat = "";
@@ -24,6 +25,8 @@
 		protected $created_date = "";
 		protected $updated_date = "";
 		protected $deleted_date = "";
+		protected $forma_pago = "";
+		protected $cantidad = 0;
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -60,6 +63,11 @@
 		public function setIdTaller( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "IDTALLER","i") ) 
  				$this->id_taller = $value;
+		}
+		
+		public function setIdPersonalpuesto( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDPERSONALPUESTO","i") ) 
+ 				$this->id_personalpuesto = $value;
 		}
 		
 		public function setNombre( $value ){			
@@ -142,6 +150,16 @@
  				$this->deleted_date = $value;
 		}
 		
+		public function setFormaPago( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "FORMAPAGO","s") ) 
+ 				$this->forma_pago = $value;
+		}
+		
+		public function setCantidad( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "CANTIDAD","d") ) 
+ 				$this->cantidad = $value;
+		}
+		
 		public function setValidclass( $value ){
 			if ( $this->validclassateInput('/^(true|false)$/', ( $value ) ? 'true' : 'false', "Validclass",'s') )
 				$this->validclass = $value;
@@ -180,6 +198,14 @@
  				return htmlspecialchars($this->id_taller) ;
  			}else{
  				return $this->id_taller ;
+ 			}
+		}
+		
+		public function getIdPersonalpuesto($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->id_personalpuesto) ;
+ 			}else{
+ 				return $this->id_personalpuesto ;
  			}
 		}
 		
@@ -311,6 +337,22 @@
  			}
 		}
 		
+		public function getFormaPago($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->forma_pago) ;
+ 			}else{
+ 				return $this->forma_pago ;
+ 			}
+		}
+		
+		public function getCantidad($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->cantidad) ;
+ 			}else{
+ 				return $this->cantidad ;
+ 			}
+		}
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -340,6 +382,7 @@
 			$this->setId( $res['id'] );
 			$this->setIdUser( $res['id_user'] );
 			$this->setIdTaller( $res['id_taller'] );
+			$this->setIdPersonalpuesto( $res['id_personalpuesto'] );
 			$this->setNombre( $res['nombre'] );
 			$this->setApellidoPat( $res['apellido_pat'] );
 			$this->setApellidoMat( $res['apellido_mat'] );
@@ -356,6 +399,8 @@
 			$this->setCreatedDate( $res['created_date'] );
 			$this->setUpdatedDate( $res['updated_date'] );
 			$this->setDeletedDate( $res['deleted_date'] );
+			$this->setFormaPago( $res['forma_pago'] );
+			$this->setCantidad( $res['cantidad'] );
 			return true;
 		}
 		// end function load
@@ -366,6 +411,7 @@
 
 			$sql .= " `id_user` = ? ,";
 			$sql .= " `id_taller` = ? ,";
+			$sql .= " `id_personalpuesto` = ? ,";
 			$sql .= " `nombre` = ? ,";
 			$sql .= " `apellido_pat` = ? ,";
 			$sql .= " `apellido_mat` = ? ,";
@@ -382,6 +428,8 @@
 			$sql .= " `created_date` = ? ,";
 			$sql .= " `updated_date` = ? ,";
 			$sql .= " `deleted_date` = ? ,";
+			$sql .= " `forma_pago` = ? ,";
+			$sql .= " `cantidad` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -389,6 +437,7 @@
 
 			$sql .= " `id_user` = ? ,";
 			$sql .= " `id_taller` = ? ,";
+			$sql .= " `id_personalpuesto` = ? ,";
 			$sql .= " `nombre` = ? ,";
 			$sql .= " `apellido_pat` = ? ,";
 			$sql .= " `apellido_mat` = ? ,";
@@ -405,6 +454,8 @@
 			$sql .= " `created_date` = ? ,";
 			$sql .= " `updated_date` = ? ,";
 			$sql .= " `deleted_date` = ? ,";
+			$sql .= " `forma_pago` = ? ,";
+			$sql .= " `cantidad` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -416,6 +467,7 @@
 
 			$stmt->mbind_param( 'i', $this->id_user );
 			$stmt->mbind_param( 'i', $this->id_taller );
+			$stmt->mbind_param( 'i', $this->id_personalpuesto );
 			$stmt->mbind_param( 's', $this->nombre );
 			$stmt->mbind_param( 's', $this->apellido_pat );
 			$stmt->mbind_param( 's', $this->apellido_mat );
@@ -432,6 +484,8 @@
 			$stmt->mbind_param( 's', $this->created_date );
 			$stmt->mbind_param( 's', $this->updated_date );
 			$stmt->mbind_param( 's', $this->deleted_date );
+			$stmt->mbind_param( 's', $this->forma_pago );
+			$stmt->mbind_param( 'd', $this->cantidad );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -455,6 +509,9 @@
 			}
 			if (in_array("id_taller",$fieldstoupdate)){
 				$sql .= " `id_taller` = ? ,";
+			}
+			if (in_array("id_personalpuesto",$fieldstoupdate)){
+				$sql .= " `id_personalpuesto` = ? ,";
 			}
 			if (in_array("nombre",$fieldstoupdate)){
 				$sql .= " `nombre` = ? ,";
@@ -504,6 +561,12 @@
 			if (in_array("deleted_date",$fieldstoupdate)){
 				$sql .= " `deleted_date` = ? ,";
 			}
+			if (in_array("forma_pago",$fieldstoupdate)){
+				$sql .= " `forma_pago` = ? ,";
+			}
+			if (in_array("cantidad",$fieldstoupdate)){
+				$sql .= " `cantidad` = ? ,";
+			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -518,6 +581,9 @@
 			}
 			if (in_array("id_taller",$fieldstoupdate)){
 				$stmt->mbind_param( 'i', $this->idTaller  );
+			}
+			if (in_array("id_personalpuesto",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idPersonalpuesto  );
 			}
 			if (in_array("nombre",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->nombre  );
@@ -566,6 +632,12 @@
 			}
 			if (in_array("deleted_date",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->deletedDate  );
+			}
+			if (in_array("forma_pago",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->formaPago  );
+			}
+			if (in_array("cantidad",$fieldstoupdate)){
+				$stmt->mbind_param( 'd', $this->cantidad  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

@@ -86,15 +86,15 @@ if(isPost()){
                                                 <input type="text" class="form-control" placeholder="Descripcion" name="descripcion" value="<?php echo htmlentities($data['descripcion']); ?>">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="name">Tipo</label><br>
+                                        <div class="col-sm-12">
+                                            <label for="name">Tipo</label>
                                             <select style="width:100%" class="select2" name="tipo">
                                                 <?php 
-                                                    if ($val['tipo']=='Normal'){
+                                                    if ($data['tipo']=='Normal'){
                                                             echo "<option selected value='Normal'>Normal</option>";
                                                             echo "<option value='General'>General</option>";
                                                     }
-                                                    if ($val['tipo']=='General'){
+                                                    if ($data['tipo']=='General'){
                                                         echo "<option value='Normal'>Normal</option>";
                                                         echo "<option selected value='General'>General</option>";
                                                     }

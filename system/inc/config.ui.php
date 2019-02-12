@@ -116,7 +116,8 @@ $menuCatalogos = array(
 			"cataseguradora" => array( "title" => "Aseguradoras","url" => APP_URL."/Catalogos/aseguradora" ),
 			"catalmacen"     => array( "title" => "Almacenes",   "url" => APP_URL."/Catalogos/almacen" ),
 			"catproveedor"   => array( "title" => "Proveedores", "url" => APP_URL."/Catalogos/proveedor" ),
-			"catgastostipo"   => array( "title" => "Gastos Tipo", "url" => APP_URL."/Catalogos/gastostipo" )
+			"catgastostipo"  => array( "title" => "Gastos Tipo", "url" => APP_URL."/Catalogos/gastostipo" ),
+			"catpersonalpuesto"  => array( "title" => "Personal puesto", "url" => APP_URL."/Catalogos/personalpuesto" )
 		)
 	)
 );
@@ -124,7 +125,7 @@ $menuCatalogos = array(
 $menuUsuarios = array(
 	"usuarios" => array(
 		"title" => "Usuarios",
-		"icon"  => "fa-users",
+		"icon"  => "fa-user-tie",
 		"sub" => array(
 				'userindex' => array('title'  => 'Usuarios','url' => APP_URL."/Users/index" ),
 				'usertypeindex' => array('title'  => 'Usuarios Perfiles','url' => APP_URL."/Users/usertype" ),
@@ -135,11 +136,22 @@ $menuUsuarios = array(
 $menuGastos = array(
 	"gastos" => array(
 		"title" => "Gastos",
-		"icon" => "fa-flag",
+		"icon" => "fa-calculator",
 		//"url" => APP_URL."/solicitudes/index",
 		"sub" => array(
 			"pedido"     => array( "title" => "Gastos",      "url" => APP_URL."/Gastos/index" ),
 			'pedidosadd' => array( 'title' => 'Gastos Alta', 'url' => APP_URL."/Gastos/add" )
+		)
+	)
+);
+$menuNomina = array(
+	"gastos" => array(
+		"title" => "Nomina",
+		"icon" => "fa-hand-holding-usd",
+		//"url" => APP_URL."/solicitudes/index",
+		"sub" => array(
+			"nomina"     => array( "title" => "Nomina",      "url" => APP_URL."/Nomina/index" ),
+			'nominaadd' => array( 'title' => 'Nomina Alta', 'url' => APP_URL."/Nomina/add" )
 		)
 	)
 );
@@ -205,6 +217,10 @@ if(isset($_SESSION['user_id'])){
 	  $page_nav = array_merge($page_nav, $menuGastos);
 	}
 
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Nomina');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuNomina);
+	}
 	//default
 	$page_nav = array_merge($page_nav, $extras);
 

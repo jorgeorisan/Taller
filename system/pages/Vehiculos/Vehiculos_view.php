@@ -355,16 +355,16 @@ if(isPost()){
 															$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
 														elseif($reslast['fecha_estimada'])
 															$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
-														elseif($reslast['fecha_inicial'])
+														elseif(isset($reslast['fecha_inicial']))
 															$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
 													}
 													?>
 													<tr style="height: 30px;"  class="<?php echo $cancelada;?>">
-														<td><span class='<?php echo $class; ?>'><?php echo $status;?></span></td>
+														<td><span class='<?php //echo $class; ?> estatusnuevo<?php echo $row['id']; ?>'><?php echo $status;?></span></td>
 														<td><?php echo htmlentities($row['codigo']); ?></td>
 														<td><?php echo htmlentities($nombre); ?></td>
 														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
-														<td style="text-align: right;"><?php echo $datelast; ?></td>
+														<td class="fechanueva<?php echo $row['id']; ?>" style="text-align: right;"><?php echo $datelast; ?></td>
 														<td style="text-align: right;">
 															<?php if(!$cancelada){
 																$totalservicio += $row['total'];  	
@@ -438,12 +438,12 @@ if(isPost()){
 													}
 													?>
 													<tr style="height: 30px;" class="<?php echo $cancelada;?>">
-														<td><span class='<?php  ?>'><?php echo $status;?></span></td>
+														<td><span class='<?php  ?> estatusnuevo<?php echo $row['id']; ?>'><?php echo $status;?></span></td>
 														<td><?php echo htmlentities($row['cantidad']); ?></td>
 														<td><?php echo htmlentities($nombre); ?></td>
 														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['costo_aprox']),2); ?></td>
 														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total_aprox']),2); ?></td>
-														<td style="text-align: right;"><?php echo $datelast; ?></td>
+														<td class="fechanueva<?php echo $row['id']; ?>" style="text-align: right;"><?php echo $datelast; ?></td>
 														<td style="text-align: right;">
 															<?php if(!$cancelada){ ?>
 															<div class="btn-group">
@@ -547,7 +547,7 @@ if(isPost()){
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="width:110%">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
@@ -667,9 +667,6 @@ if(isPost()){
     }
 	$(document).ready(function() {
 		document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
-
-		
-
 		//servicios
 		$('body').on('click', '.btn-statusservice', function(){
 			//change status
@@ -709,8 +706,15 @@ if(isPost()){
                 url: url,
                 data: $( "form#form-"+ page ).serialize() + data, // Adjuntar los campos del formulario enviado.
                 success: function(response){
-					if(response>0){
-						location.reload();
+					if(response){
+                        $('#myModal').modal('hide');
+                        notify('success',"Registrado correctamente");
+						$(".estatusnuevo"+ id).html(status);
+						var fechanueva = fecha_inicio;
+						fechanueva = (fecha_estimada) ? fecha_estimada : fechanueva;
+						fechanueva = (fecha_final)    ? fecha_final    : fechanueva;
+						$(".fechanueva"+ id).html(fechanueva);
+						//location.reload();
                     }else{
                         notify('error',"Oopss error al cambiar estatus: "+response);
                     }
@@ -795,8 +799,9 @@ if(isPost()){
 			if ( !idpersonal )   return notify('error',"Se necesita el personal");
 			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
 			
-			if ( status_anterior == status) return notify('error',"El estatus no se puede repetir");
-			if ( status == "Recibida" && fecha_final!="") return notify('error',"Este estatus no puede estar terminado");
+			if ( status_anterior == status)                            return notify('error',"El estatus no se puede repetir");
+			if ( status == "Recibida" && fecha_final!="")              return notify('error',"Este estatus no puede estar terminado");
+			if ( status_anterior == "Recibida" && status=="Rechazada") return notify('error',"Este estatus no puede ser posible");
 			if ( (status_anterior=="Proporcionado-Cliente" && status == "Recibida") || (status=="Proporcionado-Cliente" && status_anterior == "Recibida") ) 
 				return notify('error',"Este estatus no puede ser posible");
 			if ( (status_anterior=="Entregada" && status == "Reenvio") || (status=="Entregada" && status_anterior == "Reenvio") ) 
@@ -815,10 +820,17 @@ if(isPost()){
                 data: $( "form#form-"+ page ).serialize() + data, // Adjuntar los campos del formulario enviado.
                 success: function(response){
 					if(response>0){
-						location.reload();
+                        $('#myModal').modal('hide');
+                        notify('success',"Registrado correctamente");
+						if(status=='active') status='Solicitada';
+						$(".estatusnuevo"+ id).html(status);
+						var fechanueva = fecha_inicio;
+						fechanueva = (fecha_estimada) ? fecha_estimada : fechanueva;
+						fechanueva = (fecha_final)    ? fecha_final    : fechanueva;
+						$(".fechanueva"+ id).html(fechanueva);
+						//location.reload();
                     }else{
                         notify('error',"Oopss error al cambiar estatus: "+response);
-						console.log(response);
                     }
                 }
              });

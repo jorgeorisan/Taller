@@ -78,6 +78,7 @@ Routing section
         if ($request['page'] === 'proveedor')      { $page = "Catalogos_proveedor.php";  }
         if ($request['page'] === 'almacen')        { $page = "Catalogos_almacen.php";  }
         if ($request['page'] === 'gastostipo')     { $page = "Catalogos_gastostipo.php";  }
+        if ($request['page'] === 'personalpuesto') { $page = "Catalogos_personalpuesto.php";  }
       }
       if ($request['section']==='Users'){
        $page = "Users_index.php";

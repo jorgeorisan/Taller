@@ -67,6 +67,9 @@ $data = $obj->getAllArr();
 												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Direccion
 											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Puesto
+											</th>
+											<th class = "col-md-1" data-hide="phone,tablet">
 												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Alta
 											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
@@ -77,9 +80,14 @@ $data = $obj->getAllArr();
 									<tbody>
 										<?php  foreach($data as $row) {
 											$nomtaller="";
+											$nompuesto="";
 											$objtaller = new Taller();
 											$datataller = $objtaller->getTable($row["id_taller"]);
 											if($datataller){ $nomtaller = $datataller["nombre"]; }
+											
+											$objpuesto = new PersonalPuesto();
+											$datapuesto = $objpuesto->getTable($row["id_personalpuesto"]);
+											if($datapuesto){ $nompuesto = $datapuesto["nombre"]; }
 											?>
 											<tr>
 												<td><?php echo htmlentities($row['id'])?></td>
@@ -87,7 +95,7 @@ $data = $obj->getAllArr();
 												<td><?php echo htmlentities($row['email'])?></td>
 												<td><?php echo htmlentities($row['telefono']) ?></td>
 												<td><?php echo htmlentities($row['ciudad']." ".$row['estado']." Col. ".$row['colonia']." Calle. ".$row['calle']." Num. ".$row['num_ext']." ".$row['num_int']) ?></td>
-												
+												<td><?php echo htmlentities($nompuesto) ?></td>
 												<td><?php echo htmlentities($row['created_date']) ?></td>
 												<td>
 													<div class="btn-group">

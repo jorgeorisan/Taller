@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Gastos";
+$page_title = "Puestos de Personal";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -17,26 +17,19 @@ include(SYSTEM_DIR . "/inc/header.php");
 //include left panel (navigation)
 include(SYSTEM_DIR . "/inc/nav.php");
 
-
-$obj = new Gastos();
+$obj = new PersonalPuesto();
 $data = $obj->getAllArr();
-
-//print_r($users);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
 	<?php
-		//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-		//$breadcrumbs["New Crumb"] => "http://url.com"
-		//$breadcrumbs["Add client"] = APP_URL."/Clients/add";
 		include(SYSTEM_DIR . "/inc/ribbon.php");
 	?>
-
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Gastos","add")?>" >Nuevo Gastos</a></p>
+			<p><a class="btn btn-success" href="<?php echo make_url("Catalogos","personalpuestoadd")?>" >Nuevo Puesto</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -51,43 +44,17 @@ $data = $obj->getAllArr();
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> No. Gastos
-											</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Concepto
-											</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Tipo Gasto
-											</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Gasto
-											</th>
-											<th class = "col-md-1" data-hide="">
-												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Total
-											</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Usuario Alta
-											</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Alta
-											</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  text-muted hidden-md hidden-sm hidden-xs"></i>Action
-											</th>
+											<th class = "col-md-4" data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Nombre</th>
+											<th class = "col-md-1" data-hide=""><i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Status</th>
+											<th class = "col-md-2" data-hide=""><i class="fa fa-fw    text-muted hidden-md hidden-sm hidden-xs"></i>Action</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php  foreach($data as $row) {
+										<?php foreach($data as $row){
 											?>
 											<tr>
-												<td><?php echo htmlentities($row['id'])?></td>
 												<td><?php echo htmlentities($row['nombre'])?></td>
-												<td><?php echo htmlentities($row['tipo'])?></td>
-												<td><?php echo htmlentities($row['gastostipo'])?></td>
-												<td><?php echo htmlentities($row['total']) ?></td>
-												<td><?php echo htmlentities($row['nombre']." ".$row['apellido_pat']." ".$row['apellido_mat']." ") ?></td>
-												<td><?php echo htmlentities($row['created_date']) ?></td>
+												<td><?php echo htmlentities($row['status']) ?></td>												
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -95,15 +62,14 @@ $data = $obj->getAllArr();
 														</button>
 														<ul class="dropdown-menu">
 															<li>
-																<a class="" href="<?php echo make_url("Gastos","view",array('id'=>$row['id'])); ?>">Ver</a>
+																<a class="" href="<?php echo make_url("Catalogos","personalpuestoshow",array('id'=>$row['id'])); ?>">Ver</a>
 															</li>
 															<li>
-																<a class="" href="<?php echo make_url("Gastos","edit",array('id'=>$row['id'])); ?>">Editar</a>
+																<a class="" href="<?php echo make_url("Catalogos","personalpuestoedit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
-															
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Gastos","gastosdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Catalogos","personalpuestodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>
@@ -173,16 +139,12 @@ $data = $obj->getAllArr();
 				responsiveHelper_dt_basic.respond();
 			}
 		});
-	
-		/* DO NOT REMOVE : GLOBAL FUNCTIONS!
-		 *
-		 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
-		 *
-		
-		 */
 
+	}
+	
 		 pageSetUp();
-	})
+		
+	});
 
 </script>
 

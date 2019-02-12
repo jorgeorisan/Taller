@@ -134,18 +134,14 @@ if(isPost()){
                                                             <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" placeholder="Fecha promesa de entrega" name="fecha_promesa" >
                                                         </div>
                                                         <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_taller" id="id_taller">
-                                                                <option value="" disabled>Selecciona Taller</option>
+                                                            <select style="width:100%" class="select2" name="id_cliente" id="id_cliente">
+                                                                <option value="" selected disabled>Selecciona Cliente</option>
                                                                 <?php 
-                                                                $obj = new Taller();
+                                                                $obj = new Cliente();
                                                                 $list=$obj->getAllArr();
                                                                 if (is_array($list) || is_object($list)){
                                                                     foreach($list as $val){
-                                                                        $selected = "";
-                                                                        if ($_SESSION['user_info']['id_taller'] == $val['id'] )
-                                                                            $selected = "selected";
-
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                                                                     }
                                                                 }
                                                                  ?>
@@ -167,32 +163,14 @@ if(isPost()){
                                                                 }
                                                                  ?>
                                                             </select>
-                                                        </div>                                                 
+                                                        </div>       
+                                                        <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupclientes()" > <i class="fa fa-plus"></i></a>                                          
                                                     </div> 
                                                 </div>
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_cliente" id="id_cliente">
-                                                                <option value="" selected disabled>Selecciona Cliente</option>
-                                                                <?php 
-                                                                $obj = new Cliente();
-                                                                $list=$obj->getAllArr();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                 ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                         <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupclientes()" > <i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-6" id="contcliente">
-                                                    
-                                                    </div> 
+                                                <div class="col-sm-12" >
+                                                    <div class="col-sm-3"></div>
+                                                    <div class="col-sm-6" id="contcliente"></div> 
+                                                    <div class="col-sm-3"></div>
                                                 </div>
                                             </div>
                                         </div>

@@ -139,13 +139,14 @@ function getStatusServicio(){
 }
 function getStatusRefaccion(){
   $arrayStatus = array();
-  //$arrayStatus["active"]     = "Solicitada";
-  $arrayStatus["Recibida"]   = "Recibida";
+  $arrayStatus["active"]     = "Solicitada";
+  $arrayStatus["Autorizada"] = "Autorizada";
   $arrayStatus["Rechazada"]  = "Rechazada";
-  $arrayStatus["Entregada"]  = "Entregada";
+  $arrayStatus["Recibida"]   = "Recibida";
   $arrayStatus["Reenvio"]    = "Reenvio";
-  $arrayStatus["Instalado"]  = "Instalado";
   $arrayStatus["Proporcionado-Cliente"]  = "Proporcionado-Cliente";
+  $arrayStatus["Entregada"]  = "Entregada";
+  $arrayStatus["Instalado"]  = "Instalado";
   $arrayStatus["Perdida-daño"] = "Perdida-daño";
   return $arrayStatus;
 }
@@ -299,9 +300,9 @@ function delete($id,$module,$table){
     case 'proveedor':          $obj = new Proveedor();         $pagereturn = $table;    break;
     case 'pedido':             $obj = new Pedido();                                     break;
     case 'pedidorefaccion':    $obj = new PedidoRefaccion();   $pagereturn = 'view';    break;
-    case 'gastotipo':          $obj = new GastoTipo();         $pagereturn = $table;   break;
+    case 'gastostipo':         $obj = new GastosTipo();        $pagereturn = $table;    break;
     case 'gastos':             $obj = new Gastos();                                     break;
-    case 'pedidorefaccion':    $obj = new GastosRegistros();   $pagereturn = 'view';    break;
+    case 'personalpuesto':     $obj = new PersonalPuesto();    $pagereturn = $table;    break;
     default:
       echo "no se encontro tabla en func.global ".$table;
       exit;

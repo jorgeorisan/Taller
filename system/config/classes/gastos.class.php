@@ -9,7 +9,11 @@ class Gastos extends AutoGastos {
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM gastos where status='active';";
+		$sql = "SELECT g.id,g.nombre,g.total,u.nombre,u.apellido_pat,u.apellido_mat,g.created_date,gt.nombre gastostipo,gt.tipo
+		FROM gastos g 
+		left join gastos_tipo gt on gt.id=g.id_gastostipo  
+		left join user u on u.id=g.id_user 
+			where g.status='active';";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -38,6 +42,9 @@ class Gastos extends AutoGastos {
 		//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
+		$_request["id_taller"] = $_SESSION['user_info']['id_taller'];
+		$_request["id_user"]   = $_SESSION['user_id'];
+		$_request["total"]     = $_request['total-globalgasto'];
 		$data=fromArray($_request,'gastos',$this->db,"add");
 		$sql= "INSERT INTO gastos (".$data[0].") VALUES(".$data[1]."); ";
 		$res=$this->db->query($sql);
@@ -50,7 +57,29 @@ class Gastos extends AutoGastos {
 			while ($row = $res->fetch_assoc())
 				$id= $row;
 		}
-		return $id["LAST_INSERT_ID()"];
+		$id = $id["LAST_INSERT_ID()"];
+		$gastostipo	= $_request["id_gastostiporegistros"];
+		$total		= $_request["totalesregistros"];
+		$cantidad	= $_request["cantidad"];
+		$detalles	= $_request["detalles"];
+		
+		foreach ($gastostipo as $key => $value) {
+			$total         = ($total[$key]) ? $total[$key] : 0 ;
+			$cant          = $cantidad[$key];
+			$detalle       = $detalles[$key];
+			$id_gastostipo = $value;
+			$_requestgastos["id_gastos"]     = $id;
+			$_requestgastos["id_gastostipo"] = $id_gastostipo;
+			$_requestgastos["detalles"] 	 = $detalle;
+			$_requestgastos["cantidad"]      = $cant;
+			$_requestgastos["total"]         = $total;
+			$objGastosRegistros = new GastosRegistros();
+			if(!$objGastosRegistros->addAll($_requestgastos)){
+				echo "Falla en insert pedido refaccion";
+				exit;
+			}
+		}
+		return $id;
 	}
 		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)

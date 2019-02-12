@@ -74,10 +74,23 @@ if ( !$data ) {
 							                    <label for="name">Calle</label>
 							                    <input type="text"  readonly class="form-control" placeholder="Calle" name="calle"  value="<?php echo $data['calle']; ?>">                                                                                               
 							                </div>
-							                 <div class="form-group">
+							                <div class="form-group">
 							                    <label for="name">Colonia</label>
 							                    <input type="text" readonly  class="form-control" placeholder="Colonia" name="colonia" value="<?php echo $data['colonia']; ?>">                                                                                               
 							                </div>
+                                            <div class="form-group">
+                                                <label for="name">Puesto</label><br>
+                                                <select style="width:100%" disabled class="select2" name="id_puesto">
+                                                    <?php 
+                                                        $obj = new PersonalPuesto();
+                                                        $list=$obj->getAllArr();
+                                                        if (is_array($list) || is_object($list)){
+                                                            foreach($list as $val)
+                                                                echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
+                                                        }
+                                                    ?>
+                                                </select>                                
+                                            </div>
 							            </div>
 							            <div class="col-sm-3">
 							                 <div class="form-group">
@@ -98,6 +111,21 @@ if ( !$data ) {
 							                    <label for="name">Ciudad</label>
 							                    <input type="text"  readonly class="form-control" placeholder="Ciudad" name="ciudad"  value="<?php echo $data['ciudad']; ?>">                                                                                               
 							                </div>
+                                            <div class="form-group">
+                                                <label for="name">Forma de pago</label><br>
+                                                <select style="width:100%" disabled class="select2" name="forma_pago">
+                                                    <?php 
+                                                        if ($data['forma_pago']=='Destajo') {
+                                                            echo "<option value='Fijo'>Fijo</option>";
+                                                            echo "<option selected value='Destajo'>Destajo</option>";
+                                                        }
+                                                        if ($data['forma_pago']=='Fijo') {
+                                                            echo "<option selected value='Fijo'>Fijo</option>";
+                                                            echo "<option value='Destajo'>Destajo</option>";
+                                                        }
+                                                    ?>
+                                                </select>                                
+                                            </div>
 							            </div>
 							            <div class="col-sm-3">
 							                <div class="form-group">
@@ -115,6 +143,14 @@ if ( !$data ) {
 							                <div class="form-group">
 							                    <label for="name">CP</label>
 							                    <input type="text"  readonly class="form-control" placeholder="CP" name="cp"  value="<?php echo $data['cp']; ?>">                                                                                               
+							                </div>
+                                            <div class="form-group">
+							                    <label for="name">Porcentaje</label>
+							                    <input type="text" readonly  class="form-control" placeholder="Colonia" name="colonia" value="<?php echo $data['colonia']; ?>">                                                                                               
+							                </div>
+                                            <div class="form-group">
+							                    <label for="name" id='cantidad'>Cantidad</label>
+							                    <input type="number" class="form-control" placeholder="cantidad" name="cantidad"  value="<?php echo $data['cantidad']; ?>">                                                                                               
 							                </div>
 							            </div>
                                     </fieldset> 

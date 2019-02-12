@@ -17,7 +17,19 @@ class GastosTipo extends AutoGastosTipo {
 		}
 		return $set;
 	}
-	
+	//metodo que sirve para obtener todos los datos de la tabla
+	public function getAllArrNormal()
+	{
+		$sql = "SELECT * FROM gastos_tipo where status='active' and tipo='Normal'";
+		$res = $this->db->query($sql);
+		$set = array();
+		if(!$res){ die("Error getting result"); }
+		else{
+			while ($row = $res->fetch_assoc())
+				{ $set[] = $row; }
+		}
+		return $set;
+	}
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
@@ -100,7 +112,7 @@ class GastosTipo extends AutoGastosTipo {
 		$id_taller=$_SESSION['user_info']['id_taller'];
 		$id=$this->db->real_escape_string($id);
 		$sql = "
-		SELECT * FROM gastos_registros gr 
+		SELECT gr.cantidad, gr.total FROM gastos_registros gr 
 			JOIN gastos g on gr.id_gastos=g.id
 			where gr.status='active' and gr.id_gastostipo=$id 
 			and g.id_taller=$id_taller

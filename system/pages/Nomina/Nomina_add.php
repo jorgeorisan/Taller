@@ -26,7 +26,7 @@ include(SYSTEM_DIR . "/inc/header.php");
 include(SYSTEM_DIR . "/inc/nav.php");
 
 if(isPost()){
-    $obj = new Gastos();
+    $obj = new Gasto();
     $id  = $obj->addAll(getPost());
     //$id=240;
     
@@ -72,7 +72,7 @@ if(isPost()){
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_gastostipo" id="id_gastostipo">
+                                                            <select style="width:100%" class="select2" name="id_gastostipo" id="">
                                                                 <option value="" selected disabled>Selecciona Tipo Gasto</option>
                                                                 <?php 
                                                                 $obj = new GastosTipo();
@@ -95,7 +95,7 @@ if(isPost()){
                                                 <div class="col-sm-12">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control " value="" placeholder="Concepto " name="nombre" >
+                                                            <input type="text" class="form-control " value="" placeholder="Nombre " name="nombre" >
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
@@ -119,41 +119,45 @@ if(isPost()){
                                             <div class="jarviswidget-editbox" style=""></div>
                                             <div class="widget-body">
                                                 <div class="col-sm-12">
-                                                    <div class="col-sm-1 col-md-1">
+                                                    <div class="col-sm-1">
                                                         <input style='' type='number' class="form-control" id='selectcantidad_gasto' value='1'> 
                                                     </div>
-                                                    <div class="col-sm-4 col-md-4">
+                                                    <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <select style="width:50%" class="select2" name="id_gastostiporegistro" id="id_gastostiporegistro">
-                                                                <option value="" selected disabled>Selecciona </option>
-                                                                <?php 
-                                                                $obj = new GastosTipo();
-                                                                $list=$obj->getAllArrNormal();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val)
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    
-                                                                }
-                                                                ?>
-                                                            </select>
+                                                            <div class="col-sm-6">
+                                                                <select style="width:50%" class="select2" name="id_gastostiporegistro" id="id_gastostiporegistro">
+                                                                    <option value="" selected disabled>Selecciona </option>
+                                                                    <?php 
+                                                                    $obj = new GastosTipo();
+                                                                    $list=$obj->getAllArrNormal();
+                                                                    if (is_array($list) || is_object($list)){
+                                                                        foreach($list as $val)
+                                                                            echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                        
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group" id=''>
+                                                            <button class="btn btn-primary btn-md" type="button" onclick=" getgastostipo();"> Agregar  </button>
                                                         </div>
                                                         
                                                     </div>
-                                                    <div class="col-sm-5 col-md-5">
-                                                        <div class="col-sm-3">
-                                                            <button class="btn btn-primary btn-md" type="button" onclick=" getgastostipo();"> Agregar  </button>
-                                                        </div>
-                                                        <div class="col-sm-2">
-                                                            <a data-toggle="modal" title="Nueva Refaccion"  class="btn btn-success" href="#myModal" onclick="showpopupgasto()" > <i class="fa fa-plus"></i></a>
-                                                        </div>
-                                                        <div class="col-sm-2">
-                                                            <a data-toggle="modal" title="Buscar Refaccion" class="btn btn-info" href="#myModal" onclick="showpopupgastobuscar()" > <i class="fa fa-search"></i></a>
-                                                        </div>
-                                                        <div class="col-sm-1"></div>
-                                                        <div class="col-sm-2 text-right">
-                                                            <h6><strong >Total=<span id="total-numgasto"></span></strong></h6>
-                                                            <input type="hidden" name="total-globalgasto" id="total-globalgasto" value="0"/>
-                                                        </div>
+                                                    <div class="col-sm-1">
+                                                         <a data-toggle="modal" title="Nueva Refaccion"  class="btn btn-success" href="#myModal" onclick="showpopupgasto()" > <i class="fa fa-plus"></i></a>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                         <a data-toggle="modal" title="Buscar Refaccion" class="btn btn-info" href="#myModal" onclick="showpopupgastobuscar()" > <i class="fa fa-search"></i></a>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                    <div class="col-sm-2 text-right">
+                                                        <h6><strong >Total=<span id="total-numgasto"></span></strong></h6>
+                                                        <input type="hidden" name="total-globalgasto" id="total-globalgasto" value="0"/>
                                                     </div>
                                                 </div>
                                                 <div class='col-sm-12 col-md-12'>
@@ -250,14 +254,17 @@ if(isPost()){
       
         validateForm =function(){
             var fecha_alta    = $("input[name=fecha_alta]").val();
-            var nombre        = $("input[name=nombre]").val();
-            var id_gastostipo = $("#id_gastostipo").val();
+            var id_almacen    = $("#id_almacen").val();
+            var id_proveedor  = $("#id_proveedor").val();
+            var modelo        = $("#modelo").val();
             var total         = $("#total-globalgasto").val();
            
             if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
-            if ( ! id_gastostipo ) return notify("info","El Tipo de gasto es requerido");
-            if ( ! nombre )        return notify("info","El nombre es requerido");
-            if ( total <= 0)       return notify("info","Se requieren totales para generar el gasto");
+           
+            
+            if ( ! id_almacen )    return notify("info","El Almacen es requerido");
+            if ( ! id_proveedor )  return notify("info","El proveedor es requerido");
+            if ( total <= 0)       return notify("info","Se requieren gastoes para generar el gasto");
             
             $("#main-form").submit();       
         }
@@ -376,7 +383,13 @@ if(isPost()){
             calcTotalgasto();
         });
              
-        
+        //gastotipo
+        $('body').on('change', '#id_gastostipo', function(){
+            if( $(this).val() ){
+                var id = $("#id_gastostipo").val();
+                getgastostipo(id);
+            }
+        });
       
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.

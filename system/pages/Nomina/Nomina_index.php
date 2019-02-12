@@ -8,7 +8,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 /*---------------- PHP Custom Scripts ---------
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
-$page_title = "Gastos";
+$page_title = "Nomina";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 $page_css[] = "your_style.css";
@@ -18,7 +18,7 @@ include(SYSTEM_DIR . "/inc/header.php");
 include(SYSTEM_DIR . "/inc/nav.php");
 
 
-$obj = new Gastos();
+$obj = new Nomina();
 $data = $obj->getAllArr();
 
 //print_r($users);
@@ -36,7 +36,7 @@ $data = $obj->getAllArr();
 	<!-- MAIN CONTENT -->
 	<div id="content">
 		<section id="widget-grid" class="">
-			 <p><a class="btn btn-success" href="<?php echo make_url("Gastos","add")?>" >Nuevo Gastos</a></p>
+			 <p><a class="btn btn-success" href="<?php echo make_url("Nomina","add")?>" >Nuevo Nomina</a></p>
 			<div class="row">
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="jarviswidget jarviswidget-color-white" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="true">
@@ -52,22 +52,19 @@ $data = $obj->getAllArr();
 									<thead>
 										<tr>
 											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> No. Gastos
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> No. Nomina
+											</th>
+											<th class = "col-md-1" data-class="expand">
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Taller
+											</th>
+											<th class = "col-md-1" data-class="expand">
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Tipo Nomina
 											</th>
 											<th class = "col-md-1" data-class="expand">
 												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Concepto
 											</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Tipo Gasto
-											</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Gasto
-											</th>
 											<th class = "col-md-1" data-hide="">
 												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Total
-											</th>
-											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Usuario Alta
 											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
 												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Alta
@@ -79,14 +76,18 @@ $data = $obj->getAllArr();
 									</thead>
 									<tbody>
 										<?php  foreach($data as $row) {
+											$nomtaller="";
+											$objtaller = new Taller();
+											$datataller = $objtaller->getTable($row["id_taller"]);
+											if($datataller){ $nomtaller = $datataller["nombre"]; }
 											?>
 											<tr>
 												<td><?php echo htmlentities($row['id'])?></td>
-												<td><?php echo htmlentities($row['nombre'])?></td>
-												<td><?php echo htmlentities($row['tipo'])?></td>
-												<td><?php echo htmlentities($row['gastostipo'])?></td>
-												<td><?php echo htmlentities($row['total']) ?></td>
-												<td><?php echo htmlentities($row['nombre']." ".$row['apellido_pat']." ".$row['apellido_mat']." ") ?></td>
+												<td><?php echo htmlentities($row['nombre'].' '.$row['apellido_pat'].' '.$row['apellido_mat'])?></td>
+												<td><?php echo htmlentities($row['email'])?></td>
+												<td><?php echo htmlentities($row['telefono']) ?></td>
+												<td><?php echo htmlentities($row['ciudad']." ".$row['estado']." Col. ".$row['colonia']." Calle. ".$row['calle']." Num. ".$row['num_ext']." ".$row['num_int']) ?></td>
+												
 												<td><?php echo htmlentities($row['created_date']) ?></td>
 												<td>
 													<div class="btn-group">
@@ -95,15 +96,15 @@ $data = $obj->getAllArr();
 														</button>
 														<ul class="dropdown-menu">
 															<li>
-																<a class="" href="<?php echo make_url("Gastos","view",array('id'=>$row['id'])); ?>">Ver</a>
+																<a class="" href="<?php echo make_url("Nomina","view",array('id'=>$row['id'])); ?>">Ver</a>
 															</li>
 															<li>
-																<a class="" href="<?php echo make_url("Gastos","edit",array('id'=>$row['id'])); ?>">Editar</a>
+																<a class="" href="<?php echo make_url("Nomina","edit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
 															
 															<li class="divider"></li>
 															<li>
-																<a href="#" class="red" onclick="borrar('<?php echo make_url("Gastos","gastosdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																<a href="#" class="red" onclick="borrar('<?php echo make_url("Nomina","nominadelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
 															</li>
 														</ul>
 													</div>

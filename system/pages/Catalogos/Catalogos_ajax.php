@@ -355,14 +355,14 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 					$total     = ($values)  ? $values['total']  : 0 ;
 					$data="
 							<tr class='gastos' lineidgastos='".$lineId."'>
-								<input type='hidden' name='id_gastos[]' value='".$id."'/>
+								<input type='hidden' name='id_gastostiporegistros[]' value='".$id."'/>
 								<input class='cantidadesgastos' type='hidden' name='cantidad[]' value='".$cant."'/>
 								<td>" . $cant . "</td>
 								<td>" . htmlentities( $res["codigo"] ) . "</td>
 								<td>" .  $detalles . "</td>";
 						
 						$data.="
-								<td><input type='number' style='width: 80px;' class='form-control totalesgastos' name='total[]' value='".$total."' placeholder='00.00'></td>";
+								<td><input type='number' style='width: 80px;' class='form-control totalesgastos' name='totalesregistros[]' value='".$total."' placeholder='00.00'></td>";
 						
 						$data.="
 								<td class='borrar-td'>

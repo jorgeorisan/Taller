@@ -8,6 +8,8 @@
 		protected $id = 0;
 		protected $id_vehiculorefaccion = 0;
 		protected $id_user = 0;
+		protected $id_personal = 0;
+		protected $id_almacen = 0;
 		protected $status_anterior = "";
 		protected $status = "";
 		protected $comentarios = "";
@@ -15,8 +17,7 @@
 		protected $fecha_inicio = "";
 		protected $fecha_estimada = "";
 		protected $fecha_fin = "";
-		protected $id_personal = 0;
-		protected $id_almacen = 0;
+		protected $id_proveedor = 0;
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -55,6 +56,16 @@
  				$this->id_user = $value;
 		}
 		
+		public function setIdPersonal( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDPERSONAL","i") ) 
+ 				$this->id_personal = $value;
+		}
+		
+		public function setIdAlmacen( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDALMACEN","i") ) 
+ 				$this->id_almacen = $value;
+		}
+		
 		public function setStatusAnterior( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "STATUSANTERIOR","s") ) 
  				$this->status_anterior = $value;
@@ -90,14 +101,9 @@
  				$this->fecha_fin = $value;
 		}
 		
-		public function setIdPersonal( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "IDPERSONAL","i") ) 
- 				$this->id_personal = $value;
-		}
-		
-		public function setIdAlmacen( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "IDALMACEN","i") ) 
- 				$this->id_almacen = $value;
+		public function setIdProveedor( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "IDPROVEEDOR","i") ) 
+ 				$this->id_proveedor = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -138,6 +144,22 @@
  				return htmlspecialchars($this->id_user) ;
  			}else{
  				return $this->id_user ;
+ 			}
+		}
+		
+		public function getIdPersonal($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->id_personal) ;
+ 			}else{
+ 				return $this->id_personal ;
+ 			}
+		}
+		
+		public function getIdAlmacen($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->id_almacen) ;
+ 			}else{
+ 				return $this->id_almacen ;
  			}
 		}
 		
@@ -197,19 +219,11 @@
  			}
 		}
 		
-		public function getIdPersonal($sanitize=true){ 
+		public function getIdProveedor($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->id_personal) ;
+ 				return htmlspecialchars($this->id_proveedor) ;
  			}else{
- 				return $this->id_personal ;
- 			}
-		}
-		
-		public function getIdAlmacen($sanitize=true){ 
- 			if($sanitize){
- 				return htmlspecialchars($this->id_almacen) ;
- 			}else{
- 				return $this->id_almacen ;
+ 				return $this->id_proveedor ;
  			}
 		}
 		
@@ -242,6 +256,8 @@
 			$this->setId( $res['id'] );
 			$this->setIdVehiculorefaccion( $res['id_vehiculorefaccion'] );
 			$this->setIdUser( $res['id_user'] );
+			$this->setIdPersonal( $res['id_personal'] );
+			$this->setIdAlmacen( $res['id_almacen'] );
 			$this->setStatusAnterior( $res['status_anterior'] );
 			$this->setStatus( $res['status'] );
 			$this->setComentarios( $res['comentarios'] );
@@ -249,8 +265,7 @@
 			$this->setFechaInicio( $res['fecha_inicio'] );
 			$this->setFechaEstimada( $res['fecha_estimada'] );
 			$this->setFechaFin( $res['fecha_fin'] );
-			$this->setIdPersonal( $res['id_personal'] );
-			$this->setIdAlmacen( $res['id_almacen'] );
+			$this->setIdProveedor( $res['id_proveedor'] );
 			return true;
 		}
 		// end function load
@@ -261,6 +276,8 @@
 
 			$sql .= " `id_vehiculorefaccion` = ? ,";
 			$sql .= " `id_user` = ? ,";
+			$sql .= " `id_personal` = ? ,";
+			$sql .= " `id_almacen` = ? ,";
 			$sql .= " `status_anterior` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `comentarios` = ? ,";
@@ -268,8 +285,7 @@
 			$sql .= " `fecha_inicio` = ? ,";
 			$sql .= " `fecha_estimada` = ? ,";
 			$sql .= " `fecha_fin` = ? ,";
-			$sql .= " `id_personal` = ? ,";
-			$sql .= " `id_almacen` = ? ,";
+			$sql .= " `id_proveedor` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -277,6 +293,8 @@
 
 			$sql .= " `id_vehiculorefaccion` = ? ,";
 			$sql .= " `id_user` = ? ,";
+			$sql .= " `id_personal` = ? ,";
+			$sql .= " `id_almacen` = ? ,";
 			$sql .= " `status_anterior` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `comentarios` = ? ,";
@@ -284,8 +302,7 @@
 			$sql .= " `fecha_inicio` = ? ,";
 			$sql .= " `fecha_estimada` = ? ,";
 			$sql .= " `fecha_fin` = ? ,";
-			$sql .= " `id_personal` = ? ,";
-			$sql .= " `id_almacen` = ? ,";
+			$sql .= " `id_proveedor` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -297,6 +314,8 @@
 
 			$stmt->mbind_param( 'i', $this->id_vehiculorefaccion );
 			$stmt->mbind_param( 'i', $this->id_user );
+			$stmt->mbind_param( 'i', $this->id_personal );
+			$stmt->mbind_param( 'i', $this->id_almacen );
 			$stmt->mbind_param( 's', $this->status_anterior );
 			$stmt->mbind_param( 's', $this->status );
 			$stmt->mbind_param( 's', $this->comentarios );
@@ -304,8 +323,7 @@
 			$stmt->mbind_param( 's', $this->fecha_inicio );
 			$stmt->mbind_param( 's', $this->fecha_estimada );
 			$stmt->mbind_param( 's', $this->fecha_fin );
-			$stmt->mbind_param( 'i', $this->id_personal );
-			$stmt->mbind_param( 'i', $this->id_almacen );
+			$stmt->mbind_param( 'i', $this->id_proveedor );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -330,6 +348,12 @@
 			if (in_array("id_user",$fieldstoupdate)){
 				$sql .= " `id_user` = ? ,";
 			}
+			if (in_array("id_personal",$fieldstoupdate)){
+				$sql .= " `id_personal` = ? ,";
+			}
+			if (in_array("id_almacen",$fieldstoupdate)){
+				$sql .= " `id_almacen` = ? ,";
+			}
 			if (in_array("status_anterior",$fieldstoupdate)){
 				$sql .= " `status_anterior` = ? ,";
 			}
@@ -351,11 +375,8 @@
 			if (in_array("fecha_fin",$fieldstoupdate)){
 				$sql .= " `fecha_fin` = ? ,";
 			}
-			if (in_array("id_personal",$fieldstoupdate)){
-				$sql .= " `id_personal` = ? ,";
-			}
-			if (in_array("id_almacen",$fieldstoupdate)){
-				$sql .= " `id_almacen` = ? ,";
+			if (in_array("id_proveedor",$fieldstoupdate)){
+				$sql .= " `id_proveedor` = ? ,";
 			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
@@ -371,6 +392,12 @@
 			}
 			if (in_array("id_user",$fieldstoupdate)){
 				$stmt->mbind_param( 'i', $this->idUser  );
+			}
+			if (in_array("id_personal",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idPersonal  );
+			}
+			if (in_array("id_almacen",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idAlmacen  );
 			}
 			if (in_array("status_anterior",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->statusAnterior  );
@@ -393,11 +420,8 @@
 			if (in_array("fecha_fin",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->fechaFin  );
 			}
-			if (in_array("id_personal",$fieldstoupdate)){
-				$stmt->mbind_param( 'i', $this->idPersonal  );
-			}
-			if (in_array("id_almacen",$fieldstoupdate)){
-				$stmt->mbind_param( 'i', $this->idAlmacen  );
+			if (in_array("id_proveedor",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->idProveedor  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

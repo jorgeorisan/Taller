@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Ver Gastos Tipo";
+$page_title = "Editar Marca";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -27,27 +27,27 @@ include(SYSTEM_DIR . "/inc/nav.php");
 if(isset($request['params']['id'])   && $request['params']['id']>0)
     $id=$request['params']['id'];
 else
-    informError(true,make_url("Catalogos","gastostipo"));
+    informError(true,make_url("Catalogos","marca"));
 
-$obj = new GastosTipo();
+$obj = new Marca();
 $data = $obj->getTable($id);
 if ( !$data ) {
-    informError(true,make_url("Catalogos","gastostipo"));
+    informError(true,make_url("Catalogos","marca"));
 }
 if(isPost()){
-    $obj = new GastosTipo();
+    $obj = new Marca();
     $id = $obj->updateAll($id,getPost());
     if( $id  ) {
-         informSuccess(true, make_url("Catalogos","gastostipo"));
+         informSuccess(true, make_url("Catalogos","marca"));
     }else{
-        informError(true, make_url("Catalogos","gastostipoedit",array('id'=>$id)),"gastostipoedit");
+        informError(true, make_url("Catalogos","marcaedit",array('id'=>$id)),"marcaedit");
     }
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-     <?php $breadcrumbs["GastosTipo"] = APP_URL."/Catalogos/gastostipo"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+     <?php $breadcrumbs["Marca"] = APP_URL."/Catalogos/marca"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">     
@@ -66,44 +66,32 @@ if(isPost()){
                         <div style="display: ;">
                             <div class="jarviswidget-editbox" style=""></div>
                             <div class="widget-body">
-                                
+                                <form id="main-form" class="" role="form" method=post action="<?php echo make_url("Catalogos","marcaedit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">
                                    <div class="tl-body">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="name">Codigo</label>
-                                                <input type="text" class="form-control" readonly placeholder="Codigo" name="codigo" value="<?php echo htmlentities($data['codigo']); ?>">
+                                                <label for="name">Marca</label>
+                                                <input type="text" class="form-control" placeholder="Nombre marca" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label for="name">Nombre</label>
-                                                <input type="text" class="form-control" readonly placeholder="Nombre" name="nombre" value="<?php echo htmlentities($data['nombre']); ?>">
-                                            </div>
+                                           <div class="form-actions" style="text-align: center">
+                                                <div class="row">
+                                                   <div class="col-md-12">
+                                                        <button class="btn btn-default btn-md" type="button" onclick="window.history.go(-1); return false;">
+                                                            Cancelar
+                                                        </button>
+                                                        <button class="btn btn-primary btn-md" type="button" onclick=" validateForm();">
+                                                            <i class="fa fa-save"></i>
+                                                            Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div id="resultado"></div>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label for="name">Descripcion</label>
-                                                <input type="text" class="form-control" readonly placeholder="Descripcion" name="descripcion" value="<?php echo htmlentities($data['descripcion']); ?>">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <label for="name">Tipo</label><br>
-                                            <select style="width:100%" disabled class="select2" name="tipo">
-                                                <?php 
-                                                    if ($data['tipo']=='Normal'){
-                                                            echo "<option selected value='Normal'>Normal</option>";
-                                                            echo "<option value='General'>General</option>";
-                                                    }
-                                                    if ($data['tipo']=='General'){
-                                                        echo "<option value='Normal'>Normal</option>";
-                                                        echo "<option selected value='General'>General</option>";
-                                                    }
-                                                    
-                                                ?>
-                                            </select>                                
-                                        </div>
-                                       
                                     </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -132,7 +120,13 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/YOURJS.js"></script>-->
 
 <script>
-   
+    function validateForm()
+    {
+        var nombre = $("input[name=nombre]").val();
+        if ( ! nombre )  return notify("info","El nombre es requerido");
+
+        $("#main-form").submit();       
+    }
     $(document).ready(function() {
     
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!

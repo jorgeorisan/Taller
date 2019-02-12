@@ -76,6 +76,19 @@ if(isPost()){
 							                    <label for="name">Colonia</label>
 							                    <input type="text" class="form-control" placeholder="Colonia" name="colonia" >                                                                                               
 							                </div>
+                                            <div class="form-group">
+                                                <label for="name">Puesto</label><br>
+                                                <select style="width:100%" class="select2" name="id_puesto">
+                                                    <?php 
+                                                        $obj = new PersonalPuesto();
+                                                        $list=$obj->getAllArr();
+                                                        if (is_array($list) || is_object($list)){
+                                                            foreach($list as $val)
+                                                                echo "<option value='".$val['id']."'>".$val['nombre']."</option>";
+                                                        }
+                                                    ?>
+                                                </select>                                
+                                            </div>
 							            </div>
 							            <div class="col-sm-3">
 							                 <div class="form-group">
@@ -96,6 +109,15 @@ if(isPost()){
 							                    <label for="name">Ciudad</label>
 							                    <input type="text" class="form-control" placeholder="Ciudad" name="ciudad" >                                                                                               
 							                </div>
+                                            <div class="form-group">
+                                                <label for="name">Forma de pago</label><br>
+                                                <select style="width:100%" class="select2" name="forma_pago" id='forma_pago'>
+                                                    <?php 
+                                                        echo "<option value='Fijo'>Fijo</option>";
+                                                        echo "<option value='Destajo'>Destajo</option>";
+                                                    ?>
+                                                </select>                                
+                                            </div>
 							            </div>
 							            <div class="col-sm-3">
 							                <div class="form-group">
@@ -113,6 +135,10 @@ if(isPost()){
 							                <div class="form-group">
 							                    <label for="name">CP</label>
 							                    <input type="text" class="form-control" placeholder="CP" name="cp" >                                                                                               
+							                </div> 
+                                            <div class="form-group">
+							                    <label for="name" id='contcantidad'>Cantidad</label>
+							                    <input type="number" class="form-control" id='cantidad' placeholder="Cantidad" name="cantidad">                                                                                               
 							                </div>
 							            </div>
                                     </fieldset> 
@@ -169,7 +195,15 @@ if(isPost()){
         $("#main-form").submit();       
     }
     $(document).ready(function() {
-    
+        $('body').on('change', '#forma_pago', function(){
+            if( $(this).val() == "Fijo" ){
+                $("#contcantidad").html('Cantidad');
+                $("#cantidad").attr('placeholder','Cantidad');           
+            }else{
+                $("#contcantidad").html('Porcentaje');
+                $("#cantidad").attr('placeholder','Porcentaje');                
+            }
+        });
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.
          * It initializes and checks for all basic elements of the page

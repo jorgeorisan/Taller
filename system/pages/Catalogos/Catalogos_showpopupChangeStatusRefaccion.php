@@ -53,6 +53,21 @@
                     ?>
                 </select>
             </div>
+            <div class="form-group contproveedor">
+                <label for="name">Asignar Proveedor</label>
+                <select style="width:100%" class="select2" name="id_proveedor" id="id_proveedor">
+                    <?php 
+                        $obj = new Proveedor();
+                        $list=$obj->getAllArr($_SESSION['user_info']['id_taller']);
+                        if (is_array($list) || is_object($list)){
+                            foreach($list as $val){
+                                $selected = ($val['id'] == $almacen) ? " selected ": "";
+                                echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                            }
+                        }
+                    ?>
+                </select>
+            </div>
             
            
             <div class="form-group">
@@ -99,32 +114,25 @@
 <script>
    
     $(document).ready(function() { 
-        $("#status").select2({
+        $(".select2").select2({
             multiple: false,
             header: "Selecciona una opcion",
             noneSelectedText: "Seleccionar",
             selectedList: 1
         });
-        $("#id_personal").select2({
-            multiple: false,
-            header: "Selecciona una opcion",
-            noneSelectedText: "Seleccionar",
-            selectedList: 1
-        });
-         $("#id_almacen").select2({
-            multiple: false,
-            header: "Selecciona una opcion",
-            noneSelectedText: "Seleccionar",
-            selectedList: 1
-        });
+       
         //servicios
 		$('body').on('change', '#status', function(){
 			//change status
 			var status    = $('#status').val();
 			var statusant = $('#statusant').val();
             $(".fechasextras").show();
+            $(".contproveedor").show();
             if(status=="Recibida" || status=="Proporcionado-Cliente"){
                 $(".fechasextras").hide();
+            } 
+            if(status=="Proporcionado-Cliente"){
+                $(".contproveedor").hide();
             }           
         });
         

@@ -38,8 +38,8 @@ class Vehiculo extends AutoVehiculo {
 	//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		
-
+		$_request['id_taller'] = $_SESSION['user_info']['id_taller'];
+		//$_request['id_user']   = $_SESSION['id_user'];
 		$data = fromArray($_request,'vehiculo',$this->db,"add");
 		$sql  = "INSERT INTO vehiculo (".$data[0].") VALUES(".$data[1]."); ";
 		$res  = $this->db->query($sql);
