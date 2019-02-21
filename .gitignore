@@ -5,10 +5,10 @@ error_log
 .well-known
 cgi-bin
 .DS_Store
-.expediente/
-.expedienteseliminados/
-.expedientesterminados/
-.refaccion/
+expediente/
+expedienteseliminados/
+expedientesterminados/
+refaccion/
 
 #system/
 #system/config/config.php
