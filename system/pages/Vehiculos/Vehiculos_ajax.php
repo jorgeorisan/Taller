@@ -74,10 +74,12 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			}
 			break;
 		case 'change-statusservicio':
-		    $obj = new HistorialVehiculoservicio();
+			$objvehiculo = new Vehiculo();
+		    $obj 		 = new HistorialVehiculoservicio();
 			if(isPost()){
 			    $id=$obj->addAll(getPost());
 			    if($id>0){
+					$objvehiculo->updateStatusVehiculo($_POST['id_vehiculo']);
 			        echo $id;
 			    }else{
 			        echo 0;
@@ -85,15 +87,23 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			}
 			break;
 		case 'change-statusrefaccion':
+			$objvehiculo = new Vehiculo();
 		    $obj = new HistorialVehiculorefaccion();
 			if(isPost()){
 			    $id=$obj->addAll(getPost());
 			    if($id>0){
+					$objvehiculo->updateStatusVehiculo($_POST['id_vehiculo']);
 			        echo $id;
 			    }else{
 			        echo 0;
 			    }
 			}
+			break;
+		case 'change-statusvehiculo':
+			$objvehiculo = new Vehiculo();
+			$objvehiculo->updateStatusVehiculo($_POST['id_vehiculo'],'Firmado');
+			echo 1;
+			      
 			break;
 		
 		default:

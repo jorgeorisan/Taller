@@ -20,6 +20,7 @@ include(SYSTEM_DIR . "/inc/nav.php");
 $obj = new Vehiculo();
 $data = $obj->getAllArr();
 //print_r($users);
+
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
@@ -52,6 +53,7 @@ $data = $obj->getAllArr();
 							<div class="jarviswidget-editbox"></div>
 							<div class="widget-body">
 								<?php foreach($data as $key => $row){
+									$carpetaexpediente = $obj->getCarpetaexpediente($row["id"]);
 									$key++;
 									$nomtaller      = "";
 									$nommarca       = "";
@@ -81,11 +83,11 @@ $data = $obj->getAllArr();
 									if($row["id_cliente"]){
 										$objcliente = new Cliente();
 										$datacliente = $objcliente->getTable($row["id_cliente"]);
-										if($datacliente){ $nomcliente = $datacliente["nombre"] ." ". $datacliente["apellido_pat"] ." ". $datacliente["apellido_mat"]; }
+										if($datacliente){ $nomcliente = $datacliente["nombre"] ." ". $datacliente["apellido_pat"] ." ". $datacliente["apellido_mat"]."<br>Tel.".$datacliente["telefono"]; }
 									}
 									$fechaalta = ($row['fecha_alta'])    ? date('Y-m-d',strtotime($row['fecha_alta'])) : "";
 									$fechaprom = ($row['fecha_promesa']) ? date('Y-m-d',strtotime($row['fecha_promesa'])) : "";
-								    $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$row["id"].DIRECTORY_SEPARATOR.'images';
+								    $carpetaimg = ASSETS_URL.'/'.$carpetaexpediente.'/auto'.DIRECTORY_SEPARATOR.'auto_'.$row["id"].DIRECTORY_SEPARATOR.'images';
                                     $objimg = new ImagenesVehiculo();
                                     $dataimagenes = $objimg->getAllArr($row["id"]);
                                     $link='';
@@ -94,7 +96,7 @@ $data = $obj->getAllArr();
 
                                         $link = $carpetaimg.DIRECTORY_SEPARATOR.$rowimg['nombre'];
 									}
-									$link = ($link) ? $link :ASSETS_URL.'/expediente/base_auto.png' ;
+									$link = ($link) ? $link :ASSETS_URL.'/'.$carpetaexpediente.'/base_auto.png' ;
 									$diastranscurridos = dias_transcurridos($row['fecha_alta'],date('Y-m-d'));
 									if (($key % 3) == 0){
 										echo "<div class='row ".$key."'>";
@@ -108,40 +110,48 @@ $data = $obj->getAllArr();
 													<div class="col-md-5 col-sm-12 col-xs-12">
 														<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> 
 															<div class="product-image"> 
-																<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> <img src="<?php echo $link; ?>" alt="194x228" class="img-responsive"> 
-																<span title='<?php echo $diastranscurridos; ?> dias ' class="tag2 <?php if($diastranscurridos<10) echo  'sale'; else echo  'hot' ;?>">
-																	<?php if($diastranscurridos<10) echo  'NEW'; else echo  'OLD' ;?>
-																</span> 
+																<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> 
+																	<img src="<?php echo $link; ?>" alt="194x228" class="img-responsive" style='max-width:120px'> 
+																	<span title='<?php echo $diastranscurridos; ?> dias ' class="tag2 <?php if($diastranscurridos<10) echo  'sale'; else echo  'hot' ;?>">
+																		<?php if($diastranscurridos<10) echo  'NEW'; else echo  'OLD' ;?>
+																	</span> 
+																</a>
+																<div class="description">
+																	<small><strong>Cliente:</strong> <?php echo $nomcliente ?></small>
+																</div>
 															</div>
 														</a>
 													</div>
 													<div class="col-md-7 col-sm-12 col-xs-12">
 														<div class="product-deatil">
-																<h6 class="name">
-																	<?php echo $nommarca." ".$nomsubmarca." - ". $row['modelo'] ?>
-																</h6>
-																<h5 class="name">
-																	<small><strong>Cliente:</strong> <?php echo $nomcliente ?></small>
-																	<small><strong>Fecha Alta:</strong> <?php echo htmlentities($fechaalta) ?></small>
-																	<small><strong>Fecha Prom:</strong> <?php echo htmlentities($fechaprom) ?></small>
-																	<?php
-																	if ($row["id_aseguradora"]>1) { ?>
-																		<!--<small><strong>Aseguradora:</strong> <?php echo htmlentities($nomaseguradora) ?></small> -->
-																	<?php
+															<h6 class="name">
+																<?php echo $nommarca." ".$nomsubmarca." - ". $row['modelo'] ?>
+															</h6>
+															<h5 class="name">
+																
+																<small><strong>Fecha Alta:</strong> <?php echo htmlentities($fechaalta) ?></small>
+																<small><strong>Fecha Prom:</strong> <?php echo htmlentities($fechaprom) ?></small>
+																<?php
+																if ($row["id_aseguradora"]>1) { ?>
+																	<small><strong>Aseguradora:</strong> <?php echo htmlentities($nomaseguradora) ?></small> 
+																<?php
+																}
+																$porcent = $obj->getPorcentaje($row['id']);
+																$porcentdec= number_format(($porcent/10)/2,0);
+																for($i=1; $i<=5; $i++){
+																	if($i<=$porcentdec){
+																		echo "<i class='fa fa-star fa-2x text-primary'></i>";
+																	}else{
+																		echo "<i class='fa fa-star fa-2x text-muted'></i>";
 																	}
-																	?>
-																	
-
-																</h5>
-																<p class="price-container">
-																	<span><?php echo htmlentities($row['matricula'])?></span>
-																</p>
-																<span class="tag1"></span> 
+																}
+																?>
+																<span class="fa fa-2x"><h5><?php echo  $porcent; ?> %</h5></span>	
+															</h5>
+															<p class="price-container">
+																<span><?php echo htmlentities($row['matricula'])?></span>
+															</p>
 														</div>
-														<div class="description">
-																<p>Pendientes </p>
-														</div>
-
 														<div class="product-info smart-form">
 															
 															<div class="row">
@@ -153,17 +163,17 @@ $data = $obj->getAllArr();
 																		<ul class="dropdown-menu">
 																
 																			<li>
-																				<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>Ver Detalles</a>
+																				<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> <i class="fa fa-eye"></i>&nbsp;Ver Detalles</a>
 																			</li>
 																			<li>
-																				<a class="" href="<?php echo make_url("Vehiculos","showorden",array('id'=>$row['id'])); ?>"> <i class="fa fa-th-list"></i>Ver Orden</a>
+																				<a class="" href="<?php echo make_url("Vehiculos","showorden",array('id'=>$row['id'])); ?>"> <i class="fa fa-th-list"></i>&nbsp;Ver Orden</a>
 																			</li>
 																			<li>
-																				<a class="" href="<?php echo make_url("Vehiculos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>Editar</a>
+																				<a class="" href="<?php echo make_url("Vehiculos","edit",array('id'=>$row['id'])); ?>"><i class="fa fa-edit"></i>&nbsp;Editar</a>
 																			</li>
 																			<li class="divider"></li>
 																			<li>
-																				<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
+																				<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);"><i class="fa fa-trash"></i>&nbsp;Eliminar</a>
 																			</li>
 																		</ul>
 																	</div>

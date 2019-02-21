@@ -59,11 +59,38 @@ class VehiculoServicio extends AutoVehiculoServicio {
 			$total       = $serviciostotal[$key];
 			$detalle     = $detallesserv[$key];
 			$id_servicio = $value;
-			$sql  = "INSERT INTO vehiculo_servicio (id_vehiculo,id_servicio,detalles,total) VALUES(".$id. "," .$id_servicio. ",'". $detalle. "' ,"  .$total. "); ";
-			$res  = $this->db->query($sql);
-			if(!$res){ die("Error al dar de alta el servicio vehiculo:".$sql); }
+			$_request['id_vehiculo'] = $id;
+			$_request['id_servicio'] = $id_servicio;
+			$_request['detalles'] 	 = $detalle;
+			$_request['total']       = $total;
+			$this->Addonebyone($_request);
+			if($idHS>0){}else{ die("Error al insertar vehiculo servicio"); }
 		}
-		echo 1;
+		echo $id;
+	}
+	public function Addonebyone($_request){
+		$sql  = "INSERT INTO vehiculo_servicio (id_vehiculo,id_servicio,detalles,total) VALUES(".$_request['id_vehiculo']. "," .$_request['id_servicio']. ",'". $_request['detalles']. "' ,"  .$_request['total']. "); ";
+		$res  = $this->db->query($sql);
+		if(!$res){ die("Error al dar de alta el servicio vehiculo:".$sql); }
+		$sql  = "SELECT LAST_INSERT_ID();";//. $num ;
+		$res  = $this->db->query($sql);
+		$set  = array();
+		$id   = "";
+		if(!$res) die("Error getting result"); 
+		else
+			while ($row = $res->fetch_assoc())
+				$id= $row;
+		
+		$id = $id["LAST_INSERT_ID()"];
+		$_request['id_vehiculoservicio'] = $id;
+		$_request['status_anterior'] 	 = "";
+		$_request['status'] 			 = 'active';
+		$_request['fecha_inicio']        = date('Y-m-d H:i:s');
+		$_request['comentarios']         = '';
+		$u = new HistorialVehiculoservicio();
+		$idHS=$u->addAll($_request);
+		if($idHS>0){ }else{	die("Error al dar de alta el historial servicio vehiculo:");  }
+		return $id;
 	}
 		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)
@@ -81,15 +108,30 @@ class VehiculoServicio extends AutoVehiculoServicio {
 		//metodo que sirve para hacer delete
 	public function deleteAll($id,$_request=false)
 	{
-		$_request["status"]="deleted";
-		$_request["deleted_date"]=date("Y-m-d H:i:s");
+		$_request["status"] = "deleted";
+		$_request["deleted_date"] = date("Y-m-d H:i:s");
 		$data=fromArray($_request,'vehiculo_servicio',$this->db,"update");	
-		$sql= "UPDATE vehiculo_servicio SET $data[0]  WHERE id=".$id." and status != 'deleted';";
-		$row=$this->db->query($sql);
-		if(!$row){
-			return false;
-		}else{
-			return true;
+		$sql= "UPDATE vehiculo_servicio SET $data[0]  WHERE id=".$id;
+		$u  = new HistorialVehiculoservicio();
+		if($res = $u->getLastStatus($id)){
+			$_request['id_vehiculoservicio'] = $id;
+			$_request['status_anterior'] 	 = $res['status'];
+			$_request['status'] 			 = 'deleted';
+			$_request['fecha_inicio']        = date('Y-m-d H:i:s');
+			$_request['id_personal']         = ($res['id_personal'])? $res['id_personal']: null;
+			$_request['comentarios']         = '';
+			$idHS=$u->addAll($_request);
+			if($idHS>0){
+				$row=$this->db->query($sql);
+				if(!$row){
+					return false;
+				}else{
+					
+					return true;
+				}
+			}else{
+				return false;
+			}
 		}
 	}
 

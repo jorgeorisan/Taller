@@ -9,7 +9,7 @@ class Vehiculo extends AutoVehiculo {
 	//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr()
 	{
-		$sql = "SELECT * FROM vehiculo where status='active';";
+		$sql = "SELECT * FROM vehiculo where status!='deleted';";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -39,7 +39,7 @@ class Vehiculo extends AutoVehiculo {
 	public function addAll($_request)
 	{
 		$_request['id_taller'] = $_SESSION['user_info']['id_taller'];
-		//$_request['id_user']   = $_SESSION['id_user'];
+		$_request['id_user']   = $_SESSION['user_id'];
 		$data = fromArray($_request,'vehiculo',$this->db,"add");
 		$sql  = "INSERT INTO vehiculo (".$data[0].") VALUES(".$data[1]."); ";
 		$res  = $this->db->query($sql);
@@ -60,24 +60,32 @@ class Vehiculo extends AutoVehiculo {
 			$total       = $serviciostotal[$key];
 			$detalle     = $detallesserv[$key];
 			$id_servicio = $value;
-			$sql  = "INSERT INTO vehiculo_servicio (id_vehiculo,id_servicio,detalles,total) VALUES(".$id. "," .$id_servicio. ",'". $detalle. "' ,"  .$total. "); ";
-			$res  = $this->db->query($sql);
-			if(!$res){ die("Error al dar de alta el servicio vehiculo:".$sql); }
+			$_request['id_vehiculo'] = $id;
+			$_request['id_servicio'] = $id_servicio;
+			$_request['detalles'] 	 = $detalle;
+			$_request['total']       = $total;
+			$VS = new VehiculoServicio();
+			$idHS = $VS->Addonebyone($_request);
+			if($idHS>0){}else{ die("Error al insertar vehiculo servicio"); }
 		}
 		$refacciones      = $_request["id_refaccion"];
 		$refaccionestotal = $_request["costorefaccion"];
 		$cantidad		  = $_request["cantidad_refaccion"];
 		$detallesref	  = $_request["detalles_refaccion"];
 		
-		
 		foreach ($refacciones as $key => $value) {
 			$total        = ($refaccionestotal[$key]) ? $refaccionestotal[$key] : 0 ;
 			$cant         = $cantidad[$key];
 			$detalle      = $detallesref[$key];
 			$id_refaccion = $value;
-			$sql  = "INSERT INTO vehiculo_refaccion (id_vehiculo,id_refaccion,detalles,cantidad,costo_aprox) VALUES(".$id. "," .$id_refaccion. ",'". $detalle. "'," .$cant. "," .$total. "); ";
-			$res  = $this->db->query($sql);
-			if(!$res){ die("Error al dar de alta la refaccion vehiculo".$sql); }
+			$_request['id_vehiculo'] = $id;
+			$_request['id_refaccion']= $id_refaccion;
+			$_request['detalles'] 	 = $detalle;
+			$_request['cantidad']    = $cant;
+			$_request['costo_aprox'] = $total;
+			$VS = new VehiculoRefaccion();
+			$idHS = $VS->Addonebyone($_request);
+			if($idHS>0){}else{ die("Error al insertar vehiculo refaccion"); }
 		}
 		return $id;
 	}
@@ -108,7 +116,104 @@ class Vehiculo extends AutoVehiculo {
 			return true;
 		}
 	}
-	
+	// metodo para obtener el porcentaje de terminacion de un vehiculo
+	public function getPorcentaje($id){
+		$objref       = new VehiculoRefaccion();
+		$dataref      = $objref->getAllArr($id,false);
+		$objser       = new VehiculoServicio();
+		$dataser      = $objser->getAllArr($id,false);
+		$cont 		  = 0;
+		$contterminado= 0;
+		foreach($dataser as $key => $row) {
+			$status = htmlentities($row['status']);
+			switch ($status) {
+				case 'Realizado': $contterminado++;	break;
+				default: break;
+			}  
+			$cont++;
+		} 
+		foreach($dataref as $key => $row) {
+			$status = htmlentities($row['status']);
+			switch ($row['status']) {
+				case 'Instalado':
+				case 'Perdida-daño':		
+				$contterminado++;	break;
+				default: break;
+			}  
+			$cont++;
+		} 
+		
+		$porcent = ($cont && $contterminado) ? ($contterminado*100)/$cont: 0 ;
+				
+		return $porcent;
+	}
+	// metodo para actualizar el estatus de un vehiculo
+	public function updateStatusVehiculo($id,$statusvehiculo=false){
+		
+		$objref       = new VehiculoRefaccion();
+		$dataref      = $objref->getAllArr($id,false);
+		$objser       = new VehiculoServicio();
+		$dataser      = $objser->getAllArr($id,false);
+		$cont 		  = 0;
+		$contterminado= 0;
+		foreach($dataser as $key => $row) {
+			$status = htmlentities($row['status']);
+			switch ($status) {
+				case 'Realizado': $contterminado++;	break;
+				default: break;
+			}  
+			$cont++;
+		} 
+		foreach($dataref as $key => $row) {
+			$status = htmlentities($row['status']);
+			switch ($row['status']) {
+				case 'Instalado':
+				case 'Perdida-daño':		
+				$contterminado++;	break;
+				default: break;
+			}  
+			$cont++;
+		} 
+		if($cont==$contterminado){
+			$_request['status_vehiculo']   = 'Terminado sin firma';
+			if($statusvehiculo){
+				$_request['status_vehiculo']   = 'Terminado y firmado';
+				$this->updateAll($id,$_request);
+				$this->MoverVehiculoTerminado($_POST['id_vehiculo']);
+			}
+			$this->updateAll($id,$_request);
+		}
+	}
+	function MoverVehiculoTerminado($id){
+		$from  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+		$to    = EXPEDIENTE_DIRTER .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+
+		//Abro el directorio que voy a leer
+		$dir = opendir($from);
+
+		//Recorro el directorio para leer los archivos que tiene
+		while(($file = readdir($dir)) !== false){
+			//Leo todos los archivos excepto . y ..
+			if(strpos($file, '.') !== 0){
+				//Copio el archivo manteniendo el mismo nombre en la nueva carpeta
+				if(exec('move "'.$from.'" "'.$to.'"')){
+					echo 1;
+				}
+				
+			}
+		}
+	}
+	function getCarpetaExpediente($id){
+		$data = $this->getTable($id);
+		if($data['status_vehiculo']=='Terminado y firmado') 
+			$carpetaexpediente = 'expedientesterminados';
+		elseif($data['status_vehiculo']=='Eliminado') 
+			$carpetaexpediente = 'expedienteseliminados';
+		else
+			$carpetaexpediente =  'expediente';
+
+		return $carpetaexpediente;
+	}
 
 
 }

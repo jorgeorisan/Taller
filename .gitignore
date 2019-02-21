@@ -6,6 +6,7 @@ error_log
 cgi-bin
 .DS_Store
 .expediente/
+.expedienteseliminados/
 .expedientesterminados/
 .refaccion/
 

@@ -8,7 +8,6 @@
             <div class="form-group">
                 <label for="name">Cambiar Estatus</label>
                 <select style="width:100%" class="select2" name="status" id="status">
-                    <option value="">Selecciona Status</option>
                     <?php 
                     
                     $listref= getStatusRefaccion();
@@ -81,12 +80,12 @@
                 <label for="name">Fecha Inicio</label>
                 <input type="date" class="form-control" value="<?php echo $fecha_inicio;?>"  placeholder="Fecha Inicio" name="fecha_inicio" id="fecha_inicio" >                                                                                             
             </div> 
-            <div class="form-group fechasextras">
+            <div class="form-group fechasextras fechaestimada">
                 <label for="name">Fecha Estimada</label>
                 <input type="date" class="form-control" value="<?php echo $fecha_estimada;?>" placeholder="Fecha Estimada" name="fecha_estimada" id="fecha_estimada" >                                                                                             
             </div> 
            
-            <div class="form-group fechasextras">
+            <div class="form-group fechasextras fechafin">
                 <label for="name">Fecha Termino</label>
                 <input type="date" class="form-control" value="<?php echo $fecha_fin;?>" placeholder="Fecha Termino" name="fecha_fin" id="fecha_fin" >                                                                                             
             </div> 
@@ -124,17 +123,25 @@
         //servicios
 		$('body').on('change', '#status', function(){
 			//change status
+            
 			var status    = $('#status').val();
 			var statusant = $('#statusant').val();
+            console.log(status);
             $(".fechasextras").show();
             $(".contproveedor").show();
-            if(status=="Recibida" || status=="Proporcionado-Cliente"){
+            if(status=="Recibida" || status=="Proporcionado-Cliente" || status=="active"){
                 $(".fechasextras").hide();
             } 
             if(status=="Proporcionado-Cliente"){
                 $(".contproveedor").hide();
-            }           
+            }  
+            if(status=="active"){
+                $(".fechaestimada").show();
+            }  
+            if(status=="Reenvio" || status=="Autorizada"){
+                $(".fechafin").hide();
+            }         
         });
-        
+        $('#status').change();
     });
 </script>

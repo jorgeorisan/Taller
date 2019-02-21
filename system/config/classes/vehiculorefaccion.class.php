@@ -62,11 +62,39 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 			$cant         = $cantidad[$key];
 			$detalle      = $detallesref[$key];
 			$id_refaccion = $value;
-			$sql  = "INSERT INTO vehiculo_refaccion (id_vehiculo,id_refaccion,detalles,cantidad,costo_aprox) VALUES(".$id. "," .$id_refaccion. ",'". $detalle. "'," .$cant. "," .$total. "); ";
-			$res  = $this->db->query($sql);
-			if(!$res){ die("Error al dar de alta la refaccion vehiculo".$sql); }
+			$_request['id_vehiculo'] = $id;
+			$_request['id_refaccion']= $id_refaccion;
+			$_request['detalles'] 	 = $detalle;
+			$_request['cantidad']    = $cant;
+			$_request['costo_aprox'] = $total;
+			$idHR = $this->Addonebyone($_request);
+			if($idHR>0){}else{ die("Error al insertar vehiculo refaccion"); }
 		}
-		echo 1;
+		echo $id;
+	}
+	public function Addonebyone($_request){
+		$sql  = "INSERT INTO vehiculo_refaccion (id_vehiculo,id_refaccion,detalles,cantidad,costo_aprox) VALUES(".$_request['id_vehiculo']. "," .$_request['id_refaccion']. ",'". $_request['detalles']. "'," .$_request['cantidad']. "," .$_request['costo_aprox']. "); ";
+		$res  = $this->db->query($sql);
+		if(!$res){ die("Error al dar de alta la refaccion vehiculo".$sql); }
+		$sql  = "SELECT LAST_INSERT_ID();";//. $num ;
+		$res  = $this->db->query($sql);
+		$set  = array();
+		$id   = "";
+		if(!$res) die("Error getting result"); 
+		else
+			while ($row = $res->fetch_assoc())
+				$id= $row;
+		
+		$id = $id["LAST_INSERT_ID()"];
+		$_request['id_vehiculorefaccion'] = $id;
+		$_request['status_anterior'] 	 = "";
+		$_request['status'] 			 = 'active';
+		$_request['fecha_inicio']        = date('Y-m-d H:i:s');
+		$_request['comentarios']         = '';
+		$u = new HistorialVehiculorefaccion();
+		$idHS=$u->addAll($_request);
+		if($idHS>0){ }else{	die("Error al dar de alta el historial servicio vehiculo:");  }
+		return $id;
 	}
 		//metodo que sirve para hacer update
 	public function updateAll($id,$_request)

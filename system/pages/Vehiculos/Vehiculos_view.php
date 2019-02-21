@@ -61,15 +61,17 @@ if($data["id_cliente"]){
     $objcliente  = new Cliente();
     $datacliente = $objcliente->getTable($data["id_cliente"]);
     if($datacliente){
+		$telefono   = $datacliente["telefono"];
         $nomcliente = $datacliente["nombre"] ." ". $datacliente["apellido_pat"] ." ". $datacliente["apellido_mat"];
         $domicilio  = $datacliente["ciudad"] ." ". $datacliente["estado"]. " Col." .$datacliente["colonia"] ." Call." .$datacliente["calle"]." ".$datacliente["num_ext"]. " " .$datacliente["num_int"];
-        $telefono   = $datacliente["telefono"];
+      
         $email      = $datacliente["email"];
     }
 }
+$carpetaexpediente = $obj->getCarpetaexpediente($id);
 $fechaalta  = ($data['fecha_alta'])    ? date('Y-m-d',strtotime($data['fecha_alta']))    : "";
 $fechaprom  = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_promesa'])) : "";
-$carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
+$carpetaimg = ASSETS_URL.'/'.$carpetaexpediente.'/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
 
 $objimg       = new ImagenesVehiculo();
 $dataimagenes = $objimg->getAllArr($id);
@@ -163,6 +165,7 @@ if(isPost()){
         informError(true,make_url("Vehiculos","view",array('id'=>$id)),"view");
     }
 }
+
 //print_r($users);
 ?>
 <style type="text/css">
@@ -209,7 +212,7 @@ if(isPost()){
 											if(!$image) {
 												$image = "
 													<div class='item active '>
-														<img src='".ASSETS_URL.'/expediente/base_auto.png'."' max-width='430px'
+														<img src='".ASSETS_URL.'/'.$carpetaexpediente.'/base_auto.png'."' max-width='430px'
 														alt='base_auto.png' title='base_auto.png' >
 													</div>";
 											}
@@ -230,16 +233,34 @@ if(isPost()){
 										<small><strong>Acesor:</strong> <a class="" href="<?php echo make_url("User","show",array('id'=>$data['id_user'])); ?>"><?php echo $nombreasesor ?></a></small>
 										<?php if($data["id_aseguradora"]){ ?>
 											<small><strong>Aseguradora:</strong> <a class="" href="<?php echo make_url("Aseguradora","show",array('id'=>$data['id_aseguradora'])); ?>"><?php echo $nomaseguradora ?></a></small>
-										<?php }?>
-										<i class="fa fa-star fa-2x text-primary"></i>
-										<i class="fa fa-star fa-2x text-primary"></i>
-										<i class="fa fa-star fa-2x text-primary"></i>
-										<i class="fa fa-star fa-2x text-primary"></i>
-										<i class="fa fa-star fa-2x text-muted"></i>
-										<span class="fa fa-2x"><h5>80 %</h5></span>	
+										<?php }
+										$porcent = $obj->getPorcentaje($data['id']);
+										$porcentdec= number_format(($porcent/10)/2,0);
+										for($i=1; $i<=5; $i++){
+											if($i<=$porcentdec){
+												echo "<i class='fa fa-star fa-2x text-primary'></i>";
+											}else{
+												echo "<i class='fa fa-star fa-2x text-muted'></i>";
+											}
+										}
 										
-										<a href="javascript:void(0);">Status Completed</a>
-			
+										?>
+										
+										<span class="fa fa-2x"><h5><?php echo  $porcent; ?> %</h5></span>	
+										
+										<a href="javascript:void(0);">Completed</a>
+										<div>
+											<span class="fa fa-6x">
+												<h5><a href="javascript:void(0);"><?php ECHO $data['status_vehiculo'] ?> </a>
+												<?php 
+												if($data['status_vehiculo']=='Terminado sin firma'){
+													?>
+													<a href="#" id='btn-firmado' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmado</a>
+													<?php
+												}?>
+												</h5>
+											</span>
+										</div>
 									</h2>
 									<hr>
 									<div class="certified">
@@ -247,6 +268,7 @@ if(isPost()){
 											<li><a href="javascript:void(0);">Fecha de Alta<span><?php echo $fechaalta?></span></a></li>
 											<li><a href="javascript:void(0);">Fecha Promesa<span><?php echo $fechaprom ?></span></a></li>
 										</ul>
+										
 									</div>
 									<hr>
 								</div>
@@ -305,6 +327,8 @@ if(isPost()){
 
 								
 							</div>
+						</div>
+						<div class="row">
 							<div class="col-sm-12 col-md-12 col-lg-12">
 								<div class="description description-tabs">
 									<ul id="myTab" class="nav nav-pills">
@@ -320,7 +344,7 @@ if(isPost()){
 													<a data-toggle="modal" class="btn btn-info" title="Agregar Servicio" id="btnaddservice" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Servicio</a>
 												</div>
 											</div>
-											<table style="height: 100%;">
+											<table class='table' style="height: 100%;">
 												<tr style="">
 													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
 													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</th>
@@ -359,24 +383,37 @@ if(isPost()){
 															$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
 													}
 													?>
-													<tr style="height: 30px;"  class="<?php echo $cancelada;?>">
-														<td><span class='<?php //echo $class; ?> estatusnuevo<?php echo $row['id']; ?>'><?php echo $status;?></span></td>
-														<td><?php echo htmlentities($row['codigo']); ?></td>
-														<td><?php echo htmlentities($nombre); ?></td>
-														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
-														<td class="fechanueva<?php echo $row['id']; ?>" style="text-align: right;"><?php echo $datelast; ?></td>
+													<tr style="height: 30px; padding-top: 5px;" >
+														<td class="<?php echo $cancelada;?>"><span class='<?php //echo $class; ?> estatusnuevo<?php echo $row['id']; ?>'><?php echo $status;?></span></td>
+														<td class="<?php echo $cancelada;?>"><?php echo htmlentities($row['codigo']); ?></td>
+														<td class="<?php echo $cancelada;?>"><?php echo htmlentities($nombre); ?></td>
+														<td class="<?php echo $cancelada;?>" style="text-align: right;">$<?php echo number_format(htmlentities($row['total']),2);  ?></td>
+														<td class="fechanueva<?php echo $row['id']." ".$cancelada; ?>" style="text-align: right;"><?php echo $datelast; ?></td>
 														<td style="text-align: right;">
-															<?php if(!$cancelada){
-																$totalservicio += $row['total'];  	
-															?>
 															<div class="btn-group">
-																<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusservice " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
-															</div>
-															<?php } ?>
-															<div class="btn-group">
-																<a data-toggle="modal" class="btn-historystatusservice" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																<i class="fa fa-history"></i>&nbsp;Historial</a>
+																<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+																	Accions <span class="caret"></span>
+																</button>
+																<ul class="dropdown-menu">
+																	<li>
+																		<?php if(!$cancelada){
+																			$totalservicio += $row['total'];  	
+																		?>
+																			<a data-toggle="modal" class="btn-statusservice " title="Cambiar status" href="#myModal"  idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																			<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
+																		<?php } ?>
+																	</li>
+																	<li>
+																		<a data-toggle="modal" class="btn-historystatusservice" title="Ver Historial" href="#myModal"  idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																			<i class="fa fa-history"></i>&nbsp;Historial</a>
+																	</li>
+																	<li class="divider"></li>
+																	<li>
+																		<?php if(!$cancelada){ ?>
+																		<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculoserviciodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);"><i class="fa fa-trash"></i>&nbsp;Eliminar</a>
+																		<?php } ?>
+																	</li>
+																</ul>
 															</div>
 														</td>
 													<tr>
@@ -400,10 +437,10 @@ if(isPost()){
 													<a data-toggle="modal" class="btn btn-info" title="Agregar Refaccion" id="btnaddrefaccion" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Refaccion</a>
 												</div>
 											</div>
-											<table style="height: 100%;" >
+											<table class='table' style="height: 100%;" >
 												<tr>
 													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
-													<th style="width:10%;background-color:#d0d0cf;  font-weight:bold;">Cant.</th>
+													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant.</th>
 													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion.</th>
 													<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Costo </th>
 													<th style="width:10%;background-color:#d0d0cf; text-align: right; font-weight:bold;">Total </th>
@@ -437,33 +474,43 @@ if(isPost()){
 															$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
 													}
 													?>
-													<tr style="height: 30px;" class="<?php echo $cancelada;?>">
-														<td><span class='<?php  ?> estatusnuevo<?php echo $row['id']; ?>'><?php echo $status;?></span></td>
-														<td><?php echo htmlentities($row['cantidad']); ?></td>
-														<td><?php echo htmlentities($nombre); ?></td>
-														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['costo_aprox']),2); ?></td>
-														<td style="text-align: right;">$<?php echo number_format(htmlentities($row['total_aprox']),2); ?></td>
-														<td class="fechanueva<?php echo $row['id']; ?>" style="text-align: right;"><?php echo $datelast; ?></td>
-														<td style="text-align: right;">
-															<?php if(!$cancelada){ ?>
+													<tr style="height: 30px;" >
+														<td class="<?php echo $cancelada;?>"><span class='<?php  ?> estatusnuevo<?php echo $row['id']; ?>'><?php echo $status;?></span></td>
+														<td class="<?php echo $cancelada;?>"><?php echo htmlentities($row['cantidad']); ?></td>
+														<td class="<?php echo $cancelada;?>"><?php echo htmlentities($nombre); ?></td>
+														<td class="<?php echo $cancelada;?>" style="text-align: right;">$<?php echo number_format(htmlentities($row['costo_aprox']),2); ?></td>
+														<td class="<?php echo $cancelada;?>" style="text-align: right;">$<?php echo number_format(htmlentities($row['total_aprox']),2); ?></td>
+														<td class="fechanueva<?php echo $row['id']." ".$cancelada; ?>" style="text-align: right;"><?php echo $datelast; ?></td>
+														<td style="text-align: right;padding-top: 5px;">
 															<div class="btn-group">
-																<a data-toggle="modal" class="btn btn-xs btn-primary btn-statusrefaccion " title="Cambiar status" href="#myModal" style="margin-left: 10px;" idref='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
+																<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+																	Accions <span class="caret"></span>
+																</button>
+																<ul class="dropdown-menu">
+																	<li>
+																		<?php if(!$cancelada){ ?>
+																			<a data-toggle="modal" class=" btn-statusrefaccion " title="Cambiar status" href="#myModal"  idref='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																			<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
+																		<?php } ?>
+																	</li>
+																	<li>
+																		<a data-toggle="modal" class="btn-historystatusrefaccion" title="Ver Historial" href="#myModal" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																		<i class="fa fa-history"></i>&nbsp;Historial</a>
+																	</li>
+																	<li class="divider"></li>
+																	<li>
+																		<?php if(!$cancelada){ ?>
+																		<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculorefacciondelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);"><i class="fa fa-trash"></i>&nbsp;Eliminar</a>
+																		<?php } ?>
+																	</li>
+																</ul>
 															</div>
-															<?php } ?>
-															<div class="btn-group">
-																<a data-toggle="modal" class="btn-historystatusrefaccion" title="Ver Historial" href="#myModal" style="margin-left: 10px;" idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
-																<i class="fa fa-history"></i>&nbsp;Historial</a>
-															</div>
-															<?php if(!$cancelada){ ?>
-															<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculorefacciondelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>
-															<?php } ?>
 														</td>
 													</tr>
 													<?php
 												} 
 												?>
-												<tr style="height: 30px; text-align: right;">
+												<tr style="height: 30px; text-align: right; ">
 													<td></td>
 													<td></td>
 													<td></td>
@@ -476,7 +523,7 @@ if(isPost()){
 											</table>
 										</div>
 										<div class="tab-pane fade" id="terminados">
-											<table style="height: 100%;">
+											<table class='table' style="height: 100%;">
 												<tr style="">
 													<th style="width:10%;background-color:#d0d0cf; font-weight:bold; ">Estatus</th>
 													<th style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</th>
@@ -507,11 +554,28 @@ if(isPost()){
 															<td style="text-align: right;"><?php echo date("Y-m-d",strtotime($row['created_date'])); ?></td>
 															<td style="text-align: right;">
 																<div class="btn-group">
-																	<button class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-																		Cambiar status <span class="caret"></span>
+																	<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+																		Accions <span class="caret"></span>
 																	</button>
 																	<ul class="dropdown-menu">
-																		
+																		<li>
+																			<?php if(!$cancelada){
+																				$totalservicio += $row['total'];  	
+																			?>
+																				<a data-toggle="modal" class="btn-statusservice " title="Cambiar status" href="#myModal"  idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																				<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
+																			<?php } ?>
+																		</li>
+																		<li>
+																			<a data-toggle="modal" class="btn-historystatusservice" title="Ver Historial" href="#myModal"  idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
+																				<i class="fa fa-history"></i>&nbsp;Historial</a>
+																		</li>
+																		<li class="divider"></li>
+																		<li>
+																			<?php if(!$cancelada){ ?>
+																			<a href="#" class="red" onclick="borrar('<?php echo make_url("Vehiculos","vehiculoserviciodelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);"><i class="fa fa-trash"></i>&nbsp;Eliminar</a>
+																			<?php } ?>
+																		</li>
 																	</ul>
 																</div>
 															</td>
@@ -600,6 +664,7 @@ if(isPost()){
         if (fileElem) {
            
             fileElem.click();
+			$(".cont-imagesvehiculo").show();
         }
     }
   
@@ -667,6 +732,25 @@ if(isPost()){
     }
 	$(document).ready(function() {
 		document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
+
+		$('body').on('click', '#btn-firmado', function(){
+			var id_vehiculo    = <?php echo $id ?>;
+            var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
+            var data = "id_vehiculo=" + id_vehiculo ;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+					if(response){
+						location.reload();
+                    }else{
+                        notify('error',"Oopss error al cambiar estatus: "+response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
+        });
 		//servicios
 		$('body').on('click', '.btn-statusservice', function(){
 			//change status
@@ -691,6 +775,7 @@ if(isPost()){
 			var fecha_inicio   = $("#fecha_inicio").val();
 			var fecha_estimada = $("#fecha_estimada").val();
 			var fecha_final    = $("#fecha_fin").val();
+			var id_vehiculo    = <?php echo $id ?>;
 			if ( !status )       return notify('error',"Se necesita el estatus");
 			if ( !idpersonal )   return notify('error',"Se necesita el personal");
 			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
@@ -700,7 +785,7 @@ if(isPost()){
 			if ( fecha_final && (fecha_final < fecha_inicio ) )     return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
 			
             var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusservicio"; 
-            var data = (page=='change-statusservicio') ? "&id_vehiculoservicio=" + id : "&id_vehiculorefaccion=" + id ;
+            var data = "&id_vehiculoservicio=" + id + "&id_vehiculo=" + id_vehiculo ;
             $.ajax({
                 type: "POST",
                 url: url,
@@ -794,17 +879,18 @@ if(isPost()){
 			var fecha_inicio   = $("#fecha_inicio").val();
 			var fecha_estimada = $("#fecha_estimada").val();
 			var fecha_final    = $("#fecha_fin").val();
+			var id_vehiculo    = <?php echo $id ?>;
 			if ( !status )       return notify('error',"Se necesita el estatus");
 			if ( !idalmacen )    return notify('error',"Se necesita el almacen");
 			if ( !idpersonal )   return notify('error',"Se necesita el personal");
 			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
 			
-			if ( status_anterior == status)                            return notify('error',"El estatus no se puede repetir");
+			if ( status_anterior == status & status!='active' )        return notify('error',"El estatus no se puede repetir");
 			if ( status == "Recibida" && fecha_final!="")              return notify('error',"Este estatus no puede estar terminado");
 			if ( status_anterior == "Recibida" && status=="Rechazada") return notify('error',"Este estatus no puede ser posible");
 			if ( (status_anterior=="Proporcionado-Cliente" && status == "Recibida") || (status=="Proporcionado-Cliente" && status_anterior == "Recibida") ) 
 				return notify('error',"Este estatus no puede ser posible");
-			if ( (status_anterior=="Entregada" && status == "Reenvio") || (status=="Entregada" && status_anterior == "Reenvio") ) 
+			if ( (status_anterior=="Entregada" && status == "Reenvio") || (status=="Entregada" && status_anterior == "Reenvio")|| ( status=="Reenvio" && status_anterior == "active") ) 
 				return notify('error',"Este estatus no puede ser posible");
 			
 			if( status != "Recibida" && status != "Proporcionado-Cliente"){
@@ -813,7 +899,7 @@ if(isPost()){
 			}
 
             var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusrefaccion"; 
-            var data = (page=='change-statusservicio') ? "&id_vehiculoservicio=" + id : "&id_vehiculorefaccion=" + id ;
+			var data = "&id_vehiculorefaccion=" + id + "&id_vehiculo=" + id_vehiculo ;
             $.ajax({
                 type: "POST",
                 url: url,

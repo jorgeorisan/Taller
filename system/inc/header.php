@@ -14,8 +14,8 @@
 
 		<!-- Basic Styles -->
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/bootstrap.min.css">
-		<!--<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/font-awesome.min.css">-->
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/fontawesome-pro/css/all.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/fontawesome-pro/css/all.css">
 
 		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/smartadmin-production-plugins.min.css">
@@ -27,8 +27,7 @@
 
 		<!-- Toastr JQuery based toasts-->
 		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/css/toastr.css" />
-		<!-- notify alert-->
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/css/animate.css/animate.min.css" />
+
 
 		<!-- We recommend you use "your_style.css" to override SmartAdmin
 		     specific styles this will also ensure you retrain your customization with each SmartAdmin update.
@@ -92,22 +91,9 @@
 		  <!--para lo del sweetalert eliminar y mensajitos -->
 	    <script src="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.min.js"></script>
 	    <link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.css">
-<style>
-	body.smart-style-7 #logo-group > span#logo::before {  content: "";}
-    body.smart-style-7 nav ul li.active > a::before{color: #323950 !important;}
-    aside {background-color: #fff; border-right:1px solid #ccc; }
-    #main {background-color: #fff;}
-    .page-footer{position: fixed; bottom:0;}
-    body.smart-style-7 .minifyme { background: #323950 !important;}
-    input[disabled] {color: #bbb !important;}
-	#resultado{
-		padding-top:15px;
-	}
-	.cancelada {
-        opacity: .5;
-    }
+		<!-- estilos globales del proyecto -->
+		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/css/main.css">
 
-</style>
 
 	</head>
 	<body <?php echo implode(' ', array_map(function($prop, $value) {

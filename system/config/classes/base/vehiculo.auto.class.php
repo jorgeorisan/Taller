@@ -86,6 +86,7 @@
 		protected $created_date = "";
 		protected $updated_date = "";
 		protected $deleted_date = "";
+		protected $status_vehiculo = "";
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -502,6 +503,11 @@
 		public function setDeletedDate( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "DELETEDDATE","s") ) 
  				$this->deleted_date = $value;
+		}
+		
+		public function setStatusVehiculo( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "STATUSVEHICULO","s") ) 
+ 				$this->status_vehiculo = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -1169,6 +1175,14 @@
  			}
 		}
 		
+		public function getStatusVehiculo($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->status_vehiculo) ;
+ 			}else{
+ 				return $this->status_vehiculo ;
+ 			}
+		}
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -1276,6 +1290,7 @@
 			$this->setCreatedDate( $res['created_date'] );
 			$this->setUpdatedDate( $res['updated_date'] );
 			$this->setDeletedDate( $res['deleted_date'] );
+			$this->setStatusVehiculo( $res['status_vehiculo'] );
 			return true;
 		}
 		// end function load
@@ -1364,6 +1379,7 @@
 			$sql .= " `created_date` = ? ,";
 			$sql .= " `updated_date` = ? ,";
 			$sql .= " `deleted_date` = ? ,";
+			$sql .= " `status_vehiculo` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -1449,6 +1465,7 @@
 			$sql .= " `created_date` = ? ,";
 			$sql .= " `updated_date` = ? ,";
 			$sql .= " `deleted_date` = ? ,";
+			$sql .= " `status_vehiculo` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -1538,6 +1555,7 @@
 			$stmt->mbind_param( 's', $this->created_date );
 			$stmt->mbind_param( 's', $this->updated_date );
 			$stmt->mbind_param( 's', $this->deleted_date );
+			$stmt->mbind_param( 's', $this->status_vehiculo );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -1796,6 +1814,9 @@
 			if (in_array("deleted_date",$fieldstoupdate)){
 				$sql .= " `deleted_date` = ? ,";
 			}
+			if (in_array("status_vehiculo",$fieldstoupdate)){
+				$sql .= " `status_vehiculo` = ? ,";
+			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -2044,6 +2065,9 @@
 			}
 			if (in_array("deleted_date",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->deletedDate  );
+			}
+			if (in_array("status_vehiculo",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->statusVehiculo  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

@@ -111,29 +111,6 @@ if(isPost()){
                                                             
                                                         </div>
                                                         <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_user" id="id_user">
-                                                                <option value="" selected disabled>Selecciona Asesor</option>
-                                                                <?php 
-                                                                $obj = new User();
-                                                                $list=$obj->getAllArr();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        $selected = "";
-                                                                        if ($_SESSION['user_id'] == $val['id'] )
-                                                                            $selected = "selected";
-                                                                        
-                                                                        echo "<option ".$selected." value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                 ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" placeholder="Fecha promesa de entrega" name="fecha_promesa" >
-                                                        </div>
-                                                        <div class="form-group">
                                                             <select style="width:100%" class="select2" name="id_cliente" id="id_cliente">
                                                                 <option value="" selected disabled>Selecciona Cliente</option>
                                                                 <?php 
@@ -144,8 +121,16 @@ if(isPost()){
                                                                         echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
                                                                     }
                                                                 }
-                                                                 ?>
+                                                                ?>
                                                             </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yy-mm-dd' autocomplete="off" placeholder="Fecha promesa de entrega" name="fecha_promesa" >
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupclientes()" > <i class="fa fa-plus"></i></a>                                          
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">    
@@ -164,7 +149,7 @@ if(isPost()){
                                                                  ?>
                                                             </select>
                                                         </div>       
-                                                        <a data-toggle="modal" class="btn btn-success" href="#myModal" onclick="showpopupclientes()" > <i class="fa fa-plus"></i></a>                                          
+                                                        
                                                     </div> 
                                                 </div>
                                                 <div class="col-sm-12" >
@@ -993,7 +978,7 @@ if(isPost()){
                                                             <input type="hidden" name="ManeralGato">
                                                             <div class="col-md-6 col-sm-3 col-lg-6">
                                                                 <label class="radio ">
-                                                                    <input type="radio" class="radiobox" value="Si" name="ManeralGato"><span>Si</span> 
+                                                                    <input type="radio" class="radiobox" value="Si" name="optManeralGato"><span>Si</span> 
                                                                 </label>
                                                                 <label class="radio ">
                                                                     <input type="radio" class="radiobox" value="No"  name="optManeralGato"><span>No</span> 
@@ -1546,17 +1531,13 @@ if(isPost()){
         validateForm =function(){
             var fecha_alta    = $("input[name=fecha_alta]").val();
             var fecha_promesa = $("input[name=fecha_promesa]").val();
-            var id_user       = $("#id_user").val();
-            var id_taller     = $("#id_taller").val();
             var id_cliente    = $("#id_cliente").val();
             var id_marca      = $("#id_marca").val();
             var id_submarca   = $("#id_submarca").val();
             var modelo        = $("#modelo").val();
-            console.log
             if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
             if ( ! fecha_promesa ) return notify("info","La fecha de promesa es requerida");
-            if ( ! id_user )       return notify("info","El asesor es requerido");
-            if ( ! id_taller )     return notify("info","El taller es requerido");
+            if ( fecha_promesa < fecha_alta ) return notify("info","La fecha de promesa no puede ser menor a la fecha de alta");
             if ( ! id_cliente )    return notify("info","El cliente es requerido");
             if ( ! id_marca )      return notify("info","La marca es requerida");
             if ( ! id_submarca )   return notify("info","El modelo es requerido");

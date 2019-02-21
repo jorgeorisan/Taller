@@ -54,7 +54,7 @@ class HistorialVehiculoservicio extends AutoHistorialVehiculoservicio {
 	//metodo que sirve para agregar nuevo
 	public function addAll($_request)
 	{
-		$_request["id_user"] = $this->db->real_escape_string($_SESSION['user_id']);
+		$_request['id_user'] = $_SESSION['user_id'];
 		$id_vehiculoserv     = $this->db->real_escape_string($_request["id_vehiculoservicio"]);
 		$status     		 = $this->db->real_escape_string($_request["status"]);
 		$cometarios     	 = $this->db->real_escape_string($_request["comentarios"]);

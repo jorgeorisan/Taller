@@ -30,6 +30,8 @@ $data = $obj->getTable($id);
 if ( !$data ) {
     informError(true,make_url("Vehiculo","index"));
 }
+
+$carpetaexpediente = $obj->getCarpetaexpediente($id);
 $nomtaller      = "";
 $nommarca       = "";
 $nomsubmarca    = "";
@@ -565,7 +567,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                 <div class="superbox col-sm-12">
                                     
                                     <?php 
-                                    $carpetaimg = ASSETS_URL.'/expediente/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
+                                    $carpetaimg = ASSETS_URL.'/'.$carpetaexpediente.'/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
                                     $objimg = new ImagenesVehiculo();
                                     $dataimagenes = $objimg->getAllArr($id);
 

@@ -130,11 +130,11 @@ function catModelo()
 }
 function getStatusServicio(){
   $arrayStatus = array();
-  $arrayStatus["En Proceso"]     = "En Proceso";
   //$arrayStatus["active"]     = "Pendiente";
+  $arrayStatus["En Proceso"]     = "En Proceso";
   $arrayStatus["Realizado"]      = "Realizado";
   $arrayStatus["Stand-By"]       = "Stand-By";
-  $arrayStatus["Perdida o daño"] = "Perdida o daño";
+
   return $arrayStatus;
 }
 function getStatusRefaccion(){
@@ -221,12 +221,16 @@ function fromArray($array, $table, $db, $method )
       $result = $db->query("SHOW COLUMNS FROM ".$table." WHERE Field = '".$rowKey."'");
       if ($result->num_rows === 1) {
         if($method=="add"){
-          $columns .= $rowKey.",";
-          $values  .= "'".$db->real_escape_string($row)."',";
+          if($row){
+            $columns .= $rowKey.",";
+            $values  .= "'".$db->real_escape_string($row)."',";
+          }
         } 
         if($method=="update"){
-          $columns .= $rowKey."='".$db->real_escape_string($row)."',";
-          $values  .= "";//no se ocupa
+          if($row){
+            $columns .= $rowKey."='".$db->real_escape_string($row)."',";
+            $values  .= "";//no se ocupa
+          }
         } 
       }
     }
