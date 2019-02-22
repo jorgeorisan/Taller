@@ -106,6 +106,7 @@ class Vehiculo extends AutoVehiculo {
 	public function deleteAll($id,$_request=false)
 	{
 		$_request["status"]="deleted";
+		$_request["status_vehiculo"]="deleted";
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
 		$data=fromArray($_request,'vehiculo',$this->db,"update");	
 		$sql= "UPDATE vehiculo SET $data[0]  WHERE id=".$id.";";
@@ -113,6 +114,7 @@ class Vehiculo extends AutoVehiculo {
 		if(!$row){
 			return false;
 		}else{
+			$this->MoverVehiculoEliminado($id);
 			return true;
 		}
 	}
@@ -177,7 +179,8 @@ class Vehiculo extends AutoVehiculo {
 		if($cont==$contterminado){
 			$_request['status_vehiculo']   = 'Terminado sin firma';
 			if($statusvehiculo){
-				$_request['status_vehiculo']   = 'Terminado y firmado';
+				$_request['status_vehiculo'] = 'Terminado y firmado';
+				$_request['fecha_firma']     = date('Y-m-d H:i:s');
 				$this->updateAll($id,$_request);
 				$this->MoverVehiculoTerminado($_POST['id_vehiculo']);
 			}
@@ -187,6 +190,25 @@ class Vehiculo extends AutoVehiculo {
 	function MoverVehiculoTerminado($id){
 		$from  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
 		$to    = EXPEDIENTE_DIRTER .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+
+		//Abro el directorio que voy a leer
+		$dir = opendir($from);
+
+		//Recorro el directorio para leer los archivos que tiene
+		while(($file = readdir($dir)) !== false){
+			//Leo todos los archivos excepto . y ..
+			if(strpos($file, '.') !== 0){
+				//Copio el archivo manteniendo el mismo nombre en la nueva carpeta
+				if(exec('move "'.$from.'" "'.$to.'"')){
+					echo 1;
+				}
+				
+			}
+		}
+	}
+	function MoverVehiculoEliminado($id){
+		$from  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+		$to    = EXPEDIENTE_DIRELIMINADO .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
 
 		//Abro el directorio que voy a leer
 		$dir = opendir($from);

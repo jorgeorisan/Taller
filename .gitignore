@@ -5,6 +5,8 @@ error_log
 .well-known
 cgi-bin
 .DS_Store
+
+#ingnorar carpetas
 expediente/
 expedienteseliminados/
 expedientesterminados/

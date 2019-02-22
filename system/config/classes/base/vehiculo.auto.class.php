@@ -87,6 +87,7 @@
 		protected $updated_date = "";
 		protected $deleted_date = "";
 		protected $status_vehiculo = "";
+		protected $fecha_firma = "";
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -508,6 +509,11 @@
 		public function setStatusVehiculo( $value ){			
 			if ( $this->validclassateInput("/^.*$/", $value, "STATUSVEHICULO","s") ) 
  				$this->status_vehiculo = $value;
+		}
+		
+		public function setFechaFirma( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "FECHAFIRMA","s") ) 
+ 				$this->fecha_firma = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -1183,6 +1189,14 @@
  			}
 		}
 		
+		public function getFechaFirma($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->fecha_firma) ;
+ 			}else{
+ 				return $this->fecha_firma ;
+ 			}
+		}
+		
 		public function getValidclass(){
 			return $this->validclass;
 		}
@@ -1291,6 +1305,7 @@
 			$this->setUpdatedDate( $res['updated_date'] );
 			$this->setDeletedDate( $res['deleted_date'] );
 			$this->setStatusVehiculo( $res['status_vehiculo'] );
+			$this->setFechaFirma( $res['fecha_firma'] );
 			return true;
 		}
 		// end function load
@@ -1380,6 +1395,7 @@
 			$sql .= " `updated_date` = ? ,";
 			$sql .= " `deleted_date` = ? ,";
 			$sql .= " `status_vehiculo` = ? ,";
+			$sql .= " `fecha_firma` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -1466,6 +1482,7 @@
 			$sql .= " `updated_date` = ? ,";
 			$sql .= " `deleted_date` = ? ,";
 			$sql .= " `status_vehiculo` = ? ,";
+			$sql .= " `fecha_firma` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -1556,6 +1573,7 @@
 			$stmt->mbind_param( 's', $this->updated_date );
 			$stmt->mbind_param( 's', $this->deleted_date );
 			$stmt->mbind_param( 's', $this->status_vehiculo );
+			$stmt->mbind_param( 's', $this->fecha_firma );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -1817,6 +1835,9 @@
 			if (in_array("status_vehiculo",$fieldstoupdate)){
 				$sql .= " `status_vehiculo` = ? ,";
 			}
+			if (in_array("fecha_firma",$fieldstoupdate)){
+				$sql .= " `fecha_firma` = ? ,";
+			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -2068,6 +2089,9 @@
 			}
 			if (in_array("status_vehiculo",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->statusVehiculo  );
+			}
+			if (in_array("fecha_firma",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->fechaFirma  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

@@ -101,8 +101,6 @@ $data = $obj->getAllArr();
 									if (($key % 3) == 0){
 										echo "<div class='row ".$key."'>";
 									} 
-										
-
 									?>
 										<div class="col-sm-6 col-md-4 col-lg-4">
 											<div class="product-content product-wrap clearfix">
@@ -151,6 +149,16 @@ $data = $obj->getAllArr();
 															<p class="price-container">
 																<span><?php echo htmlentities($row['matricula'])?></span>
 															</p>
+															<span class="fa fa-2x">
+																<h5><a href="javascript:void(0);"><strong><?php ECHO $row['status_vehiculo'] ?></strong> </a>
+																<?php 
+																if($row['status_vehiculo']=='Terminado sin firma'){
+																	?>
+																	<a href="#" id='btn-firmado<?php $key ?>' onclick='ActualizarAuto(<?php echo $row["id"]; ?>)' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmado</a>
+																	<?php
+																}?>
+																</h5>
+															</span>
 														</div>
 														<div class="product-info smart-form">
 															
@@ -225,6 +233,24 @@ $data = $obj->getAllArr();
 <script>
 
 	$(document).ready(function() {
+		function ActualizarAuto(id){
+			var id_vehiculo    = id;
+            var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
+            var data = "id_vehiculo=" + id_vehiculo ;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+					if(response){
+						location.reload();
+                    }else{
+                        notify('error',"Oopss error al cambiar estatus: "+response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
+        });
 		var responsiveHelper_dt_basic = undefined;
 		var responsiveHelper_datatable_fixed_column = undefined;
 		var responsiveHelper_datatable_col_reorder = undefined;

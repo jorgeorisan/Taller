@@ -16,18 +16,19 @@ if($_SERVER["SERVER_NAME"]=='138.128.161.42'){
 }
 
 
-defined("APP_URL") ? null : define("APP_URL", str_replace("/system/config", "", $base_url));
-defined("APP_PATH") ? null : define("APP_PATH", str_replace("/system/config", "", $app_path));
-defined("SITE_HOST") ? null : define("SITE_HOST", ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'http' ) . '://' .
+defined("APP_URL") 			           ? null : define("APP_URL", str_replace("/system/config", "", $base_url));
+defined("APP_PATH") 			         ? null : define("APP_PATH", str_replace("/system/config", "", $app_path));
+defined("SITE_HOST") 		           ? null : define("SITE_HOST", ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'http' ) . '://' .
     $_SERVER['HTTP_HOST']);
-defined("ROOT_DIR") ? null : define("ROOT_DIR", str_replace(DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR.'config', "", $directory));
-defined("SYSTEM_DIR") ? null : define("SYSTEM_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "system");
-defined("EXPEDIENTE_DIR") ? null : define("EXPEDIENTE_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "expediente");
-defined("EXPEDIENTE_DIRTER") ? null : define("EXPEDIENTE_DIRTER", ROOT_DIR . DIRECTORY_SEPARATOR . "expedientesterminados");
-defined("REFACCION_DIR") ? null : define("REFACCION_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "refaccion");
-defined("CONFIG_DIR") ? null : define("CONFIG_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "system" . DIRECTORY_SEPARATOR . "config");
+defined("ROOT_DIR") 							 ? null : define("ROOT_DIR", str_replace(DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR.'config', "", $directory));
+defined("SYSTEM_DIR")              ? null : define("SYSTEM_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "system");
+defined("EXPEDIENTE_DIR")          ? null : define("EXPEDIENTE_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "expediente");
+defined("EXPEDIENTE_DIRTER")       ? null : define("EXPEDIENTE_DIRTER", ROOT_DIR . DIRECTORY_SEPARATOR . "expedientesterminados");
+defined("EXPEDIENTE_DIRELIMINADO") ? null : define("EXPEDIENTE_DIRELIMINADO", ROOT_DIR . DIRECTORY_SEPARATOR . "expedienteseliminados");
+defined("REFACCION_DIR")           ? null : define("REFACCION_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "refaccion");
+defined("CONFIG_DIR")              ? null : define("CONFIG_DIR", ROOT_DIR . DIRECTORY_SEPARATOR . "system" . DIRECTORY_SEPARATOR . "config");
 //Assets URL, location of your css, img, js, etc. files
-defined("ASSETS_URL") ? null : define("ASSETS_URL", APP_URL );
+defined("ASSETS_URL")              ? null : define("ASSETS_URL", APP_URL );
 #echo "<pre>";
 #print_r(array(APP_URL,APP_PATH,ROOT_DIR,ASSETS_URL));
 #echo "</pre>";#die;
