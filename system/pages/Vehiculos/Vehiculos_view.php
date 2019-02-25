@@ -80,7 +80,7 @@ $dataref      = $objref->getAllArr($id,true);
 $objser       = new VehiculoServicio();
 $dataser      = $objser->getAllArr($id,true);
 if(isPost()){
-    $obj = new Vehiculo();
+	$obj = new Vehiculo();
     if($id>0){
         $uploadimages = $contimages = 0;
 
@@ -187,7 +187,7 @@ if(isPost()){
 					<!-- product -->
 					<div class="product-content product-wrap clearfix product-deatil">
 						<div class="row">
-							<div class="col-md-5 col-sm-12 col-xs-12 ">
+							<div class="col-md-4 col-sm-12 col-xs-12 ">
 								<div class="product-image"> 
 									<div id="myCarousel-2" class="carousel slide">
 									<ol class="carousel-indicators">
@@ -199,7 +199,7 @@ if(isPost()){
 										<?php 
 											$image= "";
 											foreach($dataimagenes as $key => $row) {
-												$active = ($key==1) ? 'active' : '';
+												$active = ($key==0) ? 'active' : '';
 												$image.= "
 													<div class='item ".$active."'>
 														<div style='text-align: center;'>
@@ -224,8 +224,8 @@ if(isPost()){
 									</div>
 								</div>
 							</div>
-							<div class="col-md-7 col-sm-12 col-xs-12">
-								<div class="col-sm-8 col-md-8 col-lg-8">
+							<div class="col-md-8 col-sm-12 col-xs-12">
+								<div class="col-sm-6 col-md-6 col-lg-6">
 									<h2 class="name">
 										<?php echo $nommarca." ".$nomsubmarca." - ". $data['modelo'] ?>
 										<small><strong>Cliente:</strong> <a class="" href="<?php echo make_url("Clientes","show",array('id'=>$data['id_cliente'])); ?>"><?php echo $nomcliente ?></a></small>
@@ -273,10 +273,14 @@ if(isPost()){
 									<hr>
 								</div>
 								<form id="main-form" class="" role="form" method="post" action="<?php echo make_url("Vehiculos","view",array('id'=>$data['id']))?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">     
-									<div class="col-sm-3 col-md-3 col-lg-3" style="text-align: center;">
-										<div class="btn-group">
+									<div class="col-sm-5 col-md-5 col-lg-5" style="text-align: center;">
+										<div class="row">
+											<div class="widget-body" style='padding-left: 15px;'>
 											<a href="<?php echo make_url("Vehiculos","showorden",array('id'=>$data['id'])); ?>" 
 											class="btn btn-success"><i class="fa fa-th-list"></i>&nbsp;Ver Orden</a>
+											<a href="<?php echo make_url("Vehiculos","edit",array('id'=>$data['id'])); ?>" 
+											class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Editar Orden</a>
+											</div>
 										</div>
 										<div class="form-group" style="padding-top: 20px;">
 	                                        <button type="button" title='Agregar imagen' class="btn btn-primary btn-circle btn-xl" onclick="getFoto('filevehiculo'); return false;">

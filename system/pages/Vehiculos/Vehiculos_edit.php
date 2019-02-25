@@ -27,66 +27,104 @@ include(SYSTEM_DIR . "/inc/nav.php");
 if(isset($request['params']['id'])   && $request['params']['id']>0)
     $id=$request['params']['id'];
 else
-    informError(true,make_url("Catalogos","modelo"));
+    informError(true,make_url("Vehiculos","index"));
 
 $obj = new Vehiculo();
 $data = $obj->getTable($id);
 if ( !$data ) {
-    informError(true,make_url("Catalogos","modelo"));
+    informError(true,make_url("Vehiculos","index"));
 }
-$carpetaexpediente = $obj->getCarpetaexpediente($id);
 if(isPost()){
+   
     $obj = new Vehiculo();
     $id = $obj->updateAll($id,getPost());
     //$id=240;
-    
     if ($id > 0){
+        $uploadimages = $contimages = 0;
+
+        //imagenes anteriores
+        if (isset($_POST['filelastvehiculo'])){
+            echo 1;
+            $cantidad = count($_POST['filelastvehiculo']);
+            $objimg = new ImagenesVehiculo();
+            $idimg  = $objimg->deleteAll($id);
+            $arraynum =[];
+            for ($i=0; $i < $cantidad; $i++){
+                if(!$_POST['filelastvehiculo'][$i]) continue;
+                
+                $idimg  = $objimg->addImage($id,$_POST['filelastvehiculo'][$i]);  
+                $ultimonum  = explode("_", $_POST['filelastvehiculo'][$i]);
+                $uploadimages++;
+                $arraynum[$i]=$ultimonum[0];
+            }  
+            $contimages = max($arraynum);
+        }
+        //nuevas imagenes
         if (isset($_FILES['filevehiculo'])){
             $cantidad = count($_FILES["filevehiculo"]["tmp_name"]);
-            $carpeta  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
-            if ( !file_exists($carpeta) ) {
-                mkdir($carpeta, 0777, true);
-                $carpetaimg = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
-                if ( !file_exists($carpetaimg) ) {
-                    mkdir($carpetaimg, 0777, true);
-                }
-            }else{
-                $carpetaimg = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
-            }
             for ($i=0; $i < $cantidad; $i++){
-                //Comprobamos si el fichero es una imagen
-                $subir=0;
-                if ($_FILES['filevehiculo']['type'][$i]=='image/png' || $_FILES['filevehiculo']['type'][$i]=='image/jpeg'){
-                    if ( isset($_POST['deletefilevehiculo'] ) ) {
-                        $imagesdeleted = $_POST['deletefilevehiculo'];
-                        $pos = strpos($imagesdeleted, $_FILES["filevehiculo"]["name"][$i]); //quitamos las imagenes eliminadas
-                        if ($pos === false) {
-                            move_uploaded_file($_FILES["filevehiculo"]["tmp_name"][$i], $carpetaimg."/".$_FILES["filevehiculo"]["name"][$i]);
-                            $subir=1;
-                        }   
-                    }else{
-                        move_uploaded_file($_FILES["filevehiculo"]["tmp_name"][$i], $carpetaimg."/".$_FILES["filevehiculo"]["name"][$i]);
-                        $subir=1;
-                    } 
-                    if($subir)  {
-                        $objimg = new ImagenesVehiculo();
-                        $idimg  = $objimg->addImage($id,$_FILES["filevehiculo"]["name"][$i]);  
-                        if(!$idimg){
-                            echo "Error al añadir imagen".$id."->".$carpetaimg."->".$_FILES["filevehiculo"]["name"][$i];
-                            exit;
-                        }  
-                    } 
-                $validar=true;
+                if(!$_FILES['filevehiculo']['type'][$i]) continue;
+                
+                $uploadimages++;
+            }
+            if($uploadimages){
+                $carpeta  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+	            if ( !file_exists($carpeta) ) {
+	                mkdir($carpeta, 0777, true);
+	                if ( !file_exists($carpetaimg) ) {
+	                    mkdir($carpetaimg, 0777, true);
+	                }
+	            }else{
+                    $carpetaimg = $carpeta.DIRECTORY_SEPARATOR."images";
                 }
-                else $validar=false;
-                    
+                $objimg = new ImagenesVehiculo();
+                if($uploadimages==0)  $objimg->deleteAll($id);
+               
+                for ($i=0; $i < $cantidad; $i++){
+                    $code = rand(1000, 100000);
+                    $contimages++;
+                    if(!$_FILES['filevehiculo']['type'][$i]) continue;
+                    //Comprobamos si el fichero es una imagen
+                    $subir=0;
+                    if ($_FILES['filevehiculo']['type'][$i]=='image/png' || $_FILES['filevehiculo']['type'][$i]=='image/jpeg'){
+                        if ( isset($_POST['deletefilevehiculo'] ) ) {
+                            $imagesdeleted = $_POST['deletefilevehiculo'];
+                            $pos = strpos($imagesdeleted, $_FILES["filevehiculo"]["name"][$i]); //quitamos las imagenes eliminadas
+                            if ($pos === false) {
+                                 move_uploaded_file($_FILES["filevehiculo"]["tmp_name"][$i], $carpetaimg.DIRECTORY_SEPARATOR.$_FILES["filevehiculo"]["name"][$i]);
+                                $subir=1;
+                            }   
+                        }else{
+                            move_uploaded_file($_FILES["filevehiculo"]["tmp_name"][$i], $carpetaimg.DIRECTORY_SEPARATOR.$_FILES["filevehiculo"]["name"][$i]);
+                            $subir=1;
+                        } 
+                        if($subir)  {
+                            $objimg = new ImagenesVehiculo();
+	                        $idimg  = $objimg->addImage($id,$_FILES["filevehiculo"]["name"][$i]);  
+	                        if(!$idimg){
+	                            echo "Error al añadir imagen".$id."->".$carpetaimg."->".$_FILES["filevehiculo"]["name"][$i];
+	                            exit;
+	                        }  
+                        } 
+                
+                    $validar=true;
+                    }
+                    else $validar=false;
+                        
+                }
+                
             }
         }
+           
+        if ($uploadimages == 0) { echo 3; $objimg = new ImagenesVehiculo();  $idimg  = $objimg->deleteAll($id); }
+  
         informSuccess(true, make_url("Vehiculos","view",array('id'=>$id)));
     }else{
         informError(true, make_url("Vehiculos","edit",array('id'=>$id)),"edit");
     }
 }
+
+$carpetaexpediente = $obj->getCarpetaexpediente($id);
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 
@@ -102,7 +140,7 @@ if(isPost()){
                             <h2><i class="fa fa-automobile"></i>&nbsp;<?php echo $page_title ?></h2>
                     </header>
                     <fieldset>          
-                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","edit");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
+                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","edit",array('id'=>$id));?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
 
                             <section id="widget-grid" class="">
                                 <article class="col-sm-12 col-md-12 col-lg-12"  id="article-1">
