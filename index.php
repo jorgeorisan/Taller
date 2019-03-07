@@ -132,6 +132,13 @@ Routing section
         if ($request['page']==='edit')     { $page = "Gastos_edit.php";     }
         if ($request['page']==='view')     { $page = "Gastos_view.php";     }
       }
+      if ($request['section']==='Nomina'){
+        $page = "Nomina_index.php";
+        $dir  = "Nomina";//si esta en carpeta
+        if ($request['page']==='add')      { $page = "Nomina_add.php";      }
+        if ($request['page']==='edit')     { $page = "Nomina_edit.php";     }
+        if ($request['page']==='view')     { $page = "Nomina_view.php";     }
+      }
       //delete pages
       if(isset($request['params']['id'])){
         if( $id = $request['params']['id'] ) {

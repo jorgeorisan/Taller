@@ -71,10 +71,13 @@ class HistorialVehiculorefaccion extends AutoHistorialVehiculorefaccion {
 			while ($row = $res->fetch_assoc())
 				$id= $row;
 
-			$sql = "UPDATE vehiculo_refaccion SET status='". $status ."'  WHERE id=".$id_vehiculoref.";";
-			$row = $this->db->query($sql);
-			//updating inventario if estatus ='Recibida,Proporcionada Por el cliente'
+			$_request["status"]       = $status;
 			$objvr = new VehiculoRefaccion();
+			if(!$objvr->updateAll($id_vehiculoref,$_request)){
+				die("Error updating VehiculoRefaccion");
+			}
+			//updating inventario if estatus ='Recibida,Proporcionada Por el cliente'
+			
 			$datavr = $objvr->getTable($id_vehiculoref);
 			if ( !$datavr ) die("Error getting result vehiculo refaccion");
 				

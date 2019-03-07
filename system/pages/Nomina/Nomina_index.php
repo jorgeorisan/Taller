@@ -52,19 +52,22 @@ $data = $obj->getAllArr();
 									<thead>
 										<tr>
 											<th class = "col-md-1" data-hide="phone,tablet">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> No. Nomina
+												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> No.
 											</th>
 											<th class = "col-md-1" data-class="expand">
 												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Taller
-											</th>
-											<th class = "col-md-1" data-class="expand">
-												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Tipo Nomina
 											</th>
 											<th class = "col-md-1" data-class="expand">
 												<i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Concepto
 											</th>
 											<th class = "col-md-1" data-hide="">
 												<i class="fa fa-fw  fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i> Total
+											</th>
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Inicial
+											</th>
+											<th class = "col-md-1" data-hide="phone,tablet">
+												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Final
 											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
 												<i class="fa fa-fw  fa-check-square  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Alta
@@ -83,12 +86,13 @@ $data = $obj->getAllArr();
 											?>
 											<tr>
 												<td><?php echo htmlentities($row['id'])?></td>
-												<td><?php echo htmlentities($row['nombre'].' '.$row['apellido_pat'].' '.$row['apellido_mat'])?></td>
-												<td><?php echo htmlentities($row['email'])?></td>
-												<td><?php echo htmlentities($row['telefono']) ?></td>
-												<td><?php echo htmlentities($row['ciudad']." ".$row['estado']." Col. ".$row['colonia']." Calle. ".$row['calle']." Num. ".$row['num_ext']." ".$row['num_int']) ?></td>
+												<td><?php echo htmlentities($nomtaller)?></td>
+												<td><?php echo htmlentities($row['nombre'])?></td>
+												<td><?php echo htmlentities($row['total'])?></td>
+												<td><?php echo date('Y-m-d',strtotime($row['fecha_inicial'])) ?></td>
+												<td><?php echo date('Y-m-d',strtotime($row['fecha_final'])) ?></td>
 												
-												<td><?php echo htmlentities($row['created_date']) ?></td>
+												<td><?php echo date('Y-m-d',strtotime($row['created_date'])) ?></td>
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -98,10 +102,10 @@ $data = $obj->getAllArr();
 															<li>
 																<a class="" href="<?php echo make_url("Nomina","view",array('id'=>$row['id'])); ?>">Ver</a>
 															</li>
-															<li>
+															<!--<li>
 																<a class="" href="<?php echo make_url("Nomina","edit",array('id'=>$row['id'])); ?>">Editar</a>
 															</li>
-															
+															-->
 															<li class="divider"></li>
 															<li>
 																<a href="#" class="red" onclick="borrar('<?php echo make_url("Nomina","nominadelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>

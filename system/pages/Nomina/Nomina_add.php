@@ -10,7 +10,7 @@ require_once(SYSTEM_DIR . "/inc/config.ui.php");
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Nuevo Gasto";
+$page_title = "Nuevo Nomina";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -26,22 +26,32 @@ include(SYSTEM_DIR . "/inc/header.php");
 include(SYSTEM_DIR . "/inc/nav.php");
 
 if(isPost()){
-    $obj = new Gasto();
+    $obj = new Nomina();
     $id  = $obj->addAll(getPost());
     //$id=240;
     
     if ($id > 0){
-        informSuccess(true, make_url("Gastos","view",array('id'=>$id)));
+        informSuccess(true, make_url("Nomina","view",array('id'=>$id)));
     }else{
-        informError(true,make_url("Gastos","add"));
+        informError(true,make_url("Nomina","add"));
     }
+}
+$hoy = date('d');
+if($hoy>=1 && $hoy<15){
+    $begin = date('Y-m-01');   
+    $end = date('Y-m-15'); 
+}else{
+    $begin = date('Y-m-15');  
+    $fecha = new DateTime();
+    $fecha->modify('last day of this month');
+    $end = $fecha->format('Y-m-d');  
 }
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-    <?php $breadcrumbs["Gastos"] = APP_URL."/Gastos/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
+    <?php $breadcrumbs["Nomina"] = APP_URL."/Nomina/index"; include(SYSTEM_DIR . "/inc/ribbon.php"); ?>
     <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row"> 
@@ -51,56 +61,42 @@ if(isPost()){
                             <h2><i class="fa fa-automobile"></i>&nbsp;<?php echo $page_title ?></h2>
                     </header>
                     <fieldset>          
-                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Gastos","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
+                        <form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Nomina","add");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">    
 
                             <section id="widget-grid" class="">
                                 <article class="col-sm-12 col-md-12 col-lg-12"  id="article-1">
                                     <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-recepcion" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
                                         <header onclick="$('.showrecepcion').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-building"></i> </span><h2>Datos Gasto</h2>
+                                            <i class="far fa-building"></i> </span><h2>Datos Nomina</h2>
                                         </header>
                                         <div class="showrecepcion" style="display: ;">
                                             <!-- widget edit box -->
                                             <div class="jarviswidget-editbox" style=""></div>
                                             <div class="widget-body">
                                                 <div class="col-sm-12">
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-6">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control datepicker" data-dateformat='yyyy-mm-dd' autocomplete="off" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha de Alta" name="fecha_alta" >
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yyyy-mm-dd' autocomplete="off" value="<?php echo $begin;?>" placeholder="Fecha Inicial" name="fecha_inicial" id="fecha_inicial" >
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-6">
                                                         <div class="form-group">
-                                                            <select style="width:100%" class="select2" name="id_gastostipo" id="">
-                                                                <option value="" selected disabled>Selecciona Tipo Gasto</option>
-                                                                <?php 
-                                                                $obj = new GastosTipo();
-                                                                $list=$obj->getAllArrGral();
-                                                                if (is_array($list) || is_object($list)){
-                                                                    foreach($list as $val){
-                                                                        echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
-                                                                    }
-                                                                }
-                                                                 ?>
-                                                            </select>
-                                                        </div> 
+                                                            <input type="text" class="form-control datepicker" data-dateformat='yyyy-mm-dd' autocomplete="off" value="<?php echo $end;?>" placeholder="Fecha Final" name="fecha_final" id="fecha_final" >
+                                                        </div>
                                                     </div>
                                                     
-                                                    <div class="col-sm-4">
-                                                      
-                                                    </div> 
                                                     
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <input type="text" class="form-control " value="" placeholder="Nombre " name="nombre" >
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-6">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control" placeholder="Comentarios Gasto" name="comentarios" >
+                                                            <input type="text" class="form-control" placeholder="Comentarios Nomina" name="comentarios" >
                                                             
                                                         </div>
                                                     </div> 
@@ -109,66 +105,113 @@ if(isPost()){
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-gastoes" 
+                                    <div class="jarviswidget  jarviswidget-sortable jarviswidget-collapsed" id="wid-nominaes" 
                                     data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-editbutton="false"  data-widget-fullscreenbutton="false" data-widget-collapsed="false" >
-                                        <header onclick="$('.showgastoes').toggle()"> <span class="widget-icon"> 
-                                            <i class="far fa-box-full"></i> </span><h2>Gastos</h2>
+                                        <header onclick="$('.shownominaes').toggle()"> <span class="widget-icon"> 
+                                            <i class="far fa-box-full"></i> </span><h2>Personal</h2>
                                         </header>
-                                        <div class="showgastoes" style="display: ;">
+                                        <div class="shownominaes" style="display: ;">
                                             <!-- widget edit box -->
                                             <div class="jarviswidget-editbox" style=""></div>
                                             <div class="widget-body">
                                                 <div class="col-sm-12">
-                                                    <div class="col-sm-1">
-                                                        <input style='' type='number' class="form-control" id='selectcantidad_gasto' value='1'> 
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <div class="col-sm-6">
-                                                                <select style="width:50%" class="select2" name="id_gastostiporegistro" id="id_gastostiporegistro">
+                                                    <div class="col-sm-8">
+                                                        <div class="row">
+                                                            <div class="col-sm-8 col-md-8">
+                                                                <select style="width:100%" class="select2" name="id_personalnomina" id="id_personalnomina">
                                                                     <option value="" selected disabled>Selecciona </option>
                                                                     <?php 
-                                                                    $obj = new GastosTipo();
-                                                                    $list=$obj->getAllArrNormal();
+                                                                    $obj = new Personal();
+                                                                    $list=$obj->getAllArr();
                                                                     if (is_array($list) || is_object($list)){
                                                                         foreach($list as $val)
-                                                                            echo "<option value='".$val['id']."'>".htmlentities($val['nombre'])."</option>";
+                                                                            echo "<option value='".$val['id']."'>".htmlentities($val['nombre'].' '.$val['apellido_pat'].' '.$val['apellido_mat'])."</option>";
                                                                         
                                                                     }
                                                                     ?>
                                                                 </select>
                                                             </div>
-                                                            
-                                                        </div>
-                                                        <div class="form-group" id=''>
-                                                            <button class="btn btn-primary btn-md" type="button" onclick=" getgastostipo();"> Agregar  </button>
+                                                            <div class="col-sm-2">
+                                                                <button class="btn btn-primary btn-md" type="button" onclick=" getpersonal();"> Agregar  </button>
+                                                            </div>
                                                         </div>
                                                         
                                                     </div>
+                                                    
+                                                    
                                                     <div class="col-sm-1">
-                                                         <a data-toggle="modal" title="Nueva Refaccion"  class="btn btn-success" href="#myModal" onclick="showpopupgasto()" > <i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                         <a data-toggle="modal" title="Buscar Refaccion" class="btn btn-info" href="#myModal" onclick="showpopupgastobuscar()" > <i class="fa fa-search"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-3">
                                                         
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                     <div class="col-sm-2 text-right">
-                                                        <h6><strong >Total=<span id="total-numgasto"></span></strong></h6>
-                                                        <input type="hidden" name="total-globalgasto" id="total-globalgasto" value="0"/>
+                                                        <h6><strong >Total=<span id="total-numnomina"></span></strong></h6>
+                                                        <input type="hidden" name="total" id="total-globalnomina" value="0"/>
                                                     </div>
                                                 </div>
                                                 <div class='col-sm-12 col-md-12'>
-                                                    <table style='width:100%' class='full-width' id="contgastos">
+                                                    <table style='width:100%' class='full-width' id="contnomina">
                                                         <tr>
-                                                            <th>Cant.</th>
-                                                            <th>Codigo</th>
-                                                            <th>Gasto</th>
+                                                            <th>Cant. Serv.</th>
+                                                            <th>Personal</th>
+                                                            <th>Auto</th>
+                                                            <th>Fecha</th>
                                                             <th>TOTAL</th>
                                                             <th class="borrar-td"></th>
                                                         </tr>
+                                                        <?php 
+                                                        $objref = new Personal();
+                                                        $dataref = $objref->getAllServicesGral($begin,$end);
+                                                        $totalglobal = 0 ;
+                                                        foreach($dataref as $lineId => $row) {
+                                                            $idpersonal = $row['id_personal'];
+                                                           
+                                                            $nombre         = htmlentities($row['nombre'].' '.$row['apellido_pat'].' '.$row['apellido_mat']) ;
+                                                            $nombrevehiculo =  htmlentities($row['marca']." ".$row['submarca']." - ". $row['modelo']);
+                                                            $id_vehiculo    =  htmlentities($row['id_vehiculo']);
+                                                            $status         = htmlentities($row['status']);
+                                                            $porcentaje ="Fijo";
+                                                            switch ($row['forma_pago']) {
+                                                                case 'Fijo':
+                                                                    $total = $row['cantidad'];
+                                                                    break;
+                                                                default:
+                                                                    $total      = $row['total']*($row['cantidad']/100);
+                                                                    $porcentaje = $row['cantidad']."%";
+                                                                    $totalglobal+= $total*($row['cantidad']/100);
+                                                                    break;
+                                                            }
+                                                            $queryAllServices = $objref->getAllServices($begin,$end,$row['id_personal']);
+                                                          
+                                                            $detalles = json_encode($queryAllServices);
+                                                            $detalles = $nombre."<input type='hidden' name='detalles[]' value='".$detalles."'>";
+                                                           
+                                                        ?>
+                                                        <tr class='personal' lineidpersonal='<?php echo $lineId; ?>'>
+                                                            <input type='hidden' name='id_personal[]' value='<?php echo $row['id_personal'] ?>'/>
+                                                            <input class='cantidadespersonal' type='hidden' name='cantidad[]' value='<?php echo $row['cantidad_servicios']?>'/>
+                                                            <input type='hidden' name='fecha[]' value='<?php echo $fecha ?>'/>
+                                                            <input type='hidden' name='id_vehiculo[]' value='<?php echo $id_vehiculo ?>'/>
+                                                            <td><?php echo $row['cantidad_servicios']; ?></td>
+                                                            <td><?php echo $detalles; ?></td>
+                                                            <td><?php echo $nombrevehiculo; ?></td>
+                                                            <td><?php echo $row['fecha']; ?></td>
+                                                            <td>
+                                                                <span style='float:left;padding-top: 10px;'><?php echo $porcentaje; ?></span>
+                                                                <input type='number' style='width: 80px;' class='form-control totalespersonal' name='totalpersonal[]' value='<?php echo htmlentities($total) ?>' placeholder='00.00'>
+                                                            </td>
+                                                            <td class='borrar-td'>
+                                                                <a data-toggle="modal" class="btn-historyservices" title="Ver Servicios" href="#myModal" idper='<?php echo $row['id_personal']; ?>' >
+																		<i class="fa fa-history"></i>&nbsp;Servicios
+                                                                </a>
+                                                                <a href='javascript:void(0);' class='btn btn-danger borrar-personal' lineidpersonal='<?php echo $lineId ?>'> 
+                                                                    <i class='glyphicon glyphicon-trash'></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+
+                                                        <?php
+                                                        } 
+                                                        ?>
                                                     </table>
                                                 </div>
                                             </div>
@@ -253,52 +296,48 @@ if(isPost()){
         /*GENERALES*/
       
         validateForm =function(){
-            var fecha_alta    = $("input[name=fecha_alta]").val();
-            var id_almacen    = $("#id_almacen").val();
-            var id_proveedor  = $("#id_proveedor").val();
-            var modelo        = $("#modelo").val();
-            var total         = $("#total-globalgasto").val();
+            var fecha_inicio  = $("input[name=fecha_inicial]").val();  
+            var fecha_final   = $("input[name=fecha_final]").val();
+            var total         = $("#total-globalnomina").val();
            
-            if ( ! fecha_alta )    return notify("info","La fecha de alta es requerida");
-           
-            
-            if ( ! id_almacen )    return notify("info","El Almacen es requerido");
-            if ( ! id_proveedor )  return notify("info","El proveedor es requerido");
-            if ( total <= 0)       return notify("info","Se requieren gastoes para generar el gasto");
+            if ( ! fecha_inicio )  return notify("info","La fecha de inicio es requerida");
+            if ( ! fecha_final )   return notify("info","La fecha final es requerida");
+            if ( total <= 0)       return notify("info","Se requiere personal para generar el nomina");
             
             $("#main-form").submit();       
         }
         
-        //**********Gastos*************/
-        getgastostipo = function() {
-            var id = $('select[name="id_gastostiporegistro"] option:selected').val();
+        //**********Nomina*************/
+        getpersonal = function() {
+            var id = $('select[name="id_personalnomina"] option:selected').val();
             if(id){
-                var text = $('select[name="id_gastostiporegistro"] option:selected').text();
-                var url = config.base+"/Catalogos/ajax/?action=get&object=getgastostipo"; // El script a dónde se realizará la petición.
-               
-                var cantidad = $("#selectcantidad_gasto").val();
+                var text = $('select[name="id_personalnomina"] option:selected').text();
+                var url = config.base+"/Personal/ajax/?action=get&object=getpersonal"; // El script a dónde se realizará la petición.
+                var begin = $('#fecha_inicial').val();
+                var end = $('#fecha_final').val();
+                var cantidad = $("#selectcantidad_nomina").val();
                 $.ajax({
                     type: "GET",
                     url: url,
-                    data: "id="+id+ "&cantidad=" + cantidad, // Adjuntar los campos del formula=rio enviado.
+                    data: "id="+id+ "&cantidad=" + cantidad + "&begin=" + begin + "&end=" + end, 
                     success: function(response){
                         if(response){
-                            $('#contgastos').append(response);  
-                            $('#selectcantidad_gasto').val(1);
-                            calcTotalgasto();
+                            $('#contnomina').append(response);  
+                            $('#selectcantidad_nomina').val(1);
+                            calcTotalnomina();
                         }else{
-                            notify('error',"Oopss error al agregar gasto"+response);
+                            notify('error',"Oopss error al agregar nomina"+response);
                         }
                     }
                 });
                 return false; // Evitar ejecutar el submit del formulario.
             }
         }
-        calcTotalgasto = function() {
-            var totalesgastos     = $(".totalesgastos");
+        calcTotalnomina = function() {
+            var totalespersonal     = $(".totalespersonal");
             var total = 0;
-            for (var i = 0, len = totalesgastos.length; i < len; i++) {
-                var valor=$(totalesgastos[i]).val();
+            for (var i = 0, len = totalespersonal.length; i < len; i++) {
+                var valor=$(totalespersonal[i]).val();
                 if (! isNaN( valor )  && valor > 0 ){
                     total += parseFloat(valor);
                     
@@ -306,51 +345,30 @@ if(isPost()){
                 }
             }
             
-            $("#total-numgasto").html(total);
-            $("#total-globalgasto").val(total);
+            $("#total-numnomina").html(total);
+            $("#total-globalnomina").val(total);
         }
         
-        showpopupgasto= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nueva Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupgasto", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        showpopupgastobuscar= function(){
-            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-search"></i> Buscar Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupgastobuscar", null, function (response) {
-                    if ( response ){
-                        $("#contentpopup").html(response);
-                    }else{
-                        return notify('error', 'Error al obtener los datos del Formulario');
-                        
-                    }     
-            });
-        }
-        $("body").on('click', '.borrar-gasto', function (e) {
+        
+        $("body").on('click', '.borrar-personal', function (e) {
             e.preventDefault();
 
-            var id = $(this).attr("lineidgasto");
-            $("[lineidgasto=" + id + "]").remove();
-            calcTotalgasto();
+            var id = $(this).attr("lineidpersonal");
+            $("[lineidpersonal=" + id + "]").remove();
+            calcTotalnomina();
         });
-        $('body').on('click', '#savenewgasto', function(){
+        $('body').on('click', '#savenewnomina', function(){
             
-            var code        = $("input[name=codigo_gasto]", $(this).parents('form:first')).val();
-            var nombre      = $("input[name=nombre_gasto]", $(this).parents('form:first')).val();
-            var descripcion = $("input[name=descripcion_gasto]", $(this).parents('form:first')).val();
-            var id_marca    = $("#id_marca_gasto").val();
-            var id_submarca = $("#id_submarca_gasto").val();
-            var modelo      = $("#modelo_gasto").val();
-            var costoaprox  = $("#costo_aprox_gasto").val();
-            var costoreal   = $("#costo_real_gasto").val();
+            var code        = $("input[name=codigo_nomina]", $(this).parents('form:first')).val();
+            var nombre      = $("input[name=nombre_nomina]", $(this).parents('form:first')).val();
+            var descripcion = $("input[name=descripcion_nomina]", $(this).parents('form:first')).val();
+            var id_marca    = $("#id_marca_nomina").val();
+            var id_submarca = $("#id_submarca_nomina").val();
+            var modelo      = $("#modelo_nomina").val();
+            var costoaprox  = $("#costo_aprox_nomina").val();
+            var costoreal   = $("#costo_real_nomina").val();
           
-            var url = config.base+"/Catalogos/ajax/?action=get&object=savenewgasto"; // El script a dónde se realizará la petición.
+            var url = config.base+"/Catalogos/ajax/?action=get&object=savenewnomina"; // El script a dónde se realizará la petición.
             $.ajax({
                 type: "POST",
                 url: url,
@@ -358,38 +376,32 @@ if(isPost()){
                 success: function(response){
                     if(response>0){
                         //alert("Group successfully added");
-                        $('#idgasto').append($('<option>', {
+                        $('#idnomina').append($('<option>', {
                             value: response,
                             text: code+"||"+nombre,
                             selected:true
                         }));  
-                        $("#idgasto").select2({
+                        $("#idnomina").select2({
                             multiple: false,
                             header: "Selecciona una opcion",
                             noneSelectedText: "Seleccionar",
                             selectedList: 1
                         });
                         $('#myModal').modal('hide');
-                        $("#idgasto"). change();
+                        $("#idnomina"). change();
                         notify('success',"Refaccion agregada correctamente:"+response);
                     }else{
-                        notify('error',"Oopss error al agregar gasto"+response);
+                        notify('error',"Oopss error al agregar nomina"+response);
                     }
                 }
              });
             return false; // Evitar ejecutar el submit del formulario.
         });
-        $('body').on('blur', '.totalesgastos', function(){
-            calcTotalgasto();
+        $('body').on('blur', '.totalespersonal', function(){
+            calcTotalnomina();
         });
-             
-        //gastotipo
-        $('body').on('change', '#id_gastostipo', function(){
-            if( $(this).val() ){
-                var id = $("#id_gastostipo").val();
-                getgastostipo(id);
-            }
-        });
+        $(".totalespersonal").blur();
+       
       
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.

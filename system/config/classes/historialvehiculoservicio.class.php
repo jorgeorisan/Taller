@@ -70,11 +70,11 @@ class HistorialVehiculoservicio extends AutoHistorialVehiculoservicio {
 			while ($row = $res->fetch_assoc())
 				$id= $row;
 
-			$sql = "UPDATE vehiculo_servicio SET status='". $status ."'  WHERE id=".$id_vehiculoserv.";";
-			$row = $this->db->query($sql);
-			if(!$row)
+			$_request["status"]       = $status;
+			$objPedidoRefaccion = new VehiculoServicio();
+			if(!$objPedidoRefaccion->updateAll($id_vehiculoserv,$_request)){
 				die("Error updating VehiculoServicio");
-			
+			}
 		}
 		return $id["LAST_INSERT_ID()"];
 	}

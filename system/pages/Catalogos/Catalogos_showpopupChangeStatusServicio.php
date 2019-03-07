@@ -46,17 +46,17 @@
         </div>
         <div class="col-sm-6 col-md-6">
             <div class="form-group">
-                <label for="name">Fecha Inicio</label>
-                <input type="date" class="form-control" value="<?php echo $fecha_inicio;?>" placeholder="Fecha Inicio" name="fecha_inicio" id="fecha_inicio" >                                                                                             
+                <label for="name">Fecha Inicio <?php echo $fecha_estimada.'--'.date('Y-m-d Th:i:s',strtotime($fecha_inicio)) ?></label>
+                <input type="datetime-local" class="form-control" value="<?php echo date('Y-m-dTH:i:s',strtotime($fecha_inicio));?>" placeholder="Fecha Inicio" name="fecha_inicio" id="fecha_inicio" >                                                                                             
             </div> 
             <div class="form-group">
                 <label for="name">Fecha Estimada</label>
-                <input type="date" class="form-control" value="<?php echo $fecha_estimada;?>"  placeholder="Fecha Estimada" name="fecha_estimada" id="fecha_estimada" >                                                                                             
+                <input type="datetime-local" class="form-control" value="<?php echo $fecha_estimada;?>"  placeholder="Fecha Estimada" name="fecha_estimada" id="fecha_estimada" >                                                                                             
             </div> 
            
             <div class="form-group">
                 <label for="name">Fecha Termino</label>
-                <input type="date" class="form-control" value="<?php echo $fecha_fin;?>" placeholder="Fecha Termino" name="fecha_fin" id="fecha_fin" >                                                                                             
+                <input type="datetime-local" class="form-control" value="<?php echo $fecha_fin;?>" placeholder="Fecha Termino" name="fecha_fin" id="fecha_fin" >                                                                                             
             </div> 
                                            
         </div>

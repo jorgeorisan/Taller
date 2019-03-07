@@ -78,6 +78,14 @@ class Gastos extends AutoGastos {
 				echo "Falla en insert pedido refaccion";
 				exit;
 			}
+			if($id_gastostipo==7){//nomina
+				$objNomina = new Nomina();
+				$_requestnomina["available"] = 0;
+				if(!$objNomina->updateAll($detalle,$_requestnomina)){
+					echo "Falla en update de nomina available";
+					exit;
+				}	
+			}
 		}
 		return $id;
 	}

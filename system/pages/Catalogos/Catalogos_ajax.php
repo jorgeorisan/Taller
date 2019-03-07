@@ -348,8 +348,24 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 				if($res       = $u->getTable($id)){
 					$lineId   = rand(1000, 100000);
 					$detalles = htmlentities( $res["nombre"] );
-					if ( $res['detalles'] )  $detalles .="<input type='text' name='detalles[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
-					
+					if ( $res['codigo'] == 'nomina') {
+						$obj = new Nomina();
+						if($list=$obj->getAllAvailable()){
+							$detalles.='<br><select style="width:50%" lineid="'.$lineId.'"  class="select2 vincular-nomina" name="detalles[]" id="detalles'.$lineId.'">
+										<option value="" total="">Vincular Nomina</option>';
+								if (is_array($list) || is_object($list)){
+									foreach($list as $val){
+										$detalles.="<option total='".$val['total']."' value='".$val['id']."'>".htmlentities($val['id'].'||'.$val['nombre'])."</option>";
+									}
+								}
+							$detalles.='</select>';
+						}else{
+							$detalles .="<input type='text' name='detalles[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
+						}						
+						$detalles .="</select>";
+					}else{
+						$detalles .="<input type='text' name='detalles[]' style='width: 150px;'  class='form-control' placeholder='Detalles' >";
+					}
 					$values	   = $u->getPrecio($id);
 					$totalunit = ($values)  ? $values['total']/$values['cantidad']  : 0 ;
 					$total     = ($values)  ? $values['total']  : 0 ;
@@ -362,7 +378,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 								<td>" .  $detalles . "</td>";
 						
 						$data.="
-								<td><input type='number' style='width: 80px;' class='form-control totalesgastos' name='totalesregistros[]' value='".$total."' placeholder='00.00'></td>";
+								<td><input type='number' style='width: 80px;' id='totalesregistros".$lineId."' class='form-control totalesgastos' name='totalesregistros[]' value='".$total."' placeholder='00.00'></td>";
 						
 						$data.="
 								<td class='borrar-td'>

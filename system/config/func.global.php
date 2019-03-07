@@ -221,13 +221,13 @@ function fromArray($array, $table, $db, $method )
       $result = $db->query("SHOW COLUMNS FROM ".$table." WHERE Field = '".$rowKey."'");
       if ($result->num_rows === 1) {
         if($method=="add"){
-          if($row){
+          if($row || $row==0){
             $columns .= $rowKey.",";
             $values  .= "'".$db->real_escape_string($row)."',";
           }
         } 
         if($method=="update"){
-          if($row){
+          if($row || $row==0){
             $columns .= $rowKey."='".$db->real_escape_string($row)."',";
             $values  .= "";//no se ocupa
           }
@@ -270,7 +270,12 @@ function dias_transcurridos($fecha_i,$fecha_f)
     $dias 	= abs($dias); $dias = floor($dias);
     return $dias;
 }
-
+function validar_fecha($fecha){
+  // metodo para valdar una fecha sea valida
+  $valores = explode('-', $fecha);
+	
+	return count($valores);
+}
 function isPost()
 {
     if ('POST' == getMethod()) {

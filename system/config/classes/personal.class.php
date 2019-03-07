@@ -80,6 +80,75 @@ class Personal extends AutoPersonal {
 		}else{
 			return true;
 		}
+	}	
+	//metodo que sirve para obtener todos servicios realizados por persona
+	public function getAllServices($fechaini,$fechafin,$idpersonal)
+	{
+		$fechaini='2019-02-19';
+		$fechafin='2019-02-29';
+		if(	validar_fecha( $fechaini )!=3 || validar_fecha( $fechafin )!=3)
+			die("Error fecha invalida GRAL=".$fechaini); 
+
+		$sql = "
+			SELECT hvs.id_personal,vs.id_vehiculo,hvs.id_vehiculoservicio,hvs.status,hvs.created_date
+			,hvs.fecha_inicio,hvs.fecha_estimada,hvs.fecha_fin
+			,p.nombre,p.apellido_pat,p.apellido_mat,
+			vs.total,s.codigo,s.nombre,v.matricula,m.nombre marca,sm.nombre submarca,v.modelo
+			FROM systemmy_tallerhp.historial_vehiculoservicio hvs
+			LEFT JOIN personal p ON hvs.id_personal=p.id
+			LEFT JOIN vehiculo_servicio vs ON hvs.id_vehiculoservicio=vs.id
+			LEFT JOIN servicio s   ON vs.id_servicio=s.id
+			LEFT JOIN vehiculo v   ON vs.id_vehiculo=v.id
+			LEFT JOIN marca m      ON v.id_marca=m.id
+			LEFT JOIN sub_marca sm ON v.id_submarca=sm.id
+			WHERE  v.status='active' and
+			hvs.created_date>='".$fechaini."' and hvs.created_date<='".$fechafin."' and
+			hvs.id_personal=".$idpersonal." and
+			hvs.status in('Realizado') and 
+			v.id_taller=".$_SESSION['user_info']['id_taller'].";";
+		$res = $this->db->query($sql);
+		$set = array();
+		if(!$res){ die("Error getting result"); }
+		else{
+			while ($row = $res->fetch_assoc())
+				{ $set[] = $row; }
+		}
+		return $set;
+	}
+	//metodo que sirve para obtener todos servicios realizados Generales
+	public function getAllServicesGral($fechaini,$fechafin)
+	{
+		$fechaini='2019-02-19';
+		$fechafin='2019-02-29';
+		if(	validar_fecha( $fechaini )!=3 || validar_fecha( $fechafin )!=3)
+			die("Error fecha invalida GRAL=".$fechaini); 
+	
+		$sql = "
+			SELECT hvs.id_personal,vs.id_vehiculo,hvs.status,DATE_FORMAT(hvs.created_date, '%Y-%m-%d') fecha
+			,p.nombre,p.apellido_pat,p.apellido_mat, p.forma_pago,p.cantidad,
+			v.matricula,m.nombre marca,sm.nombre submarca,v.modelo,sum(vs.total) total, 
+			count(hvs.id_vehiculoservicio) cantidad_servicios
+			FROM systemmy_tallerhp.historial_vehiculoservicio hvs
+			LEFT JOIN personal p ON hvs.id_personal=p.id
+			LEFT JOIN vehiculo_servicio vs ON hvs.id_vehiculoservicio=vs.id
+			LEFT JOIN servicio s   ON vs.id_servicio=s.id
+			LEFT JOIN vehiculo v   ON vs.id_vehiculo=v.id
+			LEFT JOIN marca m      ON v.id_marca=m.id
+			LEFT JOIN sub_marca sm ON v.id_submarca=sm.id
+			WHERE  v.status='active' and
+			hvs.created_date>='".$fechaini."' and hvs.created_date<='".$fechafin."' and
+			hvs.status in('Realizado') and
+			v.id_taller=".$_SESSION['user_info']['id_taller']."
+			GROUP BY hvs.id_personal,vs.id_vehiculo,hvs.status  ,p.nombre,p.apellido_pat,p.apellido_mat, p.forma_pago,p.cantidad,v.matricula
+			,m.nombre ,sm.nombre ,v.modelo ;";
+		$res = $this->db->query($sql);
+		$set = array();
+		if(!$res){ die("Error getting result"); }
+		else{
+			while ($row = $res->fetch_assoc())
+				{ $set[] = $row; }
+		}
+		return $set;
 	}
 
 

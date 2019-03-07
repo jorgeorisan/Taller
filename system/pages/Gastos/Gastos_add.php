@@ -143,13 +143,8 @@ if(isPost()){
                                                         <div class="col-sm-3">
                                                             <button class="btn btn-primary btn-md" type="button" onclick=" getgastostipo();"> Agregar  </button>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <a data-toggle="modal" title="Nueva Refaccion"  class="btn btn-success" href="#myModal" onclick="showpopupgasto()" > <i class="fa fa-plus"></i></a>
-                                                        </div>
-                                                        <div class="col-sm-2">
-                                                            <a data-toggle="modal" title="Buscar Refaccion" class="btn btn-info" href="#myModal" onclick="showpopupgastobuscar()" > <i class="fa fa-search"></i></a>
-                                                        </div>
-                                                        <div class="col-sm-1"></div>
+                                                        
+                                                        <div class="col-sm-4 col-md-4"></div>
                                                         <div class="col-sm-2 text-right">
                                                             <h6><strong >Total=<span id="total-numgasto"></span></strong></h6>
                                                             <input type="hidden" name="total-globalgasto" id="total-globalgasto" value="0"/>
@@ -278,7 +273,10 @@ if(isPost()){
                         if(response){
                             $('#contgastos').append(response);  
                             $('#selectcantidad_gasto').val(1);
-                            calcTotalgasto();
+                            if ( id == 7 ) { // nomina
+                                $('.select2').select2();
+                                calcTotalgasto();
+                            }
                         }else{
                             notify('error',"Oopss error al agregar gasto"+response);
                         }
@@ -325,9 +323,18 @@ if(isPost()){
                     }     
             });
         }
+        
+        $("body").on('change', '.vincular-nomina', function (e) {
+            e.preventDefault();
+            var total = $('option:selected',this).attr("total");
+            var lineid = $(this).attr("lineid");
+            $('#totalesregistros'+lineid).val(total);
+            
+            $('#totalesregistros'+lineid).attr('value',total);
+            calcTotalgasto();
+        });
         $("body").on('click', '.borrar-gasto', function (e) {
             e.preventDefault();
-
             var id = $(this).attr("lineidgasto");
             $("[lineidgasto=" + id + "]").remove();
             calcTotalgasto();

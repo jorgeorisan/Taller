@@ -145,7 +145,7 @@ $menuGastos = array(
 	)
 );
 $menuNomina = array(
-	"gastos" => array(
+	"nomina" => array(
 		"title" => "Nomina",
 		"icon" => "fa-hand-holding-usd",
 		//"url" => APP_URL."/solicitudes/index",

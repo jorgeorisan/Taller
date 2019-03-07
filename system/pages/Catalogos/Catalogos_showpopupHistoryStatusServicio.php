@@ -48,9 +48,9 @@ $data = $obj->getAllArr($id);
                     <td><?php echo  $key."->".$statusant ?></td>
                     <td><?php echo $status ?></td>
                     <td><?php echo htmlentities($nomuser)?></td>
-                    <td><?php echo htmlentities($row['fecha_inicio'])?></td>
-                    <td><?php echo htmlentities($row['fecha_estimada'])?></td>
-                    <td><?php echo htmlentities($row['fecha_fin'])?></td>                    
+                    <td><?php echo htmlentities(date('Y-m-d H:i:s',strtotime($row['fecha_inicio'])))?></td>
+                    <td><?php echo htmlentities(date('Y-m-d H:i:s',strtotime($row['fecha_estimada']))); ?></td>
+                    <td><?php echo htmlentities(date('Y-m-d H:i:s',strtotime($row['fecha_fin'])))?></td>                    
                     <td><?php echo htmlentities($row['comentarios'])?></td>                   
                 </tr>
             <?php

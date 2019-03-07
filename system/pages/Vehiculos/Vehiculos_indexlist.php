@@ -69,6 +69,12 @@ $data = $obj->getAllArr();
 											<th class = "col-md-1" data-hide="">
 												<i class="fa fa-fw  fa-calendar-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Orden
 											</th>
+											<th class = "col-md-1" data-hide="">
+												<i class="fa fa-fw  fa-calendar-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Fecha Estimada
+											</th>
+											<th class = "col-md-1" data-hide="">
+												<i class="fa fa-fw  fa-exchange-alt  text-muted hidden-md hidden-sm hidden-xs"></i>Estatus
+											</th>
 											<th class = "col-md-1" data-hide="phone,tablet">
 												<i class="fa fa-fw  fa-car-garage  text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp;Taller
 											</th>
@@ -117,7 +123,10 @@ $data = $obj->getAllArr();
 												
 												<td><?php echo htmlentities($row['matricula'])?></td>
 												<td><?php echo htmlentities($nomcliente) ?></td>
-												<td><?php echo htmlentities($row['fecha_alta']) ?></td>
+												
+												<td><?php echo htmlentities(date('Y-m-d'),strtotime($row['fecha_alta'])) ?></td>
+												<td><?php echo htmlentities($row['fecha_promesa']) ?></td>
+												<td><?php echo htmlentities($row['status_vehiculo']) ?></td>
 												<td><?php echo htmlentities($nomtaller) ?></td>
 												
 												<td>
