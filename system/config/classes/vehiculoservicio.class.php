@@ -64,7 +64,12 @@ class VehiculoServicio extends AutoVehiculoServicio {
 			$_request['detalles'] 	 = $detalle;
 			$_request['total']       = $total;
 			$this->Addonebyone($_request);
-			if($idHS>0){}else{ die("Error al insertar vehiculo servicio"); }
+		}
+		$vehiculos = new Vehiculo();
+		$vehiculo = $vehiculos->getTable($id);
+		if($vehiculo['status_vehiculo']=='Terminado y firmado' || $vehiculo['status_vehiculo']=='Terminado sin firma'){
+			$_requestvehiculo['status_vehiculo'] = 'Pendiente';
+			$vehiculos->updateAll($id,$_requestvehiculo);
 		}
 		echo $id;
 	}

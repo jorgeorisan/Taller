@@ -129,8 +129,11 @@ updated token / token experation
 		}
 
 
-
-
+		// Logs
+		public function error_log($error) {
+			file_put_contents( SYSTEM_DIR . "/internal/log/debug.log",$error);
+			return $error;
+		}
 
 
 	}

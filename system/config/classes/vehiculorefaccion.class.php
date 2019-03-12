@@ -70,6 +70,14 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 			$idHR = $this->Addonebyone($_request);
 			if($idHR>0){}else{ die("Error al insertar vehiculo refaccion"); }
 		}
+		$vehiculos = new Vehiculo();
+		$vehiculo = $vehiculos->getTable($id);
+		if ( $vehiculo['status_vehiculo'] == 'Terminado y firmado' || $vehiculo['status_vehiculo'] == 'Terminado sin firma' ) {
+			$_requestvehiculo['status_vehiculo'] = 'Pendiente';
+			$vehiculos->updateAll($id,$_requestvehiculo);
+			$a=new Auth();
+			echo $a->error_log('Error en vehiculo estatus incorrecto'.$id);
+		}
 		echo $id;
 	}
 	public function Addonebyone($_request){
