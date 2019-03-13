@@ -401,7 +401,21 @@ if($hoy>=1 && $hoy<15){
             calcTotalnomina();
         });
         $(".totalespersonal").blur();
-       
+        
+        $('body').on('click', '.btn-historyservices', function(){
+            //history servicios personal
+            var id        = $(this).attr("idper");
+            var fechaini  = $('#fecha_inicial').val();
+            var fechafin  = $('#fecha_final').val();
+            $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Historial Servicios</span>');
+            $.get(config.base+"/Personal/ajax/?action=get&object=showpopupHistoryServices&id="+ id + '&fechaini=' + fechaini + '&fechafin=' +fechafin , null, function (response) {
+				if ( response ){
+					$("#contentpopup").html(response);
+				}else{
+					return notify('error', 'Error al obtener los datos del Formulario');
+				}     
+            });
+        });
       
         /* DO NOT REMOVE : GLOBAL FUNCTIONS!
          * pageSetUp() is needed whenever you load a page.

@@ -7,9 +7,12 @@ class GastosRegistros extends AutoGastosRegistros {
 
 	
 		//metodo que sirve para obtener todos los datos de la tabla
-	public function getAllArr()
+	public function getAllArr($id)
 	{
-		$sql = "SELECT * FROM gastos_registros where status='active';";
+		if(! intval( $id )){
+			return false;
+		}
+		$sql = "SELECT * FROM gastos_registros where id_gastos=$id and status='active';";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }

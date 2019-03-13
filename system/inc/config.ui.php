@@ -155,6 +155,16 @@ $menuNomina = array(
 		)
 	)
 );
+$menuReportes = array(
+	"reportes" => array(
+		"title" => "Reportes",
+		"icon" => "fa-chart-line",
+		//"url" => APP_URL."/solicitudes/index",
+		"sub" => array(
+			"gastos"     => array( "title" => "Gastos",      "url" => APP_URL."/Reportes/gastos" )
+		)
+	)
+);
 
 
 $extras = array(
@@ -220,6 +230,11 @@ if(isset($_SESSION['user_id'])){
 	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Nomina');
 	if ( $datapermuser ) { 
 	  $page_nav = array_merge($page_nav, $menuNomina);
+	}
+
+	$datapermuser  = $objperm->getsectionsuser($_SESSION['user_id'],'Reportes');
+	if ( $datapermuser ) { 
+	  $page_nav = array_merge($page_nav, $menuReportes);
 	}
 	//default
 	$page_nav = array_merge($page_nav, $extras);

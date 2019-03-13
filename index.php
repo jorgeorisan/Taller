@@ -139,6 +139,11 @@ Routing section
         if ($request['page']==='edit')     { $page = "Nomina_edit.php";     }
         if ($request['page']==='view')     { $page = "Nomina_view.php";     }
       }
+      if ($request['section']==='Reportes'){
+        $page = "Reportes_index.php";
+        $dir  = "Reportes";//si esta en carpeta
+        if ($request['page']==='add')      { $page = "Reportes_gastos.php";      }
+      }
       //delete pages
       if(isset($request['params']['id'])){
         if( $id = $request['params']['id'] ) {

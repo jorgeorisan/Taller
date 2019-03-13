@@ -116,6 +116,24 @@ class Gastos extends AutoGastos {
 			return true;
 		}
 	}
-
+	public function getReportGastos($fechaini,$fechafin)
+	{
+		if ( validar_fecha($fechaini) != 3 || validar_fecha($fechafin) != 3){
+			return false;
+		}
+		$sql = "SELECT g.id,g.nombre,g.total,u.nombre,u.apellido_pat,u.apellido_mat,g.created_date,gt.nombre gastostipo,gt.tipo
+			FROM gastos g 
+			left join gastos_tipo gt on gt.id=g.id_gastostipo  
+			left join user u on u.id=g.id_user
+			where g.status='active' and fecha_alta>='".$fechaini."' and fecha_alta<='".$fechafin."' ";
+		$res = $this->db->query($sql);
+		$set = array();
+		if(!$res){ die("Error getting result"); }
+		else{
+			while ($row = $res->fetch_assoc())
+				{ $set[] = $row; }
+		}
+		return $set;
+	}
 
 }

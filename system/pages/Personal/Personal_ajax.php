@@ -72,6 +72,17 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 				echo 0;
 			}
 			break;
+
+		case 'showpopupHistoryServices':
+			$page      = '';
+			$id        = $_GET["id"];
+			$fechaini  = $_GET["fechaini"];
+			$fechafin  = $_GET["fechafin"];
+		    $html = require_once(SYSTEM_DIR.'/pages/Personal/Personal_showpopupHistoryServices.php');
+            if( $html )	echo $data=$html; 
+                else    echo 0;
+		
+			break;
 		default:
 			# code...
 			break;

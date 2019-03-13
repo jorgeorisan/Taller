@@ -93,7 +93,8 @@ class Personal extends AutoPersonal {
 			SELECT hvs.id_personal,vs.id_vehiculo,hvs.id_vehiculoservicio,hvs.status,hvs.created_date
 			,hvs.fecha_inicio,hvs.fecha_estimada,hvs.fecha_fin
 			,p.nombre,p.apellido_pat,p.apellido_mat,
-			vs.total,s.codigo,s.nombre,v.matricula,m.nombre marca,sm.nombre submarca,v.modelo
+			vs.total,s.codigo,s.nombre servicio,v.matricula,m.nombre marca,sm.nombre submarca,v.modelo,
+			p.cantidad,p.forma_pago
 			FROM systemmy_tallerhp.historial_vehiculoservicio hvs
 			LEFT JOIN personal p ON hvs.id_personal=p.id
 			LEFT JOIN vehiculo_servicio vs ON hvs.id_vehiculoservicio=vs.id

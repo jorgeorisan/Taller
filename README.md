@@ -14,3 +14,7 @@ chown uweb:www-data expedienteseliminados
 chown uweb:www-data expedientesterminados
 chown uweb:www-data refaccion
 ```
+
+-- 
+concepto de pago de nomina en el catalogo de conceptos
+id=7, codigo=nomina,nombre=Pago de nomina
