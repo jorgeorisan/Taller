@@ -151,7 +151,14 @@ function getStatusRefaccion(){
   $arrayStatus["Perdida-daño"] = "Perdida-daño";
   return $arrayStatus;
 }
+function getStatusAutos(){
+  $arrayStatus = array();
+  $arrayStatus["Pendiente"]           = "Pendiente";
+  $arrayStatus["Terminado sin firma"] = "Terminado sin firma";
+  $arrayStatus["Terminado y firmado"] = "Terminado y firmado";
 
+  return $arrayStatus;
+}
 
 
 

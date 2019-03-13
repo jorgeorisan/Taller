@@ -71,6 +71,7 @@ if($data["id_cliente"]){
 $carpetaexpediente = $obj->getCarpetaexpediente($id);
 $fechaalta  = ($data['fecha_alta'])    ? date('Y-m-d',strtotime($data['fecha_alta']))    : "";
 $fechaprom  = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_promesa'])) : "";
+$fechater   = ($data['fecha_termino']) ? date('Y-m-d',strtotime($data['fecha_termino'])) : "";
 $carpetaimg = ASSETS_URL.'/'.$carpetaexpediente.'/auto'.DIRECTORY_SEPARATOR.'auto_'.$id.DIRECTORY_SEPARATOR.'images';
 
 $objimg       = new ImagenesVehiculo();
@@ -256,7 +257,7 @@ if(isPost()){
 												<?php 
 												if($data['status_vehiculo']=='Terminado sin firma'){
 													?>
-													<a href="#" id='btn-firmado' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmado</a>
+													<a href="#" id='btn-firmado' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmar</a>
 													<?php
 												}?>
 												</h5>
@@ -268,6 +269,13 @@ if(isPost()){
 										<ul>
 											<li><a href="javascript:void(0);">Fecha de Alta<span><?php echo $fechaalta?></span></a></li>
 											<li><a href="javascript:void(0);">Fecha Promesa<span><?php echo $fechaprom ?></span></a></li>
+											<?php
+											if($data['status_vehiculo']!='Pendiente'){
+												?>
+												<li><a href="javascript:void(0);">Fecha Termino<span><?php echo $fechater ?></span></a></li>
+												<?php
+											}
+											?>
 										</ul>
 										
 									</div>

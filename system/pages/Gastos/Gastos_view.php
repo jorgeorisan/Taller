@@ -193,9 +193,14 @@ $datagastostipo = $objgastostipo->getTable($data['id_gastostipo']);
                                                                             $nomina = new Nomina();
                                                                             $nominarow = $nomina->getTable($row['detalles']);
                                                                             $folionomina = $nominarow['nombre'];
+                                                                            ?>
+                                                                            <a class="" href="<?php echo make_url("Nomina","view",array('id'=>$row['detalles'])); ?>"><?php echo htmlentities( $folionomina ); ?></a>
+                                                                            <?php
+                                                                        }else{
+                                                                            echo htmlentities($row['detalles']);
                                                                         }
                                                                         ?>
-                                                                        <a class="" href="<?php echo make_url("Nomina","view",array('id'=>$row['detalles'])); ?>"><?php echo htmlentities( $folionomina ); ?></a>
+                                                                        
                                                                     <?php  
                                                                     }else{
                                                                         echo htmlentities($row['detalles']);

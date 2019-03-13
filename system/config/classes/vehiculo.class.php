@@ -7,9 +7,19 @@ class Vehiculo extends AutoVehiculo {
 
 	
 	//metodo que sirve para obtener todos los datos de la tabla
-	public function getAllArr()
+	public function getAllArr($status_vehiculo=false)
 	{
-		$sql = "SELECT * FROM vehiculo where status!='deleted';";
+	
+		switch ($status_vehiculo) {
+			case 'Pendiente':
+			case 'Terminado sin firma':
+			case 'Terminado y firmado':
+				$sql = "SELECT * FROM vehiculo where status!='deleted' and status_vehiculo in ('".$status_vehiculo."');";
+				break;
+			default:
+				$sql = "SELECT * FROM vehiculo where status!='deleted';";
+				break;
+		}
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }
@@ -177,7 +187,8 @@ class Vehiculo extends AutoVehiculo {
 			$cont++;
 		} 
 		if($cont==$contterminado){
-			$_request['status_vehiculo']   = 'Terminado sin firma';
+			$_request['status_vehiculo'] = 'Terminado sin firma';
+			$_request['fecha_termino']   = date('Y-m-d H:i:s');
 			if($statusvehiculo){
 				$_request['status_vehiculo'] = 'Terminado y firmado';
 				$_request['fecha_firma']     = date('Y-m-d H:i:s');

@@ -15,14 +15,13 @@
                     if (is_array($listref)){
                         foreach($listref as $key => $valref){
                             $selected = ($key == $status) ? " selected ": "";
-                            $disabled = '';
                             if($key == 'Garantia' && $status != 'Realizado' )
                                 continue;
 
                             if( $status == 'Realizado' && ($key != 'Garantia' || $key == 'Realizado'))
                                 continue;
 
-                            echo "<option $selected value='".$key."'>".htmlentities($valref).$disabled."</option>";
+                            echo "<option $selected value='".$key."'>".htmlentities($valref)."</option>";
                         }
                     }
                     ?>

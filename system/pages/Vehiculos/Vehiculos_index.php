@@ -19,8 +19,11 @@ include(SYSTEM_DIR . "/inc/nav.php");
 
 $obj = new Vehiculo();
 $data = $obj->getAllArr();
-//print_r($users);
 
+if(isPost()){
+	$status_vehiculo = $_POST['status_vehiculo']; 
+	$data = $obj->getAllArr($status_vehiculo);
+}
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
@@ -39,6 +42,27 @@ $data = $obj->getAllArr();
                 <div class="widget-body" style='padding-left: 15px;'>
 					<a class="btn btn-success" href="<?php echo make_url("Vehiculos","add")?>" ><i class="fas fa-wrench"></i>&nbsp; Nueva Orden</a>
 					<a class="btn btn-info" href="<?php echo make_url("Vehiculos","indexlist")?>" ><i class="fas fa-list-ol"></i>&nbsp;Modo Lista</a>
+					<div class="row">
+						<div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<form id="main-form" class="" role="form" method='post' action="<?php echo make_url("Vehiculos","index");?>" onsubmit="return checkSubmit();" enctype="multipart/form-data">     
+								<div class="form-group"><br>
+									<select style="width:100%" class="select2" name='status_vehiculo' id="status_vehiculo">
+										<option value="">Selecciona Status Auto </option>
+										<?php 
+										$list= getStatusAutos();
+										if (is_array($list)){
+											foreach($list as $key => $val){
+												$selected = ($key == $status_vehiculo) ? " selected ": "";
+												
+												echo "<option $selected value='".$key."'>".htmlentities($val)."</option>";
+											}
+										}
+										?>
+									</select>
+								</div>
+							</form>
+						</div>
+					</div>
                 </div>
             </div>		 
 			<div class="row">&nbsp;</div>
@@ -87,6 +111,7 @@ $data = $obj->getAllArr();
 									}
 									$fechaalta = ($row['fecha_alta'])    ? date('Y-m-d',strtotime($row['fecha_alta'])) : "";
 									$fechaprom = ($row['fecha_promesa']) ? date('Y-m-d',strtotime($row['fecha_promesa'])) : "";
+									$fechater  = ($row['fecha_termino']) ? date('Y-m-d',strtotime($row['fecha_termino'])) : "";
 								    $carpetaimg = ASSETS_URL.'/'.$carpetaexpediente.'/auto'.DIRECTORY_SEPARATOR.'auto_'.$row["id"].DIRECTORY_SEPARATOR.'images';
                                     $objimg = new ImagenesVehiculo();
                                     $dataimagenes = $objimg->getAllArr($row["id"]);
@@ -110,9 +135,14 @@ $data = $obj->getAllArr();
 															<div class="product-image"> 
 																<a class="" href="<?php echo make_url("Vehiculos","view",array('id'=>$row['id'])); ?>"> 
 																	<img src="<?php echo $link; ?>" alt="194x228" class="img-responsive" style='max-width:120px'> 
-																	<span title='<?php echo $diastranscurridos; ?> dias ' class="tag2 <?php if($diastranscurridos<10) echo  'sale'; else echo  'hot' ;?>">
+																	<?php 
+																	if($row['status_vehiculo']=='Pendiente'){ ?>
+																		<span title='<?php echo $diastranscurridos; ?> dias ' class="tag2 <?php if($diastranscurridos<10) echo  'sale'; else echo  'hot' ;?>">
 																		<?php if($diastranscurridos<10) echo  'NEW'; else echo  'OLD' ;?>
-																	</span> 
+																		</span>
+																	<?php
+																	}?>
+																	 
 																</a>
 																<div class="description">
 																	<small><strong>Cliente:</strong> <?php echo $nomcliente ?></small>
@@ -129,6 +159,11 @@ $data = $obj->getAllArr();
 																
 																<small><strong>Fecha Alta:</strong> <?php echo htmlentities($fechaalta) ?></small>
 																<small><strong>Fecha Prom:</strong> <?php echo htmlentities($fechaprom) ?></small>
+																<?php 
+																if($row['status_vehiculo']!='Pendiente'){ ?>
+																	<small><strong>Fecha Term:</strong> <?php echo htmlentities($fechater) ?></small>
+																<?php
+																}?>
 																<?php
 																if ($row["id_aseguradora"]>1) { ?>
 																	<small><strong>Aseguradora:</strong> <?php echo htmlentities($nomaseguradora) ?></small> 
@@ -154,7 +189,7 @@ $data = $obj->getAllArr();
 																<?php 
 																if($row['status_vehiculo']=='Terminado sin firma'){
 																	?>
-																	<a href="#" id='btn-firmado<?php $key ?>' onclick='ActualizarAuto(<?php echo $row["id"]; ?>)' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmado</a>
+																	<a href="#" id='btn-firmado<?php $key ?>' onclick='ActualizarAuto(<?php echo $row["id"]; ?>)' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmar</a>
 																	<?php
 																}?>
 																</h5>
@@ -231,25 +266,27 @@ $data = $obj->getAllArr();
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <script>
-
+	function ActualizarAuto(id){
+		var id_vehiculo    = id;
+		var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
+		var data = "id_vehiculo=" + id_vehiculo ;
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: data, 
+			success: function(response){
+				if(response){
+					location.reload();
+				}else{
+					notify('error',"Oopss error al cambiar estatus: "+response);
+				}
+			}
+			});
+		return false; 
+	}
 	$(document).ready(function() {
-		function ActualizarAuto(id){
-			var id_vehiculo    = id;
-            var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
-            var data = "id_vehiculo=" + id_vehiculo ;
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: data, // Adjuntar los campos del formulario enviado.
-                success: function(response){
-					if(response){
-						location.reload();
-                    }else{
-                        notify('error',"Oopss error al cambiar estatus: "+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
+		$('body').on('change', '#status_vehiculo', function(){
+			$("#main-form").submit(); 
         });
 		var responsiveHelper_dt_basic = undefined;
 		var responsiveHelper_datatable_fixed_column = undefined;
