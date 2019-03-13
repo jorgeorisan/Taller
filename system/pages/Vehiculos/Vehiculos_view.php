@@ -405,7 +405,7 @@ if(isPost()){
 																</button>
 																<ul class="dropdown-menu">
 																	<li>
-																		<?php if (!$cancelada && $row['status'] != 'Realizado'){ ?>
+																		<?php if ( ! $cancelada ){ ?>
 																			<a data-toggle="modal" class="btn-statusservice " title="Cambiar status" href="#myModal"  idserv='<?php echo $row['id']; ?>' statusant='<?php echo $row['status']; ?>' >
 																			<i class="fa fa-exchange-alt"></i>&nbsp;Cambiar status</a>
 																		<?php } ?>

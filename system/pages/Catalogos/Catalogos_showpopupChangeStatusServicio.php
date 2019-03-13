@@ -8,14 +8,21 @@
             <div class="form-group">
                 <label for="name">Cambiar Estatus</label>
                 <select style="width:100%" class="select2" name="status" id="status">
-                    <option value="">Selecciona Status</option>
+                    <option value="">Selecciona Status </option>
                     <?php 
                     
                     $listref= getStatusServicio();
                     if (is_array($listref)){
                         foreach($listref as $key => $valref){
                             $selected = ($key == $status) ? " selected ": "";
-                            echo "<option  $selected value='".$key."'>".htmlentities($valref)."</option>";
+                            $disabled = '';
+                            if($key == 'Garantia' && $status != 'Realizado' )
+                                continue;
+
+                            if( $status == 'Realizado' && ($key != 'Garantia' || $key == 'Realizado'))
+                                continue;
+
+                            echo "<option $selected value='".$key."'>".htmlentities($valref).$disabled."</option>";
                         }
                     }
                     ?>
@@ -46,17 +53,33 @@
         </div>
         <div class="col-sm-6 col-md-6">
             <div class="form-group">
-                <label for="name">Fecha Inicio <?php echo $fecha_estimada.'--'.date('Y-m-d Th:i:s',strtotime($fecha_inicio)) ?></label>
-                <input type="datetime-local" class="form-control" value="<?php echo date('Y-m-dTH:i:s',strtotime($fecha_inicio));?>" placeholder="Fecha Inicio" name="fecha_inicio" id="fecha_inicio" >                                                                                             
+                <label for="name">Fecha Inicio </label>
+                <div class="input-group date form_datetime col-md-12" data-date="<?php echo $fecha_inicio ;?>"  data-link-field="fecha_inicio">
+                    <input class="form-control" size="16" type="text" value="<?php echo $fecha_inicio;?>" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" name="fecha_inicio" id="fecha_inicio" value="<?php echo $fecha_inicio;?>" />
             </div> 
+            
             <div class="form-group">
                 <label for="name">Fecha Estimada</label>
-                <input type="datetime-local" class="form-control" value="<?php echo $fecha_estimada;?>"  placeholder="Fecha Estimada" name="fecha_estimada" id="fecha_estimada" >                                                                                             
+                <div class="input-group date form_datetime col-md-12" data-date="<?php echo $fecha_estimada;?>"  data-link-field="fecha_estimada">
+                    <input class="form-control" size="16" type="text" value="<?php echo $fecha_estimada;?>" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" name="fecha_estimada" id="fecha_estimada" value="<?php echo $fecha_estimada;?>" />
             </div> 
            
             <div class="form-group">
                 <label for="name">Fecha Termino</label>
-                <input type="datetime-local" class="form-control" value="<?php echo $fecha_fin;?>" placeholder="Fecha Termino" name="fecha_fin" id="fecha_fin" >                                                                                             
+                <div class="input-group date form_datetime col-md-12" data-date="<?php echo $fecha_fin;?>"  data-link-field="fecha_fin">
+                    <input class="form-control" size="16" type="text" value="<?php echo $fecha_fin;?>" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" name="fecha_fin" id="fecha_fin" value="<?php echo $fecha_fin;?>" />
             </div> 
                                            
         </div>
@@ -78,7 +101,6 @@
   </form>
              
 </section>
-
 <script>
    
     $(document).ready(function() { 
@@ -94,6 +116,17 @@
             noneSelectedText: "Seleccionar",
             selectedList: 1
         });
-        
+        $('.form_datetime').datetimepicker({
+            format: "yyyy-mm-dd hh:ii",
+            language:  'es',
+            weekStart: 0,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 0,
+            minuteStep :30
+        });
     });
 </script>

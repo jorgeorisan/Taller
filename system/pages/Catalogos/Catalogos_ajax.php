@@ -227,9 +227,9 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			$u  = new HistorialVehiculoservicio();
 			if($res = $u->getLastStatus($id)){
 				$personal       = $res['id_personal'];
-				$fecha_inicio   = $res['fecha_inicio'];
-				$fecha_estimada = $res['fecha_estimada'];
-				$fecha_fin      = $res['fecha_fin'];
+				$fecha_inicio   = ( isset($res['fecha_inicio'] )  && $res['fecha_inicio'] != '' )   ? date('Y-m-d H:i',strtotime($res['fecha_inicio'])) : '';
+				$fecha_estimada = ( isset($res['fecha_estimada']) && $res['fecha_estimada'] != '' ) ? date('Y-m-d H:i',strtotime($res['fecha_estimada'])) : '';
+				$fecha_fin      = ( isset($res['fecha_fin'] )     && $res['fecha_fin'] != '' )      ? date('Y-m-d H:i',strtotime($res['fecha_fin'])) : '';
 				$status         = $res['status'];
 				
 			}else{
@@ -252,10 +252,10 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			$u  = new HistorialVehiculorefaccion();
 			if($res = $u->getLastStatus($id)){
 				$personal       = $res['id_personal'];
-				$fecha_inicio   = $res['fecha_inicio'];
-				$fecha_estimada = $res['fecha_estimada'];
+				$fecha_inicio   = ( isset($res['fecha_inicio'] )  && $res['fecha_inicio'] != '' )   ? date('Y-m-d H:i',strtotime($res['fecha_inicio'])) : '';
+				$fecha_estimada = ( isset($res['fecha_estimada']) && $res['fecha_estimada'] != '' ) ? date('Y-m-d H:i',strtotime($res['fecha_estimada'])) : '';
+				$fecha_fin      = ( isset($res['fecha_fin'] )     && $res['fecha_fin'] != '' )      ? date('Y-m-d H:i',strtotime($res['fecha_fin'])) : '';
 				$almacen        = $res['id_almacen'];
-				$fecha_fin      = $res['fecha_fin'];
 				$status         = $res['status'];
 				
 			}else{

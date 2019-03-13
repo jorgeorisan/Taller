@@ -14,6 +14,7 @@
 
 		<!-- Basic Styles -->
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo ASSETS_URL; ?>/css/fontawesome-pro/css/all.css">
 
@@ -88,13 +89,14 @@
 
 		<!-- notify alert-->
 		<script src="<?php echo ASSETS_URL; ?>/js/bootstrap-notify/bootstrap-notify.min.js"></script>
-		  <!--para lo del sweetalert eliminar y mensajitos -->
-	    <script src="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.min.js"></script>
-	    <link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.css">
+		<!--para lo del sweetalert eliminar y mensajitos -->
+		<script src="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/sweetalert-master/lib/sweet-alert.css">
 		<!-- estilos globales del proyecto -->
 		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_URL; ?>/css/main.css">
+		<!-- estilos globales del proyecto -->
 
-
+		
 	</head>
 	<body <?php echo implode(' ', array_map(function($prop, $value) {
 			return $prop.'="'.$value.'"';

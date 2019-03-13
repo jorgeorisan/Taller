@@ -68,13 +68,13 @@ if (getenv('MYSQL_SOCKET') != null){
 	if($_SERVER["SERVER_NAME"]){
        // echo "<strong>$url_actual</strong>";
 	    if($_SERVER["SERVER_NAME"]!='localhost'){
-	    	defined("DB_USER") ? null : define("DB_USER", "systemmy_taller");
-	        defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "1L7(IvbxCTGI");
-	        defined("DB_NAME") ? null : define("DB_NAME", "systemmy_tallerhp");
+				defined("DB_USER") ? null : define("DB_USER", "systemmy_taller");
+				defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "1L7(IvbxCTGI");
+				defined("DB_NAME") ? null : define("DB_NAME", "systemmy_tallerhp");
 	    }else{
 	    	defined("DB_USER") ? null : define("DB_USER", "root");
-			defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "");
-			defined("DB_NAME") ? null : define("DB_NAME", "systemmy_tallerhp");
+				defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "");
+				defined("DB_NAME") ? null : define("DB_NAME", "systemmy_tallerhp");
 	    }
 	}
 	defined("DB_PORT") ? null : define("DB_PORT", null);

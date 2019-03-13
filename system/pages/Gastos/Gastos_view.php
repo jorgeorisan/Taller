@@ -186,7 +186,22 @@ $datagastostipo = $objgastostipo->getTable($data['id_gastostipo']);
                                                             <tr class="<?php echo $class; ?>">
                                                                 <td><?php echo htmlentities($row['cantidad']); ?></td>
                                                                 <td><?php echo htmlentities($nombre); ?></td>
-                                                                <td><?php echo htmlentities($row['detalles']); ?></td>
+                                                                <td><?php 
+                                                                    if ( $nombre == 'Pago de nomina'){
+                                                                        $folionomina = '';
+                                                                        if( $row['detalles'] > 0 ){
+                                                                            $nomina = new Nomina();
+                                                                            $nominarow = $nomina->getTable($row['detalles']);
+                                                                            $folionomina = $nominarow['nombre'];
+                                                                        }
+                                                                        ?>
+                                                                        <a class="" href="<?php echo make_url("Nomina","view",array('id'=>$row['detalles'])); ?>"><?php echo htmlentities( $folionomina ); ?></a>
+                                                                    <?php  
+                                                                    }else{
+                                                                        echo htmlentities($row['detalles']);
+                                                                    }
+                                                                    ?>
+                                                                </td>
                                                                 <td><?php echo htmlentities($row['total']); ?></td>
                                                             </tr>
 

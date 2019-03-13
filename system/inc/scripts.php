@@ -79,6 +79,11 @@
 		<!-- Toastr: JQuery based toasts -->
 		<script src="<?php echo ASSETS_URL; ?>/js/toastr/toastr.js"></script>
 
+		<!-- DATETIMEPICKER-->
+
+		<script src="<?php echo ASSETS_URL; ?>/js/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+		<script src="<?php echo ASSETS_URL; ?>/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.fr.js"></script>
+
 		<script type="text/javascript">
 			// DO NOT REMOVE : GLOBAL FUNCTIONS!
 			function redirectAfterToast(url)

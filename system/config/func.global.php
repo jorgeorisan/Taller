@@ -130,7 +130,7 @@ function catModelo()
 }
 function getStatusServicio(){
   $arrayStatus = array();
-  //$arrayStatus["active"]     = "Pendiente";
+  $arrayStatus["active"]     = "Pendiente";
   $arrayStatus["En Proceso"] = "En Proceso";
   $arrayStatus["Realizado"]  = "Realizado";
   $arrayStatus["Stand-By"]   = "Stand-By";
