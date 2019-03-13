@@ -191,6 +191,11 @@ class Vehiculo extends AutoVehiculo {
 		$from  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
 		$to    = EXPEDIENTE_DIRTER .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
 
+		if(! file_exists ($from) ){
+			$a=new Auth();
+			$a->error_log('Error no existe la ruta del archivo'.$from);
+			echo die('Error al mover la carpeta');
+		}
 		//Abro el directorio que voy a leer
 		$dir = opendir($from);
 
@@ -210,6 +215,11 @@ class Vehiculo extends AutoVehiculo {
 		$from  = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
 		$to    = EXPEDIENTE_DIRELIMINADO .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
 
+		if(! file_exists ($from) ){
+			$a=new Auth();
+			$a->error_log('Error no existe la ruta del archivo'.$from);
+			echo die('Error al mover la carpeta');
+		}
 		//Abro el directorio que voy a leer
 		$dir = opendir($from);
 
@@ -220,6 +230,31 @@ class Vehiculo extends AutoVehiculo {
 				//Copio el archivo manteniendo el mismo nombre en la nueva carpeta
 				if(exec('move "'.$from.'" "'.$to.'"')){
 					echo 1;
+				}
+				
+			}
+		}
+	}
+	function MoverVehiculoPendiente($id){
+		$from  = EXPEDIENTE_DIRTER .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+		$to    = EXPEDIENTE_DIR .DIRECTORY_SEPARATOR. 'auto'.DIRECTORY_SEPARATOR.'auto_'.$id;
+
+		//Abro el directorio que voy a leer
+		if(! file_exists ($from) ){
+			$a=new Auth();
+			$a->error_log('Error no existe la ruta del archivo'.$from);
+			echo die('Error al mover la carpeta');
+		}
+		$dir = opendir($from);
+		//Recorro el directorio para leer los archivos que tiene
+		while(($file = readdir($dir)) !== false){
+			//Leo todos los archivos excepto . y ..
+			if(strpos($file, '.') !== 0){
+				//Copio el archivo manteniendo el mismo nombre en la nueva carpeta
+				if(exec('move "'.$from.'" "'.$to.'"')){
+					echo 1;
+				}else{
+					echo die('Error al mover la carpeta');
 				}
 				
 			}

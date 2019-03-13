@@ -243,10 +243,11 @@ if(isPost()){
 												echo "<i class='fa fa-star fa-2x text-muted'></i>";
 											}
 										}
+										$classServ = ($porcent==100)? "display:none": "";
 										
 										?>
 										
-										<span class="fa fa-2x"><h5><?php echo  $porcent; ?> %</h5></span>	
+										<span class="fa fa-2x"><h5><?php echo  number_format($porcent,0); ?> %</h5></span>	
 										
 										<a href="javascript:void(0);">Completed</a>
 										<div>
@@ -345,7 +346,7 @@ if(isPost()){
 											<div class="col-sm-12 col-md-12 col-lg-12" style="padding:5px;text-align:right">
 												<div class="btn-group">
 													<a class="btn btn-success" target="_blank" href="<?php echo make_url("Vehiculos","print",array('id'=>$id,'page'=>'cotizaciontrabajo'))?>" style="margin-left: 10px;" ><i class="fa fa-print" ></i>&nbsp;Imprimir Orden de Trabajo</a>&nbsp;
-													<a data-toggle="modal" class="btn btn-info" title="Agregar Servicio" id="btnaddservice" href="#myModal" style="margin-left: 10px;" ><i class="fa fa-plus"></i>&nbsp;Servicio</a>
+													<a data-toggle="modal" class="btn btn-info " title="Agregar Servicio" id="btnaddservice" href="#myModal" style="margin-left: 10px;<?php echo $classServ; ?>" ><i class="fa fa-plus"></i>&nbsp;Servicio</a>
 												</div>
 											</div>
 											<table class='table' style="height: 100%;">
@@ -384,11 +385,11 @@ if(isPost()){
 													$datelast =  date("Y-m-d",strtotime($row['created_date']));
 													if($reslast = $hvs->getLastStatus($row['id'])){
 														if($reslast['fecha_fin'])
-															$datelast = date("Y-m-d",strtotime($reslast['fecha_fin']));
+															$datelast = date("Y-m-d H:i",strtotime($reslast['fecha_fin']));
 														elseif($reslast['fecha_estimada'])
-															$datelast = date("Y-m-d",strtotime($reslast['fecha_estimada']));
+															$datelast = date("Y-m-d H:i",strtotime($reslast['fecha_estimada']));
 														elseif(isset($reslast['fecha_inicial']))
-															$datelast = date("Y-m-d",strtotime($reslast['fecha_inicial']));
+															$datelast = date("Y-m-d H:i",strtotime($reslast['fecha_inicial']));
 													}
 													?>
 													<tr style="height: 30px; padding-top: 5px;" >

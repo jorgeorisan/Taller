@@ -113,16 +113,13 @@ updated token / token experation
 			$stmt->mbind_param( 's', $e );
 			$stmt->execute( $stmt );	
 			
-  			 $stmt->bind_result($ti, $tp);
-
-
-			
-		    /* fetch values */
-		    if ($stmt->fetch()) {
+  		$stmt->bind_result($ti, $tp);
+			/* fetch values */
+			if ($stmt->fetch()) {
 				if ( password_verify($p, $tp) ){ 
 					$id = $ti;
 				}
-		    }
+			}
 			// Terminate
 			$stmt->close();
 			return $id;
@@ -131,7 +128,7 @@ updated token / token experation
 
 		// Logs
 		public function error_log($error) {
-			file_put_contents( SYSTEM_DIR . "/internal/log/debug.log",$error);
+			file_put_contents( SYSTEM_DIR . "/internal/log/debug.log",date('Y-m-d_H:i:s').$error.PHP_EOL,FILE_APPEND | LOCK_EX);
 			return $error;
 		}
 

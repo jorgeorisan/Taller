@@ -75,8 +75,9 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 		if ( $vehiculo['status_vehiculo'] == 'Terminado y firmado' || $vehiculo['status_vehiculo'] == 'Terminado sin firma' ) {
 			$_requestvehiculo['status_vehiculo'] = 'Pendiente';
 			$vehiculos->updateAll($id,$_requestvehiculo);
+			$vehiculos->MoverVehiculoPendiente($id);
 			$a=new Auth();
-			echo $a->error_log('Error en vehiculo estatus incorrecto'.$id);
+			$a->error_log('Error en vehiculo estatus incorrecto refaccion'.$id);
 		}
 		echo $id;
 	}
