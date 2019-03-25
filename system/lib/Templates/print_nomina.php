@@ -160,10 +160,7 @@ $datauser = $objUser->getTable($data['id_user']);
         </tr>
         
     </table>
-    <div style="width:90%; margin:0 auto;padding:1px 2px;border:1px solid #d0d0cf;">
-        <p style="text-align:justify;">Los precios indicados en esta orden no incluyen IVA. No nos hacemos responsables por fallas mecanicas y electricas derivadas por el desgaste natural del vehiculo, ni por pertenencias olvidadas. El presente documento es expedido por el consumidor como pagare a favor del prestador del servicio el importe de este documento el dia de la entrega del vehiculo. Indispensable presentar identificacion oficial vigente para poder realizar la entrega del vehiculo.<br> No nos hacemos responsables por objetos personales olvidades en el vehiculo no reportados a recepcion, ni manifestado en el inventario. </p>
-        <p></p>
-    </div>
+   
 </body>
 
 </html>

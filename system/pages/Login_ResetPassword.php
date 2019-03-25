@@ -36,11 +36,11 @@ if ( isset($_POST['email']) )  {
 			$message = str_replace("__URL__",   $link , $message); 
 			$message = str_replace("__EMAIL__",   $email , $message); 
 
-				 $headers = "MIME-Version: 1.0\r\n";
-                    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-                    $headers .= "From: <no-reply@geohti.com>\r\n";
-                    $headers .= "X-Taller: 1\r\n";	
-                     $headers .= 'X-Mailer: PHP/' . phpversion();
+			$headers = "MIME-Version: 1.0\r\n";
+			$headers .= "Content-type: text/html; charset=UTF-8\r\n";
+			$headers .= "From: <no-reply@geohti.com>\r\n";
+			$headers .= "X-Taller: 1\r\n";	
+			$headers .= 'X-Mailer: PHP/' . phpversion();
                     
 				
 			 	//sendMail("jorge.orihuela@geohti.com", $subject, $message, $headers); 

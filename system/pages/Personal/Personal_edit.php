@@ -88,7 +88,7 @@ if(isPost()){
 							                </div>
                                             <div class="form-group">
                                                 <label for="name">Puesto</label><br>
-                                                <select style="width:100%" class="select2" name="id_puesto">
+                                                <select style="width:100%" class="select2" name="id_personalpuesto">
                                                     <?php 
                                                         $obj = new PersonalPuesto();
                                                         $list=$obj->getAllArr();
