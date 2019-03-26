@@ -16,7 +16,9 @@
                     $listref=$objref->getAllArr();
                     if (is_array($listref) || is_object($listref)){
                         foreach($listref as $valref){
-                            echo "<option value='".$valref['id']."'>".htmlentities($valref['nombre'])."</option>";
+                            
+                            $selected = ( $id_marca == $valref['id'] ) ? 'selected' : '';
+                            echo "<option $selected value='".$valref['id']."'>".htmlentities($valref['nombre'])."</option>";
                         }
                     }
                     ?>
@@ -70,10 +72,12 @@
                     <option value="">Selecciona Modelo</option>
                     <?php 
                     $objref = new SubMarca();
-                    $listref=$objref->getAllArr();
+                    $listref=$objref->getAllbyid($id_marca);
                     if (is_array($listref) || is_object($listref)){
                         foreach($listref as $valref){
-                            echo "<option value='".$valref['id']."'>".htmlentities($valref['nombre'])."</option>";
+                            
+                            $selected = ( $id_submarca == $valref['id'] ) ? 'selected' : '';
+                            echo "<option  $selected value='".$valref['id']."'>".htmlentities($valref['nombre'])."</option>";
                         }
                     }
                     ?>

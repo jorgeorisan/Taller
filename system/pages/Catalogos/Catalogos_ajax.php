@@ -316,6 +316,8 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 
 			break;
 		case 'showpopuprefaccion':
+			$id_marca 	 = $_GET['id_marca'];
+			$id_submarca = $_GET['id_submarca'];
 			$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_adpopuprefaccion.php');
 			break;
 		case 'savenewrefacciontoorden':

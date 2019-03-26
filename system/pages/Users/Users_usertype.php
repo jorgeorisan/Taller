@@ -75,6 +75,9 @@ $data = $obj->getAllArr();
 														</button>
 														<ul class="dropdown-menu">
 															<li>
+																<a class="" href="<?php echo make_url("Users","usertypeedit",array('id'=>$row['id'])); ?>">Editar</a>
+															</li>
+															<li>
 																<a class="" href="<?php echo make_url("Permisos","asignartipouser",array('id'=>$row['id'])); ?>">Permisos</a>
 															</li>
 															<li class="divider"></li>

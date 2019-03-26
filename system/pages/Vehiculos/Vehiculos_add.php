@@ -1709,7 +1709,9 @@ if(isPost()){
         }
         showpopuprefaccion= function(){
             $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Nueva Refaccion</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccion", null, function (response) {
+            var id_submarca = $("#id_submarca").val();
+            var id_marca    = $("#id_marca").val();
+            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopuprefaccion&id_submarca="+id_submarca+"&id_marca="+id_marca, null, function (response) {
                     if ( response ){
                         $("#contentpopup").html(response);
                     }else{
@@ -1755,19 +1757,26 @@ if(isPost()){
                 success: function(response){
                     if(response>0){
                         //alert("Group successfully added");
-                        $('#idrefaccion').append($('<option>', {
-                            value: response,
-                            text: code+"||"+nombre,
-                            selected:true
-                        }));  
-                        $("#idrefaccion").select2({
-                            multiple: false,
-                            header: "Selecciona una opcion",
-                            noneSelectedText: "Seleccionar",
-                            selectedList: 1
-                        });
-                        $('#myModal').modal('hide');
-                        $("#idrefaccion"). change();
+                        if(!$('#idrefaccion').length > 0){
+                            var id = $("#id_submarca").val();
+                            getselectrefaccion(id);
+                            $('#myModal').modal('hide');
+                        }else{
+                            $('#idrefaccion').append($('<option>', {
+                                value: response,
+                                text: code+"||"+nombre,
+                                selected:true
+                            }));  
+                            $("#idrefaccion").select2({
+                                multiple: false,
+                                header: "Selecciona una opcion",
+                                noneSelectedText: "Seleccionar",
+                                selectedList: 1
+                            });
+                            $('#myModal').modal('hide');
+                            $("#idrefaccion"). change();
+                        }
+                        
                         notify('success',"Refaccion agregada correctamente:"+response);
                     }else{
                         notify('error',"Oopss error al agregar refaccion"+response);
