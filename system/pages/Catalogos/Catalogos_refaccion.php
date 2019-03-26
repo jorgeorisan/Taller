@@ -65,10 +65,7 @@ $data = $obj->getAllArr();
 												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Nombre
 											</th>
                                             <th class = "col-md-4" data-hide="">
-												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Costo Aproximado
-											</th>
-                                            <th class = "col-md-4" data-hide="">
-												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Costo Real
+												<i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i> Costo
 											</th>
 											</th>
 											<th class = "col-md-2" data-hide="">
@@ -97,11 +94,10 @@ $data = $obj->getAllArr();
 											<tr>
 												<td><?php echo htmlentities($key); ?></td>
 												
-												<td><?php echo htmlentities($nommarca.' '.$nomsubmarca. ' '. $row['modelo'])?></td>
+												<td><?php echo htmlentities($nommarca.' '.$nomsubmarca. ' '. $row['modelo'].'-'.$row['modelo_hasta'])?></td>
 												<td><?php echo htmlentities($row['codigo'])?></td>
 												<td><?php echo htmlentities($row['nombre'])?></td>
 												<td><?php echo htmlentities($row['costo_aprox'])?></td>
-												<td><?php echo htmlentities($row['costo_real'])?></td>
 												<td>
 													<div class="btn-group">
 														<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">

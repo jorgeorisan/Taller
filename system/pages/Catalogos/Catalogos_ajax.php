@@ -319,6 +319,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_adpopuprefaccion.php');
 			break;
 		case 'savenewrefacciontoorden':
+			// se manda llamar desde vehiculo view
 		    $obj = new VehiculoRefaccion();
 			if(isPost()){
 			    $id=$obj->addAll(getPost());
@@ -398,6 +399,7 @@ if (  isset($_GET["action"]) && $_GET["object"]){
             
 			break;
 		case 'savenewrefaccion':
+			// se manda llamar desde vehiculo alta 
 		    $obj = new Refaccion();
 			if(isPost()){
 			    $id=$obj->addAll(getPost());

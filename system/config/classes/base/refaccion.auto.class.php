@@ -13,9 +13,11 @@
 		protected $descripcion = "";
 		protected $status = "";
 		protected $modelo = "";
+		protected $modelo_hasta = "";
 		protected $imagen_url = "";
 		protected $costo_aprox = "";
-		protected $costo_real = 0;
+		protected $precio_aprox = "";
+		protected $detalles = 0;
 
 		protected $validclass = true;
 		protected $statusclass = array();
@@ -77,6 +79,11 @@
  				$this->modelo = $value;
 		}
 		
+		public function setModeloHasta( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "MODELOHASTA","s") ) 
+ 				$this->modelo_hasta = $value;
+		}
+		
 		public function setImagenUrl( $value ){ 				$this->imagen_url = $value;
 		}
 		
@@ -85,9 +92,14 @@
  				$this->costo_aprox = $value;
 		}
 		
-		public function setCostoReal( $value ){			
-			if ( $this->validclassateInput("/^.*$/", $value, "COSTOREAL","d") ) 
- 				$this->costo_real = $value;
+		public function setPrecioAprox( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "PRECIOAPROX","s") ) 
+ 				$this->precio_aprox = $value;
+		}
+		
+		public function setDetalles( $value ){			
+			if ( $this->validclassateInput("/^.*$/", $value, "DETALLES","i") ) 
+ 				$this->detalles = $value;
 		}
 		
 		public function setValidclass( $value ){
@@ -171,6 +183,14 @@
  			}
 		}
 		
+		public function getModeloHasta($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->modelo_hasta) ;
+ 			}else{
+ 				return $this->modelo_hasta ;
+ 			}
+		}
+		
 		public function getImagenUrl($sanitize=true){ 
  			if($sanitize){
  				return htmlspecialchars($this->imagen_url) ;
@@ -187,11 +207,19 @@
  			}
 		}
 		
-		public function getCostoReal($sanitize=true){ 
+		public function getPrecioAprox($sanitize=true){ 
  			if($sanitize){
- 				return htmlspecialchars($this->costo_real) ;
+ 				return htmlspecialchars($this->precio_aprox) ;
  			}else{
- 				return $this->costo_real ;
+ 				return $this->precio_aprox ;
+ 			}
+		}
+		
+		public function getDetalles($sanitize=true){ 
+ 			if($sanitize){
+ 				return htmlspecialchars($this->detalles) ;
+ 			}else{
+ 				return $this->detalles ;
  			}
 		}
 		
@@ -229,9 +257,11 @@
 			$this->setDescripcion( $res['descripcion'] );
 			$this->setStatus( $res['status'] );
 			$this->setModelo( $res['modelo'] );
+			$this->setModeloHasta( $res['modelo_hasta'] );
 			$this->setImagenUrl( $res['imagen_url'] );
 			$this->setCostoAprox( $res['costo_aprox'] );
-			$this->setCostoReal( $res['costo_real'] );
+			$this->setPrecioAprox( $res['precio_aprox'] );
+			$this->setDetalles( $res['detalles'] );
 			return true;
 		}
 		// end function load
@@ -247,9 +277,11 @@
 			$sql .= " `descripcion` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `modelo` = ? ,";
+			$sql .= " `modelo_hasta` = ? ,";
 			$sql .= " `imagen_url` = ? ,";
 			$sql .= " `costo_aprox` = ? ,";
-			$sql .= " `costo_real` = ? ,";
+			$sql .= " `precio_aprox` = ? ,";
+			$sql .= " `detalles` = ? ,";
 			$sql = trim($sql,",");
 
 			} else { // updated existing
@@ -262,9 +294,11 @@
 			$sql .= " `descripcion` = ? ,";
 			$sql .= " `status` = ? ,";
 			$sql .= " `modelo` = ? ,";
+			$sql .= " `modelo_hasta` = ? ,";
 			$sql .= " `imagen_url` = ? ,";
 			$sql .= " `costo_aprox` = ? ,";
-			$sql .= " `costo_real` = ? ,";
+			$sql .= " `precio_aprox` = ? ,";
+			$sql .= " `detalles` = ? ,";
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
 			}
@@ -281,9 +315,11 @@
 			$stmt->mbind_param( 's', $this->descripcion );
 			$stmt->mbind_param( 's', $this->status );
 			$stmt->mbind_param( 's', $this->modelo );
+			$stmt->mbind_param( 's', $this->modelo_hasta );
 			$stmt->mbind_param( 's', $this->imagen_url );
 			$stmt->mbind_param( 's', $this->costo_aprox );
-			$stmt->mbind_param( 'd', $this->costo_real );
+			$stmt->mbind_param( 's', $this->precio_aprox );
+			$stmt->mbind_param( 'i', $this->detalles );
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->id  );
 			} // end save
@@ -323,14 +359,20 @@
 			if (in_array("modelo",$fieldstoupdate)){
 				$sql .= " `modelo` = ? ,";
 			}
+			if (in_array("modelo_hasta",$fieldstoupdate)){
+				$sql .= " `modelo_hasta` = ? ,";
+			}
 			if (in_array("imagen_url",$fieldstoupdate)){
 				$sql .= " `imagen_url` = ? ,";
 			}
 			if (in_array("costo_aprox",$fieldstoupdate)){
 				$sql .= " `costo_aprox` = ? ,";
 			}
-			if (in_array("costo_real",$fieldstoupdate)){
-				$sql .= " `costo_real` = ? ,";
+			if (in_array("precio_aprox",$fieldstoupdate)){
+				$sql .= " `precio_aprox` = ? ,";
+			}
+			if (in_array("detalles",$fieldstoupdate)){
+				$sql .= " `detalles` = ? ,";
 			}
 			$sql = trim($sql,",");
 			$sql .= " WHERE id = ?";
@@ -362,14 +404,20 @@
 			if (in_array("modelo",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->modelo  );
 			}
+			if (in_array("modelo_hasta",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->modeloHasta  );
+			}
 			if (in_array("imagen_url",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->imagenUrl  );
 			}
 			if (in_array("costo_aprox",$fieldstoupdate)){
 				$stmt->mbind_param( 's', $this->costoAprox  );
 			}
-			if (in_array("costo_real",$fieldstoupdate)){
-				$stmt->mbind_param( 'd', $this->costoReal  );
+			if (in_array("precio_aprox",$fieldstoupdate)){
+				$stmt->mbind_param( 's', $this->precioAprox  );
+			}
+			if (in_array("detalles",$fieldstoupdate)){
+				$stmt->mbind_param( 'i', $this->detalles  );
 			}
 			if ($this->getId()>0){
 				$stmt->mbind_param( 'i', $this->getId()  );

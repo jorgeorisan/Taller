@@ -24,8 +24,21 @@
             </div>
             <div class="form-group">
                 <label for="name">Año</label>
+            </div>
+            <div class="form-group" style="width:50%;float:left">
                 <select style="width:100%" class="select2" name="modelo_refaccion" id="modelo_refaccion">
-                    <option value="">Año</option>
+                    <option value="">Año desde</option>
+                    <?php 
+                    $objcat=catModelo();
+                    for ($i=0; $i < count($objcat) ; $i++) { 
+                        echo "<option value='".$objcat[$i]."'>".htmlentities($objcat[$i])."</option>";
+                    }  
+                    ?>
+                </select>
+            </div>
+            <div class="form-group" style="width:50%;float:left">
+                <select style="width:100%" class="select2" name="modelo_hasta" id="modelo_hasta">
+                    <option value="">Año hasta</option>
                     <?php 
                     $objcat=catModelo();
                     for ($i=0; $i < count($objcat) ; $i++) { 
@@ -35,7 +48,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="name">Costo Proximado</label>
+                <label for="name">Costo</label>
                 <input type="number" class="form-control" placeholder="Costo Aproximado Refaccion" name="costo_aprox_refaccion" id="costo_aprox_refaccion" >                                                                                             
             </div> 
             <div class="form-group" id="">
@@ -71,10 +84,7 @@
                 <label for="name">Descripcion</label>
                 <input type="text" class="form-control" placeholder="Descripcion" name="descripcion_refaccion" id="descripcion_refaccion" >                                                                                               
             </div>
-            <div class="form-group">
-                <label for="name">Costo Real</label>
-                <input type="number" class="form-control" placeholder="Costo Real Refaccion" name="costo_real" id="costo_real_refaccion" >                                                                                             
-            </div>
+           
         </div>
                       
     </fieldset> 
@@ -117,19 +127,8 @@
                 getsubmarcarefaccion(id);
             }
         });
-        $("#id_marca_refaccion").select2({
-            multiple: false,
-            header: "Selecciona una opcion",
-            noneSelectedText: "Seleccionar",
-            selectedList: 1
-        });
-        $("#id_submarca_refaccion").select2({
-            multiple: false,
-            header: "Selecciona una opcion",
-            noneSelectedText: "Seleccionar",
-            selectedList: 1
-        });
-        $("#modelo_refaccion").select2({
+     
+        $(".select2").select2({
             multiple: false,
             header: "Selecciona una opcion",
             noneSelectedText: "Seleccionar",

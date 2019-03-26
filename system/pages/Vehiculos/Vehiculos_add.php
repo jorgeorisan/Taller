@@ -1745,13 +1745,13 @@ if(isPost()){
             var id_submarca = $("#id_submarca_refaccion").val();
             var modelo      = $("#modelo_refaccion").val();
             var costoaprox  = $("#costo_aprox_refaccion").val();
-            var costoreal   = $("#costo_real_refaccion").val();
+            var modelohasta = $("#modelo_hasta").val();
           
             var url = config.base+"/Catalogos/ajax/?action=get&object=savenewrefaccion"; // El script a dónde se realizará la petición.
             $.ajax({
                 type: "POST",
                 url: url,
-                data: "codigo="+code+"&nombre="+nombre+"&descripcion="+descripcion+"&id_marca="+id_marca+"&id_submarca="+id_submarca+"&modelo="+modelo+"&costo_aprox="+costoaprox+"&costo_real="+costoreal, // Adjuntar los campos del formulario enviado.
+                data: "codigo="+code+"&nombre="+nombre+"&descripcion="+descripcion+"&id_marca="+id_marca+"&id_submarca="+id_submarca+"&modelo="+modelo+"&costo_aprox="+costoaprox+"&modelo_hasta="+modelohasta, // Adjuntar los campos del formulario enviado.
                 success: function(response){
                     if(response>0){
                         //alert("Group successfully added");

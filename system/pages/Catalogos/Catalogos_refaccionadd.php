@@ -118,8 +118,21 @@ if(isPost()){
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Año</label>
+                                            </div>
+                                            <div class="form-group" style="width:50%;float:left">
                                                 <select style="width:100%" class="select2" name="modelo" id="modelo">
-                                                    <option value="">Año</option>
+                                                    <option value="">Año desde</option>
+                                                    <?php 
+                                                    $objcat=catModelo();
+                                                    for ($i=0; $i < count($objcat) ; $i++) { 
+                                                        echo "<option value='".$objcat[$i]."'>".htmlentities($objcat[$i])."</option>";
+                                                    }  
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="form-group" style="width:50%;float:left">
+                                                <select style="width:100%" class="select2" name="modelo_hasta" id="modelo_hasta">
+                                                    <option value="">Año hasta</option>
                                                     <?php 
                                                     $objcat=catModelo();
                                                     for ($i=0; $i < count($objcat) ; $i++) { 
@@ -129,7 +142,7 @@ if(isPost()){
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Costo Proximado</label>
+                                                <label for="name">Costo</label>
                                                 <input type="number" class="form-control" placeholder="Costo Aproximado Refaccion" name="costo_aprox" >                                                                                             
                                             </div>                                           
                                         </div>
@@ -157,10 +170,7 @@ if(isPost()){
                                                 <label for="name">Descripcion</label>
                                                 <input type="text" class="form-control" placeholder="Descripcion" name="descripcion" >                                                                                               
                                             </div>
-                                            <div class="form-group">
-                                                <label for="name">Costo Real</label>
-                                                <input type="number" class="form-control" placeholder="Costo Real Refaccion" name="costo_real" >                                                                                             
-                                            </div>
+                                           
                                             <div class="form-group" id="">
                                                 <label for="name">Poder agregar mas detalles</label>
                                                 <select style="width:100%" class="select2" name="detalles" id="detalles">
