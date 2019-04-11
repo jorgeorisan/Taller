@@ -126,7 +126,6 @@ class VehiculoServicio extends AutoVehiculoServicio {
 			$_request['status_anterior'] 	 = $res['status'];
 			$_request['status'] 			 = 'deleted';
 			$_request['fecha_inicio']        = date('Y-m-d H:i:s');
-			$_request['id_personal']         = ($res['id_personal'])? $res['id_personal']: null;
 			$_request['comentarios']         = '';
 			$idHS=$u->addAll($_request);
 			if($idHS>0){

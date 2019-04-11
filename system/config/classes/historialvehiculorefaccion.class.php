@@ -9,7 +9,7 @@ class HistorialVehiculorefaccion extends AutoHistorialVehiculorefaccion {
 		//metodo que sirve para obtener todos los datos de la tabla
 	public function getAllArr($id)
 	{
-		$sql = "SELECT * FROM historial_vehiculorefaccion where status!='deleted' and id_vehiculorefaccion=$id;";
+		$sql = "SELECT * FROM historial_vehiculorefaccion where id_vehiculorefaccion=$id;";
 		$res = $this->db->query($sql);
 		$set = array();
 		if(!$res){ die("Error getting result"); }

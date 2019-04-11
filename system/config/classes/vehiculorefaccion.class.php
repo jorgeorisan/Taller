@@ -125,11 +125,25 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 		$_request["deleted_date"]=date("Y-m-d H:i:s");
 		$data=fromArray($_request,'vehiculo_refaccion',$this->db,"update");	
 		$sql= "UPDATE vehiculo_refaccion SET $data[0]  WHERE id=".$id.";";
-		$row=$this->db->query($sql);
-		if(!$row){
-			return false;
-		}else{
-			return true;
+		$u  = new HistorialVehiculorefaccion();
+		if($res = $u->getLastStatus($id)){
+			$_request['id_vehiculorefaccion'] = $id;
+			$_request['status_anterior'] 	 = $res['status'];
+			$_request['status'] 			 = 'deleted';
+			$_request['fecha_inicio']        = date('Y-m-d H:i:s');
+			$_request['comentarios']         = '';
+			$idHS=$u->addAll($_request);
+			if($idHS>0){
+				$row=$this->db->query($sql);
+				if(!$row){
+					return false;
+				}else{
+					
+					return true;
+				}
+			}else{
+				return false;
+			}
 		}
 	}
 

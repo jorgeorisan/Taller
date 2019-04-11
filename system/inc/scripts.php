@@ -83,7 +83,7 @@
 
 		<script src="<?php echo ASSETS_URL; ?>/js/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
 		<script src="<?php echo ASSETS_URL; ?>/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.fr.js"></script>
-
+		<!--END DATETIMEPICKER-->
 		<script type="text/javascript">
 			// DO NOT REMOVE : GLOBAL FUNCTIONS!
 			function redirectAfterToast(url)
