@@ -189,7 +189,9 @@ if(isPost()){
 																<?php 
 																if($row['status_vehiculo']=='Terminado sin firma'){
 																	?>
-																	<a href="#" id='btn-firmado<?php $key ?>' onclick='ActualizarAuto(<?php echo $row["id"]; ?>)' class="btn btn-info"><i class="fa fa-check"></i>&nbsp;Firmar</a>
+																	<a href="#" id='btn-firmado<?php $key ?>' onclick='ActualizarAuto(<?php echo $row["id"]; ?>)' class="btn btn-info" style='color:white'>
+																		<i class="fa fa-check"></i>&nbsp;Firmar
+																	</a>
 																	<?php
 																}?>
 																</h5>
