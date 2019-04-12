@@ -24,6 +24,7 @@ if(isPost()){
 	$status_vehiculo = $_POST['status_vehiculo']; 
 	$data = $obj->getAllArr($status_vehiculo);
 }
+		
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->

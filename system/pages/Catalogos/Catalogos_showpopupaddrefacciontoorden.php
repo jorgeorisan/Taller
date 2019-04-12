@@ -76,7 +76,7 @@
             if(id){
                 var text     = $('select[name="idrefaccion"] option:selected').text();
                 var url      = config.base+"/Catalogos/ajax/?action=get&object=getrefaccion"; 
-                var aseg     = <?php echo $datavehiculo['id_aseguradora']; ?>;
+                var aseg     = <?php echo ($datavehiculo['id_aseguradora']) ? $datavehiculo['id_aseguradora'] : ''; ?>;
                 var cantidad = $("#selectcantidad_refaccion").val();
                 $.ajax({
                     type: "GET",

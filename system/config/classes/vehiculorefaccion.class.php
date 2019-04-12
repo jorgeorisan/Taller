@@ -52,10 +52,10 @@ class VehiculoRefaccion extends AutoVehiculoRefaccion {
 		}
 
 		$id=$this->db->real_escape_string( $_request["id_vehiculo"] );
-		$refacciones      = $_request["id_refaccion"];
-		$refaccionestotal = $_request["costorefaccion"];
-		$cantidad		  = $_request["cantidad_refaccion"];
-		$detallesref	  = $_request["detalles_refaccion"];
+		$refacciones      = ($_request["id_refaccion"]) ? $_request["id_refaccion"] : [];
+		$refaccionestotal = ($_request["costorefaccion"]) ? $_request["costorefaccion"] : '';
+		$cantidad		  = ($_request["cantidad_refaccion"]) ? $_request["cantidad_refaccion"]: '';
+		$detallesref	  = ($_request["detalles_refaccion"]) ? $_request["detalles_refaccion"]: '';
 		
 		foreach ($refacciones as $key => $value) {
 			$total        = ($refaccionestotal[$key]) ? $refaccionestotal[$key] : 0 ;

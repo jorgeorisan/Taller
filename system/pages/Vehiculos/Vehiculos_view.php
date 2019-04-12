@@ -796,6 +796,7 @@ if(isPost()){
 			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
 			if ( status == "En Proceso" && fecha_final!="") return notify('error',"Este estatus no puede estar terminado");
 			if ( status_anterior == status) return notify('error',"El estatus no se puede repetir");
+			if ( status_anterior == 'active' && status == 'Instalado' ) return notify('error',"El estatus no puede pasar a instalado ");
 			if ( fecha_estimada < fecha_inicio )  return notify('error',"La fecha estimada no puede ser menor a la fecha inicio");
 			if ( fecha_final && (fecha_final < fecha_inicio ) )     return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
 			

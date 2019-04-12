@@ -98,9 +98,6 @@ $data = $obj->getAllArr();
 															<li>
 																<a class="" href="<?php echo make_url("Permisos","asignar",array('id'=>$row['id'])); ?>">Permisos</a>
 															</li>
-															<li>
-																<a class="" href="<?php echo make_url("Users","cambiarpwd",array('id'=>$row['id'])); ?>">Cambiar password</a>
-															</li>
 															<li class="divider"></li>
 															<li>
 																<a href="#" class="red" onclick="borrar('<?php echo make_url("Users","userdelete",array('id'=>$row['id'])); ?>',<?php echo $row['id']; ?>);">Eliminar</a>

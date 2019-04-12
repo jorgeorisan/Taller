@@ -5,13 +5,15 @@ error_log
 .well-known
 cgi-bin
 .DS_Store
-.debug.log
 
 #ingnorar carpetas
 expediente/
 expedienteseliminados/
 expedientesterminados/
 refaccion/
+
+# Logs
+internal/log
 
 #system/
 #system/config/config.php

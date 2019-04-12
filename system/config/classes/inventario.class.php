@@ -129,7 +129,7 @@ class Inventario extends AutoInventario {
 
 		$idrefaccion = $this->db->real_escape_string($idrefaccion);
 		$idalmacen = $this->db->real_escape_string($idalmacen);
-		$sql="
+		echo $sql="
 		SELECT  inventario.id_refaccion,inventario.id_almacen,
 				inventario.refaccion,inventario.almacen,
 				(ifnull(entradas.totalentradas,0)+ifnull(pedidos.entradapedido,0)) totalentradas ,

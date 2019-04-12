@@ -81,6 +81,43 @@ $datapedidos = $obj->getTablePedidos($data['id_refaccion'],$data['id_almacen']);
 									</table>
 								
 								</div>
+								
+								<div><h2><?php echo "Entradas" ?></h2></div>
+								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+									<thead>
+										<tr>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Almacen</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Usuario</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Pedido</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Status</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Fecha</td>
+											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tipo</td>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach($datapedidos as $row){
+															
+											?>
+											<tr>
+												<td><?php echo htmlentities($row['cantidad'])?></td>
+												<td><a class="" href="<?php echo make_url("Catalogos","refaccionshow",array('id'=>$row['id_refaccion'])); ?>">
+													<?php echo htmlentities($row['refaccion']) ?></a>
+												</td>
+												<td><?php echo htmlentities($row['almacen'])?></td>
+												<td><?php echo htmlentities($row['usuario'])?></td>
+												<td><?php echo htmlentities($row['pedido'])?></td>
+												<td><?php echo htmlentities($row['status']) ?></td>
+												<td><?php echo htmlentities($row['fecha']) ?></td>
+												<td><?php echo htmlentities($row['tipo']) ?></td>
+												
+												
+											</tr>
+										<?php }?>
+									</tbody>
+								</table>
+								<div><h2><?php echo "Salidas" ?></h2></div>
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>
 										<tr>
@@ -108,41 +145,6 @@ $datapedidos = $obj->getTablePedidos($data['id_refaccion'],$data['id_almacen']);
 												<td><?php echo htmlentities($row['usuario'])?></td>
 												<td><?php echo htmlentities($row['personal'])?></td>
 												<td><?php echo htmlentities($row['comentarios'])?></td>
-												<td><?php echo htmlentities($row['status']) ?></td>
-												<td><?php echo htmlentities($row['fecha']) ?></td>
-												<td><?php echo htmlentities($row['tipo']) ?></td>
-												
-												
-											</tr>
-										<?php }?>
-									</tbody>
-								</table>
-								<div><h2><?php echo "Pedidos" ?></h2></div>
-								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-									<thead>
-										<tr>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Almacen</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Usuario</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Pedido</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Status</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Fecha</td>
-											<td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tipo</td>
-										</tr>
-									</thead>
-									<tbody>
-										<?php foreach($datapedidos as $row){
-															
-											?>
-											<tr>
-												<td><?php echo htmlentities($row['cantidad'])?></td>
-												<td><a class="" href="<?php echo make_url("Catalogos","refaccionshow",array('id'=>$row['id_refaccion'])); ?>">
-													<?php echo htmlentities($row['refaccion']) ?></a>
-												</td>
-												<td><?php echo htmlentities($row['almacen'])?></td>
-												<td><?php echo htmlentities($row['usuario'])?></td>
-												<td><?php echo htmlentities($row['pedido'])?></td>
 												<td><?php echo htmlentities($row['status']) ?></td>
 												<td><?php echo htmlentities($row['fecha']) ?></td>
 												<td><?php echo htmlentities($row['tipo']) ?></td>
