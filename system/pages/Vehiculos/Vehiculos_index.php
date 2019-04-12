@@ -268,26 +268,26 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <script>
-	
-	$(document).ready(function() {
-		function ActualizarAuto(id){
-			var id_vehiculo    = id;
-			var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
-			var data = "id_vehiculo=" + id_vehiculo ;
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: data, 
-				success: function(response){
-					if(response){
-						location.reload();
-					}else{
-						notify('error',"Oopss error al cambiar estatus: "+response);
-					}
+	function ActualizarAuto(id){
+		var id_vehiculo    = id;
+		var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
+		var data = "id_vehiculo=" + id_vehiculo ;
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: data, 
+			success: function(response){
+				if(response){
+					location.reload();
+				}else{
+					notify('error',"Oopss error al cambiar estatus: "+response);
 				}
-				});
-			return false; 
-		}
+			}
+			});
+		return false; 
+	}
+	$(document).ready(function() {
+	
 		$('body').on('change', '#status_vehiculo', function(){
 			$("#main-form").submit(); 
         });
