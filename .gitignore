@@ -5,6 +5,7 @@ error_log
 .well-known
 cgi-bin
 .DS_Store
+.debug.log
 
 #ingnorar carpetas
 expediente/
