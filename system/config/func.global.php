@@ -156,7 +156,6 @@ function getStatusAutos(){
   $arrayStatus["Pendiente"]           = "Pendiente";
   $arrayStatus["Terminado sin firma"] = "Terminado sin firma";
   $arrayStatus["Terminado y firmado"] = "Terminado y firmado";
-
   return $arrayStatus;
 }
 

@@ -19,7 +19,7 @@ include(SYSTEM_DIR . "/inc/nav.php");
 
 $obj = new Vehiculo();
 $data = $obj->getAllArr();
-
+$status_vehiculo = "";
 if(isPost()){
 	$status_vehiculo = $_POST['status_vehiculo']; 
 	$data = $obj->getAllArr($status_vehiculo);
@@ -185,7 +185,7 @@ if(isPost()){
 																<span><?php echo htmlentities($row['matricula'])?></span>
 															</p>
 															<span class="fa fa-2x">
-																<h5><a href="javascript:void(0);"><strong><?php ECHO $row['status_vehiculo'] ?></strong> </a>
+																<h5><a href="javascript:void(0);"><strong><?php echo  $row['status_vehiculo'] ?></strong> </a>
 																<?php 
 																if($row['status_vehiculo']=='Terminado sin firma'){
 																	?>
@@ -268,25 +268,26 @@ if(isPost()){
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <script>
-	function ActualizarAuto(id){
-		var id_vehiculo    = id;
-		var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
-		var data = "id_vehiculo=" + id_vehiculo ;
-		$.ajax({
-			type: "POST",
-			url: url,
-			data: data, 
-			success: function(response){
-				if(response){
-					location.reload();
-				}else{
-					notify('error',"Oopss error al cambiar estatus: "+response);
-				}
-			}
-			});
-		return false; 
-	}
+	
 	$(document).ready(function() {
+		function ActualizarAuto(id){
+			var id_vehiculo    = id;
+			var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusvehiculo"; 
+			var data = "id_vehiculo=" + id_vehiculo ;
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: data, 
+				success: function(response){
+					if(response){
+						location.reload();
+					}else{
+						notify('error',"Oopss error al cambiar estatus: "+response);
+					}
+				}
+				});
+			return false; 
+		}
 		$('body').on('change', '#status_vehiculo', function(){
 			$("#main-form").submit(); 
         });
