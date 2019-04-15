@@ -577,8 +577,7 @@ $fechaprom = ($data['fecha_promesa']) ? date('Y-m-d',strtotime($data['fecha_prom
                                                 data-img='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
                                                 alt='".$row['nombre']."' title='".$row['nombre']."'
                                                 max-width='150px'  max-height='150px'
-                                                class='superbox-img'
-                                                >
+                                                class='superbox-img'>
                                             </div>";
 
                                     }

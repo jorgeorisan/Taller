@@ -33,9 +33,6 @@ Array
 */
 $request=unmake_url();
 
-
-//HOLA
-//PRUEBA DE COMENTARIO EN BRANCH
 /*
 =====================================
 Routing section
@@ -53,9 +50,6 @@ Routing section
       $page     = "Home_index.php";
       $page_num = 0;
       $page2    = ($request['page'])? $request['page'] : 'index';
-
-    
-     
       
       if ($request['section']==='Clientes'){
         $page = "Clientes_index.php";
@@ -64,8 +58,7 @@ Routing section
         if ($request['page']==='addpopup') { $page = "Clientes_adpopup.php";  }
         if ($request['page']==='edit')     { $page = "Clientes_edit.php";     }
       }
-
-      if ( $request['section'] === 'Catalogos' ) {
+      if ($request['section']=== 'Catalogos') {
         $page = "Catalogos_taller.php";
         $dir  = "Catalogos";
         if ($request['page'] === 'taller')         { $page = "Catalogos_taller.php"; }
@@ -175,12 +168,7 @@ Routing section
       }elseif(file_exists("system/pages/".$request['section']."_index.php")){
         $page = $request['section']."_index.php";
         
-      }else{}
-
-      
-      /***/
-
-
+      }
     }else{
       // Unauthenticated user
       // go to login page

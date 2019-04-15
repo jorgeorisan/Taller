@@ -125,12 +125,13 @@
         });
     }
     $(document).ready(function() { 
-         $('body').on('change', '#id_marca_refaccion', function(){
+        $('body').on('change', '#id_marca_refaccion', function(){
             if( $(this).val() ){
                 var id = $("#id_marca_refaccion").val();
                 getsubmarcarefaccion(id);
             }
         });
+        
      
         $(".select2").select2({
             multiple: false,

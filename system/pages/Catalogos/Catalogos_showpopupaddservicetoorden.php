@@ -128,6 +128,34 @@
             $("[lineid=" + id + "]").remove();
             
         });
+        $('body').on('click', '#savenewservice', function(){
+            if(!$(".servicio").length>0){
+                swal({
+                    title: "Advertencia",
+                    text: "Se necesitan servicios!",
+                    type: "warning",
+                });
+                return false;
+            }
+            var id_vehiculo = '<?php echo $id ?>';
+            var url  = config.base+"/Catalogos/ajax/?action=get&object=savenewservicetoorden"; 
+            var data = "&id_vehiculo=" + id_vehiculo;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $( "form#form-servicioadd" ).serialize() + data, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+                    if(response>0){
+                        //alert("Group successfully added");
+                        notify('success',"Servicio agregado correctamente:"+response);
+                        location.reload();
+                    }else{
+                        notify('error',"Oopss error al agregar servicio"+response);
+                    }
+                }
+             });
+            return false; // Evitar ejecutar el submit del formulario.
+        });
     });
 
 </script>

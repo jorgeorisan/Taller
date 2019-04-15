@@ -425,7 +425,7 @@ $carpetaexpediente = $obj->getCarpetaexpediente($id);
                                                     foreach($dataimagenes as $key => $row) {
                                                         
                                                         echo "<div class='superbox-list'  id='image_".$key."'>
-                                                                <img title='click para eliminar' onclick='deleteimage(".$key.");  return false;' 
+                                                                <img  style='padding:15px' title='click para eliminar' onclick='deleteimage(".$key.");  return false;' 
                                                                 src='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."' 
                                                                 data-img='".$carpetaimg.DIRECTORY_SEPARATOR.$row['nombre']."'
                                                                 alt='".$row['nombre']."' title='".$row['nombre']."'

@@ -745,6 +745,7 @@ if(isPost()){
             notify("error","Solo puedes seleccionar 15 imagenes");
         } 
     }
+
 	$(document).ready(function() {
 		document.getElementById('filevehiculo').addEventListener('change', uploadimages, false);
 
@@ -796,7 +797,6 @@ if(isPost()){
 			if ( !fecha_inicio ) return notify('error',"Se necesita una fecha de inicio");
 			if ( status == "En Proceso" && fecha_final!="") return notify('error',"Este estatus no puede estar terminado");
 			if ( status_anterior == status) return notify('error',"El estatus no se puede repetir");
-			if ( status_anterior == 'active' && status == 'Instalado' ) return notify('error',"El estatus no puede pasar a instalado ");
 			if ( fecha_estimada < fecha_inicio )  return notify('error',"La fecha estimada no puede ser menor a la fecha inicio");
 			if ( fecha_final && (fecha_final < fecha_inicio ) )     return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
 			
@@ -839,7 +839,7 @@ if(isPost()){
 	
         $('body').on('click', '#btnaddservice', function(){
             $('#titlemodal').html('<span class="widget-icon"><i class="far fa-plus"></i> Agregar Servicio</span>');
-            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupaddservicetoorden", null, function (response) {
+            $.get(config.base+"/Catalogos/ajax/?action=get&object=showpopupaddservicetoorden&id="+<?php echo $id ?>, null, function (response) {
                     if ( response ){
                         $("#contentpopup").html(response);
                     }else{
@@ -848,27 +848,7 @@ if(isPost()){
                     }     
             });
         });
-        $('body').on('click', '#savenewservice', function(){
-            
-            var id_vehiculo = <?php echo $id ?>;
-            var url  = config.base+"/Catalogos/ajax/?action=get&object=savenewservicetoorden"; 
-            var data = "&id_vehiculo=" + id_vehiculo;
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $( "form#form-servicioadd" ).serialize() + data, // Adjuntar los campos del formulario enviado.
-                success: function(response){
-                    if(response>0){
-                        //alert("Group successfully added");
-                        notify('success',"Servicio agregado correctamente:"+response);
-                        location.reload();
-                    }else{
-                        notify('error',"Oopss error al agregar servicio"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-        });
+       
 
         //refacciones
 		$('body').on('click', '.btn-statusrefaccion', function(){
@@ -903,15 +883,20 @@ if(isPost()){
 			
 			if ( status_anterior == status & status!='active' )        return notify('error',"El estatus no se puede repetir");
 			if ( status == "Recibida" && fecha_final!="")              return notify('error',"Este estatus no puede estar terminado");
-			if ( status_anterior == "Recibida" && status=="Rechazada") return notify('error',"Este estatus no puede ser posible");
+			if ( status_anterior == "Recibida" && status=="Rechazada") return notify('error',"Este estatus no es posible");
 			if ( (status_anterior=="Proporcionado-Cliente" && status == "Recibida") || (status=="Proporcionado-Cliente" && status_anterior == "Recibida") ) 
 				return notify('error',"Este estatus no puede ser posible");
-			if ( (status_anterior=="Entregada" && status == "Reenvio") || (status=="Entregada" && status_anterior == "Reenvio")|| ( status=="Reenvio" && status_anterior == "active") ) 
+			if ( (status_anterior=="Entregada" && status == "Reenvio") || 
+				 (status=="Entregada" && status_anterior == "Reenvio") || 
+				 ( status=="Reenvio"  && status_anterior == "active")  || 
+				 ( status=="Instalado" && status_anterior == "active")) 
 				return notify('error',"Este estatus no puede ser posible");
 			
 			if( status != "Recibida" && status != "Proporcionado-Cliente"){
-				if ( fecha_estimada < fecha_inicio )  return notify('error',"La fecha estimada no puede ser menor a la fecha inicio");
-				if ( fecha_final && (fecha_final < fecha_inicio ) )     return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
+				if ( fecha_estimada < fecha_inicio )  
+					return notify('error',"La fecha estimada no puede ser menor a la fecha inicio");
+				if ( fecha_final && (fecha_final < fecha_inicio ) )    
+					return notify('error',"La fecha de termino no puede ser menor a la fecha inicio");
 			}
 
             var url  = config.base+"/Vehiculos/ajax/?action=get&object=change-statusrefaccion"; 
@@ -962,28 +947,7 @@ if(isPost()){
                     }     
             });
         });
-        $('body').on('click', '#savenewrefaccion', function(){
-            
-            var id_vehiculo = <?php echo $id ?>;
-            var url  = config.base+"/Catalogos/ajax/?action=get&object=savenewrefacciontoorden"; 
-            var data = "&id_vehiculo=" + id_vehiculo;
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $( "form#form-refaccionadd" ).serialize() + data, // Adjuntar los campos del formulario enviado.
-                success: function(response){
-                    if(response>0){
-                        //alert("Group successfully added");
-                        notify('success',"Refaccion agregada correctamente:"+response);
-                        location.reload();
-                    }else{
-                        notify('error',"Oopss error al agregar refaccion"+response);
-                    }
-                }
-             });
-            return false; // Evitar ejecutar el submit del formulario.
-        });
-
+        
 		
 
 		pageSetUp();

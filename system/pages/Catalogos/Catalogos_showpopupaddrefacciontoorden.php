@@ -44,7 +44,7 @@
                     <button class="btn btn-default btn-md" type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         Cancelar
                     </button>
-                    <button class="btn btn-primary btn-md" type="button" id="savenewrefaccion">
+                    <button class="btn btn-primary btn-md" type="button" id="savenewrefacciontoorden">
                         <i class="fa fa-save"></i>
                         Guardar
                     </button>
@@ -59,7 +59,7 @@
     $(document).ready(function() {
         getselectrefaccion= function(id){
             if ( ! id ) return;
-        
+
             $("#contrefaccion").html("<div align='center'><i class='far fa-cog fa-spin fa-2x'></i></div>");
             $.get(config.base+"/Catalogos/ajax/?action=get&object=getselectrefaccion&id=" + id , null, function (response) {
                     if ( response ){
@@ -70,10 +70,12 @@
                         return false;
                     }     
             });
+            return false;
         }
         getselectrefaccion(<?php echo $datavehiculo['id_submarca']; ?>);
         getrefaccion = function(id) {
             if(id){
+                
                 var text     = $('select[name="idrefaccion"] option:selected').text();
                 var url      = config.base+"/Catalogos/ajax/?action=get&object=getrefaccion"; 
                 var aseg     = <?php echo ($datavehiculo['id_aseguradora']) ? $datavehiculo['id_aseguradora'] : ''; ?>;
@@ -95,8 +97,9 @@
                 });
                 return false; // Evitar ejecutar el submit del formulario.
             }
+            return false;
         }
-       
+            
         $('body').on('change', '#idrefaccion', function(){
             if( $(this).val() ){
                 var id = $("#idrefaccion").val();
@@ -148,9 +151,46 @@
          $("body").on('click', '.borrar-servicio', function (e) {
             e.preventDefault();
 
-            var id = $(this).attr("lineid");
-            $("[lineid=" + id + "]").remove();
+            var id = $(this).attr("lineidservicio");
+            $("[lineidservicio=" + id + "]").remove();
             
+        });
+        $("body").on('click', '.borrar-refaccion', function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr("lineidrefaccion");
+            $("[lineidrefaccion=" + id + "]").remove();
+        });
+        $('body').on('click', '#savenewrefacciontoorden', function(){
+            
+            if(!$(".cantidadesrefaccion").length>0){
+                swal({
+                    title: "Advertencia",
+                    text: "Se necesitan refacciones!",
+                    type: "warning",
+                });
+                return false;
+            }
+            var id_vehiculo = <?php echo $id ?>;
+            var url  = config.base+"/Catalogos/ajax/?action=get&object=savenewrefacciontoorden"; 
+            var data = "&id_vehiculo=" + id_vehiculo;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $( "form#form-refaccionadd" ).serialize() + data, // Adjuntar los campos del formulario enviado.
+                success: function(response){
+                    if(response>0){
+                        //alert("Group successfully added");
+                        notify('success',"Refaccion agregada correctamente:"+response);
+                        location.reload();
+                    }else{
+                        notify('error',"Oopss error al agregar refaccion"+response);
+                    }
+                }
+            });
+    
+            
+            return false; // Evitar ejecutar el submit del formulario.
         });
     });
 

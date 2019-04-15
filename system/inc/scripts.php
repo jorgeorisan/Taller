@@ -173,14 +173,24 @@
 
 			function notify( type = "success", msg = "", options = {} )
 			{
-				if(type=="error"){ type='danger'; }
+				console.log(msg);
+
+				if(type=="error") type='danger'; 
+
 				$.notifyDefaults({
 					type: type,
 					animate: {
 						enter: 'animated flipInY',
-						exit: 'animated flipOutX'
+						exit: 'animated flipOutX',
+						classes: {
+							base: {
+								"z-index": "1000",
+								"color": "red"
+							}
+						}
 					}
 				});
+				
 				setTimeout(function() {
 					$.notifyClose();
 				}, 3000);

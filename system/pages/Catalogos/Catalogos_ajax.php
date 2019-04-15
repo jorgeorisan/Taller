@@ -272,8 +272,6 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 		    if($html=require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupHistoryStatusServicio.php')){
 				echo $html;
 			}
-           
-		
 			break;
 		case 'showpopupHistoryStatusRefaccion':
 			$page      = '';
@@ -285,7 +283,15 @@ if (  isset($_GET["action"]) && $_GET["object"]){
 			break;
 		
 		case 'showpopupaddservicetoorden':
-			$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupaddservicetoorden.php');
+			if( isset($_GET["id"]) && intval($_GET["id"]) ){
+				$id = $_GET["id"];
+				$obj = new Vehiculo();
+				$datavehiculo = $obj->getTable($id);
+				if ( !$datavehiculo ) {
+					echo "error id";
+				}
+				$html = require_once(SYSTEM_DIR.'/pages/Catalogos/Catalogos_showpopupaddservicetoorden.php');
+			}
 			break;
 		case 'showpopupaddrefacciontoorden':
 			if( isset($_GET["id"]) && intval($_GET["id"]) ){
