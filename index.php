@@ -64,6 +64,7 @@ Routing section
         if ($request['page']==='addpopup') { $page = "Clientes_adpopup.php";  }
         if ($request['page']==='edit')     { $page = "Clientes_edit.php";     }
       }
+
       if ( $request['section'] === 'Catalogos' ) {
         $page = "Catalogos_taller.php";
         $dir  = "Catalogos";
@@ -87,7 +88,6 @@ Routing section
         if ($request['page']==='show') { $page = "Users_show.php"; }
         if ($request['page']==='add')  { $page = "Users_add.php" ; }
         if ($request['page']==='edit') { $page = "Users_edit.php"; }
-        if ($request['page']==='ajax') { $page = "Users_ajax.php"; }
         
       }
       if ($request['section']==='Vehiculos'){
@@ -96,14 +96,12 @@ Routing section
         if ($request['page']==='add') { $page = "Vehiculos_add.php"; }
         if ($request['page']==='edit'){ $page = "Vehiculos_edit.php"; }
         if ($request['page']==='view'){ $page = "Vehiculos_view.php"; }
-        if ($request['page']==='ajax'){ $page = "Vehiculos_ajax.php"; }
       }
       if ($request['section']==='Permisos'){
         $page = "Permisos_index.php";
         $dir  = "Permisos";
         if ($request['page']==='add')    { $page = "Permisos_add.php"; }
         if ($request['page']==='edit')   { $page = "Permisos_edit.php"; }
-        if ($request['page']==='ajax')   { $page = "Permisos_ajax.php"; }
         if ($request['page']==='asignar'){ $page = "Permisos_asignar.php"; }
       }
       if ($request['section']==='Pedidos'){
@@ -111,7 +109,6 @@ Routing section
         $dir  = "Pedidos";
         if ($request['page']==='add')   { $page = "Pedidos_add.php"; }
         if ($request['page']==='edit')  { $page = "Pedidos_edit.php"; }
-        if ($request['page']==='ajax')  { $page = "Pedidos_ajax.php"; }
         if ($request['page']==='view')  { $page = "Pedidos_view.php"; }
       }
       if ($request['section']==='Inventarios'){
@@ -144,6 +141,17 @@ Routing section
         $dir  = "Reportes";
         if ($request['page']==='add')      { $page = "Reportes_gastos.php";      }
       }
+    
+      //*****permisos de usuario  */***///
+      if($request['section']!='Home' && $request['section']!='Examples' && $request['page']!="" && $request['page']!="ajax" && $request['page']!="print" ){
+        $objpermuser = new PermisoUser();
+        $datapermuser  = $objpermuser->getpermisouser($_SESSION['user_id'],$request['section'],$page2);
+        if ( !$datapermuser ) {
+          echo "ERROR permisos".$_SESSION['user_id']."------".$request['section']."-----".$page2;
+          informPermiss(true,make_url("Home","index"));
+        }
+      }
+      
       //delete pages
       if(isset($request['params']['id'])){
         if( $id = $request['params']['id'] ) {
@@ -154,20 +162,6 @@ Routing section
           }
         }
       }
-
-      //*****permisos de usuario  */***///
-      if($request['section']!='Home' && $request['section']!='Examples' && $request['page']!="" && $request['page']!="ajax" && $request['page']!="print" ){
-        
-        $objpermuser = new PermisoUser();
-        
-        $datapermuser  = $objpermuser->getpermisouser($_SESSION['user_id'],$request['section'],$page2);
-        if ( !$datapermuser ) {
-          echo "ERROR permisos".$_SESSION['user_id']."------".$request['section']."-----".$page2;
-          exit;
-          informPermiss(true,make_url("Home","index"));
-        }
-      }
-      
       //end delete
            /******  DEV ROUTING  ******/
       $request['page']=($request['page'])? $request['page']: 'index';

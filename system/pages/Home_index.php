@@ -48,7 +48,7 @@ include(SYSTEM_DIR . "/inc/nav.php");  //pone el menu de la izquierda
 			<div class="row">
 				<div class="col-sm-2">
 					
-					hola esto es Home
+					
 				</div>
 			</div>
 		</div>
