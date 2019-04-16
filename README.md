@@ -3,6 +3,18 @@
 /** SIRVE PARA CREAR LAS CLASES */
 C:\ php createTableModel.php <TABLA> <NOMBRECLASE>
 
+## Install Package
+
+Add SendGrid to your `composer.json` file. If you are not using [Composer](http://getcomposer.org), you should be. It's an excellent way to manage dependencies in your PHP application.
+
+```json
+{
+  "require": {
+    "dompdf/dompdf": "^0.8.3",
+    "phpunit/phpunit": "^7.0"
+  }
+}
+```
 
 -------------
 
