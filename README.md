@@ -1,4 +1,6 @@
 
+/** En git hay que cambiar los permisos de Index.php  */
+chmod 0644  index.php
 
 /** SIRVE PARA CREAR LAS CLASES */
 C:\ php createTableModel.php <TABLA> <NOMBRECLASE>
@@ -31,3 +33,7 @@ chown uweb:www-data refaccion
 -- 
 concepto de pago de nomina en el catalogo de conceptos
 id=7, codigo=nomina,nombre=Pago de nomina
+
+# php.ini
+allow_url_fopen   = ON
+allow_url_include = ON

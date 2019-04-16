@@ -16,8 +16,8 @@ refaccion/
 internal/log
 
 # Composer
-composer.lock
-vendor/
+#composer.lock
+#vendor/
 
 #system/
 #system/config/config.php
