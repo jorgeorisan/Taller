@@ -1,44 +1,49 @@
 <?php 
-include SYSTEM_DIR . "/lib/Pdfcrowd.php";
-//ponemos el pizarron
 
 
-if(isset($request['params']['id'])   && $request['params']['id']>0){
-    $id=$request['params']['id'];
-    $page=$request['params']['page'];
-}else{
-    
-}
-   
-if(!$page) informError(true,make_url("Vehiculos","index"));
+// reference the Dompdf namespace
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
-switch ($page) {
-    case 'orden':
-        $html = make_url("Vehiculos","print",array('id'=>$id,"page"=>$page));
-        $pdfname = 'orden_reparacion.pdf';
-        break;
-    
-    default:
-        # code...
-        break;
-}
-try
-{
-    // create the API client instance
-    $client = new jfLib_Pdfcrowd();
-    // run the conversion and write the result to a file
-   
-    $client->convertUrlToFile($html ,  ROOT_DIR ."/documentos/".$pdfname);
-    $file = ROOT_DIR ."/documentos/".$pdfname;
-   
-    if (is_file($file)) {
-        header("Content-Type: application/force-download");
-        header("Content-Disposition: attachment; filename=\"$pdfname\"");
-        readfile($file);
+
+    if(isset($request['params']['id'])   && $request['params']['id']>0){
+        $id=$request['params']['id'];
+        $page=$request['params']['page'];
     }else{
-        echo 'no es un archivo';
+        
     }
+    
+    if(!$page) informError(true,make_url("Vehiculos","index"));
+
+    switch ($page) {
+        case 'orden':
+            $html = make_url("Vehiculos","print",array('id'=>$id,"page"=>$page));
+            $pdfname = 'orden_reparacion.pdf';
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+    // instantiate and use the dompdf class
+    $options = new Options();
+    $options->set('isHtml5ParserEnabled', true);
+    $options->set('isRemoteEnabled', true);
+    $dompdf = new Dompdf($options);
+    $html = make_url("Vehiculos","print",array('id'=>$id,"page"=>$page,"pdf"=>"si"));
+
+    $dompdf->load_html( file_get_contents( $html ) );
+    $dompdf->render();
+    $pdf = $dompdf->output();
+    
+    //$request['params']['to']='jororisan@gmail.com';
+    //$request['params']['send']='true';
+    if( ! isset($request['params']['send']))
+        $dompdf->stream($pdfname);
+    
     if(isset($request['params']['send']) && isset($request['params']['to'])){
+        $file = ROOT_DIR ."/documentos/".$pdfname;
+        file_put_contents($file, $pdf);  
         $to=$request['params']['to'];
         $bHayFicheros = 0; 
         $sCabeceraTexto = ""; 
@@ -59,18 +64,17 @@ try
         $sAdjuntos .= "Content-disposition: attachment;filename=\"".$pdfname."\"\n\n";
 
         $oFichero = fopen($file, 'r'); 
-        $sContenido = fread($oFichero, filesize($pdfname)); 
+        $sContenido = fread($oFichero, filesize($file)); 
         $sAdjuntos .= chunk_split(base64_encode($sContenido)); 
         fclose($oFichero); 
         
-        $message = file_get_contents(SYSTEM_DIR.'/lib/Templates/emailpresupuesto.html');
-        $message = str_replace("__TOKEN__", $token, $message);
-        $message = str_replace("__URL__",   $link , $message); 
-        $message = str_replace("__EMAIL__",   $email , $message); 
-        
-
-        $sTexto .= $sAdjuntos."\n\n----_Separador-de-mensajes_----\n"; 
-        return(mail($to, 'Orden de Reparacion', $sTexto, $sCabeceras)); 
+    
+        $sTexto = $sAdjuntos."\n\n----_Separador-de-mensajes_----\n"; 
+        if(mail($to, 'Orden de Reparacion', $sTexto, $sCabeceras)){
+            echo "<script>swal('Enviado con Exito')";
+        }else{
+            echo "<script>swal('Error al Enviar')";
+        }
     }
         
     
@@ -78,14 +82,6 @@ try
 
     //header("Location: http://138.128.161.42/~systemmyg/example.pdf");
     die();
-}
-catch(\Pdfcrowd\Error $why)
-{
-    // report the error
-    error_log("Pdfcrowd Error: {$why}\n");
 
-    // handle the exception here or rethrow and handle it at a higher level
-    throw $why;
-}
 
 ?>

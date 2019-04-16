@@ -1,4 +1,7 @@
 <?php
+// include autoloader
+$base = explode('system', $directory);
+require './vendor/autoload.php';
 /**
  * set document type
  * @param string $type type of document

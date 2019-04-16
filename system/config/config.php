@@ -9,7 +9,7 @@ $base_url = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'h
 $app_path=str_replace(DIRECTORY_SEPARATOR, '/', substr($directory, strlen($document_root)));
 
 if(strpos($directory, $document_root)===0) {
-    $base_url .= str_replace(DIRECTORY_SEPARATOR, '/', substr($directory, strlen($document_root)));
+    $base_url .= $app_path;
 }
 if($_SERVER["SERVER_NAME"]=='138.128.161.42'){
 	 $base_url =$base_url."/~systemmyg" ;

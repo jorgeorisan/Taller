@@ -15,5 +15,9 @@ refaccion/
 # Logs
 internal/log
 
+# Composer
+composer.lock
+vendor/
+
 #system/
 #system/config/config.php

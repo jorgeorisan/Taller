@@ -58,7 +58,11 @@ if($data["id_cliente"]){
     <link href="images/favicon.ico" rel="shortcut icon">
     <title>Maximus Body Shop</title>
     <script type="text/javascript">
-        window.print();
+        <?php
+            if( ! $pdf ) { ?>
+                window.print();
+        <?php
+            } ?>
     </script>
     <style>
         body { font-family:"Arial",sans-serif; font-size:11px;color:#666;}
@@ -213,14 +217,14 @@ if($data["id_cliente"]){
             </td>
         </tr>
         <tr>
-            <td>
-                <table style="width:100%;    border-spacing: 0px;">
+            <td >
+                <table style="width:100%; ">
                     <tr>
-                        <td colspan="8" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">INVENTARIO </td>
+                        <td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">INVENTARIO </td>
                     </tr>
                     <tr>
-                        <td class="td-inventario">
-                            <table style="height: 100%">
+                        <td style="vertical-align: top;">
+                            <table style="width:100%">
                                 <tr>
                                     <td colspan="4" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Exteriores </td>
                                 </tr>
@@ -267,8 +271,8 @@ if($data["id_cliente"]){
                                 </tr>
                             </table>
                         </td>
-                        <td  class="td-inventario">
-                            <table style="height: 100%">
+                        <td style="vertical-align: top;">
+                            <table style="width: 100%">
                                 <tr>
                                     <td colspan="4" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Interiores </td>
                                 </tr>
@@ -315,191 +319,7 @@ if($data["id_cliente"]){
                             </table>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <table style="height: 100%">
-                                <tr>
-                                    <td colspan="4" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Accesorios </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Gato: </td>
-                                    <td colspan="" style="width:10%;"><?php  echo htmlentities($data['Gato'])  ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Llanta de Refaccion: </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['LlantaRefaccion'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Maneral de gato : </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['ManeralGato'])   ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Control Alarma : </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['AlarmaControl'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Llave de ruedas: </td>
-                                    <td colspan="" style="width:10%;"><?php  echo htmlentities($data['LlavedeLlantas'])  ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Equipo A/V: </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['EquipoAV'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Kit Herramientas </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['Herramientas'])   ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cables P/C  </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['CablesPasaCorriente'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Reflejantes  </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['SenalesReflejantes'])   ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Dado de seguridad
-                                    </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['DadoSeg'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Extintor : </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['Extinguidor'])   ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;"></td>
-                                    <td colspan="" style="width:20%;"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="1" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Comentarios </td>
-                                    <td colspan="3" style="width:20%;"><?php echo htmlentities($data['ComentariosAcces'])   ?></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table style="height: 100%">
-                                <tr>
-                                    <td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Componentes Mecanicos </td>
-                                    <td colspan="2" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Documentos </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tapon de Aceite: </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['TaponAceite'])   ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tarjeta de Circulacion: </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['TarjetaCirc'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tapon Dir. HD: </td>
-                                    <td colspan="" style="width:10%;"><?php  echo htmlentities($data['TaponDirHD'])  ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Poliza seguro: </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['PolizaSeg']) ."<br>".htmlentities($data['PolizaNum'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tapon Dep. Frenos: </td>
-                                    <td colspan="" style="width:10%;"><?php  echo htmlentities($data['TaponDepFrenos'])  ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Manual Propietario: </td>
-                                    <td colspan="" style="width:10%;"><?php echo htmlentities($data['ManualProp'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Tapon Limpiaparabrisas: </td>
-                                    <td colspan="" style="width:20%;"><?php  echo htmlentities($data['TaponLimpiaparabrisas'])  ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Talon Verificacion: </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['TalonVerif'])   ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Bateria : </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['Bateria'])."<br>".htmlentities($data['MarcaBateria'])  ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">No. de Reporte  </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['ReporteNum'])  ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Claxon : </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['Claxon'])   ?></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">No. de Siniestro  </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['siniestro'])  ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;"> </td>
-                                    <td colspan="" style="width:20%;"></td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Deducible  </td>
-                                    <td colspan="" style="width:20%;"><?php echo htmlentities($data['deducible'])  ?></td>
-                                </tr>
-                                <tr>
-                                
-                                    <td colspan="2" style="width:20%;"><?php echo htmlentities($data['ComentariosComp'])   ?></td>
-                                    <td colspan="2" style="width:20%;"><?php echo htmlentities($data['ComentariosDoc'])   ?></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                
-                    <tr>
-                        <td>
-                            <table style="height: 100%">
-                                <tr>
-                                    <td colspan="4" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Refacciones </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Cant.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Refaccion.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Costo Aprox.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total Aprox.</td>
-                                </tr>
-                                <?php 
-                                $objref = new VehiculoRefaccion();
-                                $dataref = $objref->getAllArr($id);
-                                $totalrefaccion = 0 ;
-                                foreach($dataref as $row) {
-                                $totalrefaccion+= $row['total_aprox'];  
-                                $nombre = $row['nombre'] ;
-                                if($row['detalles']){
-                                    $nombre=$row['detalles'];
-                                } 
-                                ?>
-                                <tr>
-                                    <td><?php echo $row['cantidad']; ?></td>
-                                    <td><?php echo $nombre; ?></td>
-                                    <td><?php echo $row['costo_aprox']; ?></td>
-                                    <td><?php echo $row['total_aprox']; ?></td>
-                                </tr>
-
-                                <?php
-                                } 
-                                ?>
-                                    <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td>Total:</td>
-                                    <td><strong><?php echo $totalrefaccion; ?></strong></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table style="height: 100%">
-                                <tr>
-                                    <td colspan="3" style="width:20%;background-color:#d0d0cf; font-weight:bold; text-align: center">Servicios </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Codigo.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Servicio.</td>
-                                    <td colspan="" style="width:10%;background-color:#d0d0cf; font-weight:bold;">Total.</td>
-                                </tr>
-                                <?php 
-                                $objser = new VehiculoServicio();
-                                $dataser = $objser->getAllArr($id);
-                                $totalservicio = 0 ;
-                                foreach($dataser as $row) {
-                                $totalservicio+= $row['total'];   
-                                $nombre = $row['nombre'] ;
-                                if($row['detalles']){
-                                    $nombre=$row['detalles'];
-                                }
-                                ?>
-                                <tr>
-                                    <td><?php echo $row['codigo']; ?></td>
-                                    <td><?php echo $nombre; ?></td>
-                                    <td><?php echo $row['total']; ?></td>
-                                </tr>
-
-                                <?php
-                                } 
-                                ?>
-                                    <tr>
-                                    <td></td>
-                                    <td>Total:</td>
-                                    <td><strong><?php echo $totalservicio; ?></strong></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                   
                 </table>
             </td>
         </tr>

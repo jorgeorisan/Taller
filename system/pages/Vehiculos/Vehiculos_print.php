@@ -13,14 +13,15 @@ $page_title = "Autos";
 
 
 //include left panel (navigation)
+$pdf=0;
 if(isset($request['params']['id'])   && $request['params']['id']>0){
     $id=$request['params']['id'];
     $page=$request['params']['page'];
+    if(isset($request['params']['pdf']))
+        $pdf=1;
 }else{
     informError(true,make_url("Vehiculos","index"));
 }
-
-  
 if(!$page) informError(true,make_url("Vehiculos","index"));
 
 if ($page) {
